@@ -10,7 +10,7 @@ import com.kebunby.kebunby.ui.feature.login.LoginScreen
 fun Navigation(navController: NavHostController, startDestination: String) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Screen.LoginScreen.route) {
-            LoginScreen()
+            LoginScreen(navController)
         }
     }
 }
