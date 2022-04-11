@@ -4,11 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.compose.rememberNavController
+import com.kebunby.kebunby.ui.Navigation
+import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.theme.KebunbyTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,9 +20,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen()
 
+        val startDestination = Screen.LoginScreen.route
+
         setContent {
             App {
-                Content()
+                Content(startDestination)
             }
         }
     }
@@ -34,6 +40,10 @@ fun App(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun Content() {
-    Text(text = "Hello!")
+fun Content(startDestination: String) {
+    val navController = rememberNavController()
+
+    Scaffold {
+        Navigation(navController = navController, startDestination = startDestination)
+    }
 }
