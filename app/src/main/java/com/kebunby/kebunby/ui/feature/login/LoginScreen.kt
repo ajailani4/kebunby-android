@@ -14,6 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -56,6 +57,7 @@ fun LoginScreen(
     val passwordVisibility = loginViewModel.passwordVisibility
     val onPasswordVisibilityChanged = loginViewModel::onPasswordVisibilityChanged
 
+    val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -160,8 +162,18 @@ fun LoginScreen(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(15.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
-                    enabled = true,
-                    onClick = { onEvent(LoginEvent.Submit) }
+                    enabled = loginState != LoginState.LoggingIn,
+                    onClick = {
+                        if (username.isNotEmpty() && password.isNotEmpty()) {
+                            onEvent(LoginEvent.Submit)
+                        } else {
+                            coroutineScope.launch {
+                                scaffoldState.snackbarHostState.showSnackbar(
+                                    context.resources.getString(R.string.fill_the_form)
+                                )
+                            }
+                        }
+                    }
                 ) {
                     Text(
                         modifier = Modifier.padding(5.dp),
