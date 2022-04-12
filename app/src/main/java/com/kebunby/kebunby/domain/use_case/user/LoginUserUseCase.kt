@@ -1,4 +1,4 @@
-package com.kebunby.kebunby.domain.use_case
+package com.kebunby.kebunby.domain.use_case.user
 
 import com.kebunby.kebunby.data.model.request.LoginRequest
 import com.kebunby.kebunby.data.repository.UserRepository

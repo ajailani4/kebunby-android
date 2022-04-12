@@ -11,7 +11,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Primary
@@ -174,7 +174,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(15.dp))
                 ClickableText(
                     modifier = Modifier.align(CenterHorizontally),
-                    text = buildAnnotatedString { 
+                    text = buildAnnotatedString {
                         append(stringResource(id = R.string.have_no_account))
                         append(" ")
 
@@ -204,12 +204,18 @@ fun LoginScreen(
         when (loginState) {
             is LoginState.Idle -> {}
 
-            is LoginState.LoggingIn ->{
+            is LoginState.LoggingIn -> {
                 FullSizeProgressBar()
             }
 
             is LoginState.Success -> {
+                navController.navigate(Screen.HomeScreen.route) {
+                    launchSingleTop = true
 
+                    popUpTo(Screen.LoginScreen.route) {
+                        inclusive = true
+                    }
+                }
             }
 
             is LoginState.Fail -> {

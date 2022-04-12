@@ -1,6 +1,5 @@
 package com.kebunby.kebunby.ui.feature.login
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.request.LoginRequest
-import com.kebunby.kebunby.domain.use_case.LoginUserUseCase
+import com.kebunby.kebunby.domain.use_case.user.LoginUserUseCase
+import com.kebunby.kebunby.domain.use_case.user_credential.SaveUserCredentialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -17,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUserUseCase: LoginUserUseCase
+    private val loginUserUseCase: LoginUserUseCase,
+    private val saveUserCredentialUseCase: SaveUserCredentialUseCase
 ) : ViewModel() {
     var loginState by mutableStateOf<LoginState>(LoginState.Idle)
     var username by mutableStateOf("")
@@ -64,7 +65,7 @@ class LoginViewModel @Inject constructor(
             }.collect {
                 loginState = when (it) {
                     is Resource.Success -> {
-                        Log.d("AccesssToken", it.data?.accessToken!!)
+                        saveUserCredentialUseCase(it.data!!)
                         LoginState.Success
                     }
 
