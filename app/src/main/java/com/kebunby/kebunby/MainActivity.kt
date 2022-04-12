@@ -14,7 +14,9 @@ import androidx.navigation.compose.rememberNavController
 import com.kebunby.kebunby.ui.Navigation
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.theme.KebunbyTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

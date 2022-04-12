@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
@@ -22,22 +23,39 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Primary
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Eye
+import compose.icons.evaicons.outline.EyeOff
 import compose.icons.evaicons.outline.Lock
 import compose.icons.evaicons.outline.Person
+import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(
+    navController: NavController,
+    loginViewModel: LoginViewModel = hiltViewModel()
+) {
+    val onEvent = loginViewModel::onEvent
+    val loginState = loginViewModel.loginState
+    val username = loginViewModel.username
+    val onUsernameChanged = loginViewModel::onUsernameChanged
+    val password = loginViewModel.password
+    val onPasswordChanged = loginViewModel::onPasswordChanged
+    val passwordVisibility = loginViewModel.passwordVisibility
+    val onPasswordVisibilityChanged = loginViewModel::onPasswordVisibilityChanged
+
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -70,8 +88,8 @@ fun LoginScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(5.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {},
+                    value = username,
+                    onValueChange = onUsernameChanged,
                     leadingIcon = {
                         Icon(
                             imageVector = EvaIcons.Outline.Person,
@@ -103,8 +121,8 @@ fun LoginScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(5.dp))
                 OutlinedTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = "",
-                    onValueChange = {},
+                    value = password,
+                    onValueChange = onPasswordChanged,
                     leadingIcon = {
                         Icon(
                             imageVector = EvaIcons.Outline.Lock,
@@ -120,9 +138,13 @@ fun LoginScreen(navController: NavController) {
                         )
                     },
                     trailingIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = onPasswordVisibilityChanged) {
                             Icon(
-                                imageVector = EvaIcons.Outline.Eye,
+                                imageVector = if (passwordVisibility) {
+                                    EvaIcons.Outline.Eye
+                                } else {
+                                    EvaIcons.Outline.EyeOff
+                                },
                                 contentDescription = "Password visibility icon"
                             )
                         }
@@ -131,7 +153,7 @@ fun LoginScreen(navController: NavController) {
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password
                     ),
-                    visualTransformation = PasswordVisualTransformation()
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
@@ -139,7 +161,7 @@ fun LoginScreen(navController: NavController) {
                     shape = RoundedCornerShape(15.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
                     enabled = true,
-                    onClick = { /*TODO*/ }
+                    onClick = { onEvent(LoginEvent.Submit) }
                 ) {
                     Text(
                         modifier = Modifier.padding(5.dp),
@@ -176,6 +198,43 @@ fun LoginScreen(navController: NavController) {
                 painter = painterResource(id = R.drawable.img_wave),
                 contentDescription = "Wave illustration"
             )
+        }
+
+        // Observe login state
+        when (loginState) {
+            is LoginState.Idle -> {}
+
+            is LoginState.LoggingIn ->{
+                FullSizeProgressBar()
+            }
+
+            is LoginState.Success -> {
+
+            }
+
+            is LoginState.Fail -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        loginState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(LoginEvent.Idle)
+            }
+
+            is LoginState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        loginState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(LoginEvent.Idle)
+            }
         }
     }
 }
