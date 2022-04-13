@@ -49,10 +49,10 @@ class LoginUserUseCaseTest {
             doReturn(resource).`when`(userRepositoryImpl).login(any())
 
             // Act
-            val actualResource = loginUserUseCase.invoke(generateLoginRequest()).firstOrNull()
+            val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
 
             // Assert
-            assertEquals("Resource should be success", Resource.Success<UserCredential>(), actualResource)
+            assertEquals("Resource should be success", Resource.Success<UserCredential>(), actResource)
 
             // Verify
             verify(userRepositoryImpl).login(any())
@@ -70,10 +70,10 @@ class LoginUserUseCaseTest {
             doReturn(resource).`when`(userRepositoryImpl).login(any())
 
             // Act
-            val actualResource = loginUserUseCase.invoke(generateLoginRequest()).firstOrNull()
+            val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
 
             // Assert
-            assertEquals("Resource should be error", Resource.Error<UserCredential>(), actualResource)
+            assertEquals("Resource should be error", Resource.Error<UserCredential>(), actResource)
 
             // Verify
             verify(userRepositoryImpl).login(any())
