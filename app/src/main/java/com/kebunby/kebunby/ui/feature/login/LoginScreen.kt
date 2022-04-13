@@ -161,7 +161,6 @@ fun LoginScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Primary),
                     enabled = loginState != LoginState.LoggingIn,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {

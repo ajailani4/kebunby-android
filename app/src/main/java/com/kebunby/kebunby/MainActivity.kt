@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                     if (userCredential.username != "" && userCredential.accessToken != "") {
                         Screen.HomeScreen.route
                     } else {
-                        Screen.LoginScreen.route
+                        Screen.OnboardingScreen.route
                     }
 
                 setContent {

@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">Kebunby</string>
+    <string name="welcome">Welcome</string>
+    <string name="title_onboarding1">Learn How to Grow Plants</string>
+    <string name="desc_onboarding1">Kebunby provides information on how to grow plants, from tools and materials to planting steps</string>
+    <string name="title_onboarding2">Choose Your Favorite Plants</string>
+    <string name="desc_onboarding2">You can track your currently planting and planted plants, also your favorite plants</string>
+    <string name="title_onboarding3">Upload Plant Information</string>
+    <string name="desc_onboarding3">Kebunby provides a feature for users to upload plant information</string>
+    <string name="skip">Skip</string>
     <string name="login">Login</string>
+    <string name="register">Register</string>
     <string name="username">Username</string>
     <string name="enter_username">Enter username</string>
     <string name="enter_password">Enter password</string>
