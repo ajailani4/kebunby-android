@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kebunby</string>
+    <string name="welcome">Selamat Datang</string>
+    <string name="title_onboarding1">Pelajari Cara Menanam Tanaman</string>
+    <string name="desc_onboarding1">Kebunby memberikan informasi cara menanam tanaman mulai dari alat dan bahan hingga langkah menanam</string>
+    <string name="title_onboarding2">Pilih Tanaman Favoritmu</string>
+    <string name="desc_onboarding2">Kamu bisa melihat tanaman yang sedang dan sudah kamu tanam, serta tanaman favoritmu</string>
+    <string name="title_onboarding3">Unggah Informasi Tanaman</string>
+    <string name="desc_onboarding3">Kebunby menyediakan  fitur untuk pengguna agar dapat mengunggah informasi tanaman </string>
+    <string name="skip">Lewati</string>
+    <string name="login">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="username">Username</string>
+    <string name="enter_username">Masukkan username</string>
+    <string name="enter_password">Masukkan password</string>
+    <string name="have_no_account">Belum punya akun?</string>
+    <string name="register_here">Daftar di sini</string>
+    <string name="fill_the_form">Mohon isi form dengan lengkap</string>
+    <string name="incorrect_username_or_pass">Username atau password salah</string>
+    <string name="something_wrong_happened">Maaf, terjadi kesalahan</string>
+</resources>

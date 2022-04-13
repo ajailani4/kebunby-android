@@ -6,10 +6,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.kebunby.kebunby.ui.feature.home.HomeScreen
 import com.kebunby.kebunby.ui.feature.login.LoginScreen
+import com.kebunby.kebunby.ui.feature.onboarding.OnboardingScreen
 
 @Composable
 fun Navigation(navController: NavHostController, startDestination: String) {
     NavHost(navController = navController, startDestination = startDestination) {
+        composable(route = Screen.OnboardingScreen.route) {
+            OnboardingScreen(navController)
+        }
+
         composable(route = Screen.LoginScreen.route) {
             LoginScreen(navController)
         }
