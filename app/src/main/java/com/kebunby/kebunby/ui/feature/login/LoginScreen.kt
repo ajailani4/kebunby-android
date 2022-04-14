@@ -76,14 +76,14 @@ fun LoginScreen(
                         .padding(top = 50.dp)
                         .align(CenterHorizontally),
                     text = stringResource(id = R.string.login),
-                    color = PrimaryLight,
+                    color = MaterialTheme.colors.primary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h1
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Text(
                     text = stringResource(id = R.string.username),
-                    color = Color.Black,
+                    color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.body1
                 )
@@ -116,7 +116,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
                     text = stringResource(id = R.string.password),
-                    color = Color.Black,
+                    color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.body1
                 )
@@ -177,7 +177,7 @@ fun LoginScreen(
                     Text(
                         modifier = Modifier.padding(5.dp),
                         text = stringResource(id = R.string.login),
-                        color = Color.White,
+                        color = MaterialTheme.colors.onPrimary,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.subtitle1
                     )
@@ -191,7 +191,7 @@ fun LoginScreen(
 
                         withStyle(
                             style = SpanStyle(
-                                color = PrimaryLight,
+                                color = MaterialTheme.colors.primary,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             )
