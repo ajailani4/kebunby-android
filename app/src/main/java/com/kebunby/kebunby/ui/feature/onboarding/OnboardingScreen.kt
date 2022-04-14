@@ -105,7 +105,7 @@ fun OnboardingScreen(navController: NavController) {
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(15.dp),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Red),
-                    onClick = {}
+                    onClick = { navController.navigate(Screen.RegisterScreen.route) }
                 ) {
                     Text(
                         modifier = Modifier.padding(5.dp),

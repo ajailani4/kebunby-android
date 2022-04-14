@@ -115,7 +115,7 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = stringResource(id = R.string.enter_password),
+                    text = stringResource(id = R.string.password),
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.body1

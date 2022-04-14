@@ -42,7 +42,7 @@ fun OnboardingItemScreen(item: OnboardingItem) {
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h1
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
 
         if (item.description != null) {
