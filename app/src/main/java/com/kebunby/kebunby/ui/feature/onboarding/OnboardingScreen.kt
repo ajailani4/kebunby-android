@@ -1,6 +1,7 @@
 package com.kebunby.kebunby.ui.feature.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -101,13 +102,11 @@ fun OnboardingScreen(navController: NavController) {
                     )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-                Button(
+                OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        backgroundColor = Color.Transparent,
-                        contentColor = Color.White
-                    ),
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    border = BorderStroke(width = 1.dp, color = Color.White),
                     onClick = { navController.navigate(Screen.RegisterScreen.route) }
                 ) {
                     Text(

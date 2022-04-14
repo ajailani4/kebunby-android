@@ -48,13 +48,13 @@ fun RegisterScreen(navController: NavController) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Column(modifier = Modifier.background(color = PrimaryLight)) {
+            Column(modifier = Modifier.background(color = MaterialTheme.colors.primary)) {
                 Text(
                     modifier = Modifier
                         .padding(top = 30.dp)
                         .align(CenterHorizontally),
                     text = stringResource(id = R.string.register),
-                    color =  Color.White,
+                    color = MaterialTheme.colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h1
                 )
@@ -62,7 +62,7 @@ fun RegisterScreen(navController: NavController) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     shape = RoundedCornerShape(topStart = 40.dp),
-                    color = Color.White
+                    color = MaterialTheme.colors.background
                 ) {
                     Column(
                         modifier = Modifier
@@ -71,7 +71,7 @@ fun RegisterScreen(navController: NavController) {
                     ) {
                         Text(
                             text = stringResource(id = R.string.username),
-                            color = Color.Black,
+                            color = MaterialTheme.colors.onBackground,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.body1
                         )
@@ -104,7 +104,7 @@ fun RegisterScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(20.dp))
                         Text(
                             text = stringResource(id = R.string.email),
-                            color = Color.Black,
+                            color = MaterialTheme.colors.onBackground,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.body1
                         )
@@ -137,7 +137,7 @@ fun RegisterScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(20.dp))
                         Text(
                             text = stringResource(id = R.string.name),
-                            color = Color.Black,
+                            color = MaterialTheme.colors.onBackground,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.body1
                         )
@@ -170,7 +170,7 @@ fun RegisterScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(20.dp))
                         Text(
                             text = stringResource(id = R.string.password),
-                            color = Color.Black,
+                            color = MaterialTheme.colors.onBackground,
                             fontWeight = FontWeight.Bold,
                             style = MaterialTheme.typography.body1
                         )
@@ -231,21 +231,21 @@ fun RegisterScreen(navController: NavController) {
                             Text(
                                 modifier = Modifier.padding(5.dp),
                                 text = stringResource(id = R.string.login),
-                                color = Color.White,
+                                color = MaterialTheme.colors.onPrimary,
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.subtitle1
                             )
                         }
                         Spacer(modifier = Modifier.height(15.dp))
                         ClickableText(
-                            modifier = Modifier.align(Alignment.CenterHorizontally),
+                            modifier = Modifier.align(CenterHorizontally),
                             text = buildAnnotatedString {
                                 append(stringResource(id = R.string.have_account))
                                 append(" ")
 
                                 withStyle(
                                     style = SpanStyle(
-                                        color = PrimaryLight,
+                                        color = MaterialTheme.colors.primary,
                                         fontFamily = poppinsFamily,
                                         fontSize = 15.sp
                                     )
