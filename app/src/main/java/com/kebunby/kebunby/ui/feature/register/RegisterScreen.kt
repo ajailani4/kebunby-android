@@ -1,9 +1,6 @@
 package com.kebunby.kebunby.ui.feature.register
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -30,17 +27,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.kebunby.kebunby.R
-import com.kebunby.kebunby.ui.feature.login.LoginEvent
-import com.kebunby.kebunby.ui.feature.login.LoginState
 import com.kebunby.kebunby.ui.theme.Grey
-import com.kebunby.kebunby.ui.theme.Primary
+import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.outline.*
-import kotlinx.coroutines.launch
 
 @Composable
 fun RegisterScreen(navController: NavController) {
@@ -54,7 +48,7 @@ fun RegisterScreen(navController: NavController) {
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            Column(modifier = Modifier.background(color = Primary)) {
+            Column(modifier = Modifier.background(color = PrimaryLight)) {
                 Text(
                     modifier = Modifier
                         .padding(top = 30.dp)
@@ -251,7 +245,7 @@ fun RegisterScreen(navController: NavController) {
 
                                 withStyle(
                                     style = SpanStyle(
-                                        color = Primary,
+                                        color = PrimaryLight,
                                         fontFamily = poppinsFamily,
                                         fontSize = 15.sp
                                     )

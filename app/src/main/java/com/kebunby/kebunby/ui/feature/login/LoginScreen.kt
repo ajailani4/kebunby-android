@@ -33,7 +33,7 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
-import com.kebunby.kebunby.ui.theme.Primary
+import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
@@ -76,7 +76,7 @@ fun LoginScreen(
                         .padding(top = 50.dp)
                         .align(CenterHorizontally),
                     text = stringResource(id = R.string.login),
-                    color = Primary,
+                    color = PrimaryLight,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h1
                 )
@@ -191,7 +191,7 @@ fun LoginScreen(
 
                         withStyle(
                             style = SpanStyle(
-                                color = Primary,
+                                color = PrimaryLight,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             )

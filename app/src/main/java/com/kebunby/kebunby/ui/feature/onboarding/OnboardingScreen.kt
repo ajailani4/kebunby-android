@@ -23,8 +23,8 @@ import com.google.accompanist.pager.rememberPagerState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.feature.onboarding.component.OnboardingItemScreen
-import com.kebunby.kebunby.ui.theme.Primary
-import com.kebunby.kebunby.ui.theme.PrimaryVariant
+import com.kebunby.kebunby.ui.theme.PrimaryLight
+import com.kebunby.kebunby.ui.theme.PrimaryVariantLight
 import com.kebunby.kebunby.ui.theme.Red
 import kotlinx.coroutines.launch
 
@@ -42,7 +42,7 @@ fun OnboardingScreen(navController: NavController) {
 
     Column(
         modifier = Modifier
-            .background(color = Primary)
+            .background(color = PrimaryLight)
             .fillMaxSize()
             .padding(
                 top = if (pagerState.currentPage != onboardingItems.size - 1) {
@@ -95,7 +95,7 @@ fun OnboardingScreen(navController: NavController) {
                     Text(
                         modifier = Modifier.padding(5.dp),
                         text = stringResource(id = R.string.login),
-                        color = Primary,
+                        color = PrimaryLight,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h3
                     )
@@ -146,7 +146,7 @@ fun OnboardingScreen(navController: NavController) {
                 modifier = Modifier.align(Alignment.Center),
                 pagerState = pagerState,
                 activeColor = Color.White,
-                inactiveColor = PrimaryVariant
+                inactiveColor = PrimaryVariantLight
             )
         }
     }
