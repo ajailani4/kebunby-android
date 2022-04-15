@@ -1,6 +1,7 @@
 package com.kebunby.kebunby.ui.feature.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -23,8 +24,8 @@ import com.google.accompanist.pager.rememberPagerState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.feature.onboarding.component.OnboardingItemScreen
-import com.kebunby.kebunby.ui.theme.Primary
-import com.kebunby.kebunby.ui.theme.PrimaryVariant
+import com.kebunby.kebunby.ui.theme.PrimaryLight
+import com.kebunby.kebunby.ui.theme.PrimaryVariantLight
 import com.kebunby.kebunby.ui.theme.Red
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,7 @@ fun OnboardingScreen(navController: NavController) {
 
     Column(
         modifier = Modifier
-            .background(color = Primary)
+            .background(color = PrimaryLight)
             .fillMaxSize()
             .padding(
                 top = if (pagerState.currentPage != onboardingItems.size - 1) {
@@ -95,17 +96,18 @@ fun OnboardingScreen(navController: NavController) {
                     Text(
                         modifier = Modifier.padding(5.dp),
                         text = stringResource(id = R.string.login),
-                        color = Primary,
+                        color = PrimaryLight,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.h3
                     )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
-                Button(
+                OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
                     shape = RoundedCornerShape(15.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = Red),
-                    onClick = {}
+                    colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                    border = BorderStroke(width = 1.dp, color = Color.White),
+                    onClick = { navController.navigate(Screen.RegisterScreen.route) }
                 ) {
                     Text(
                         modifier = Modifier.padding(5.dp),
@@ -146,7 +148,7 @@ fun OnboardingScreen(navController: NavController) {
                 modifier = Modifier.align(Alignment.Center),
                 pagerState = pagerState,
                 activeColor = Color.White,
-                inactiveColor = PrimaryVariant
+                inactiveColor = PrimaryVariantLight
             )
         }
     }

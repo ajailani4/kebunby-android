@@ -3,14 +3,15 @@ package com.kebunby.kebunby.domain.use_case
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.data.repository.UserRepository
-import com.kebunby.kebunby.data.repository.impl.UserRepositoryImpl
-import com.kebunby.kebunby.domain.use_case.user.LoginUserUseCase
+import com.kebunby.kebunby.domain.use_case.user.RegisterUserUseCase
 import com.kebunby.kebunby.util.TestCoroutineRule
 import com.kebunby.kebunby.util.generateLoginRequest
+import com.kebunby.kebunby.util.generateRegisterRequest
 import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
-import org.junit.Assert.assertEquals
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,7 +24,7 @@ import org.mockito.kotlin.verify
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class LoginUserUseCaseTest {
+class RegisterUserUseCaseTest {
 
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
@@ -33,11 +34,11 @@ class LoginUserUseCaseTest {
     private lateinit var userRepository: UserRepository
 
     // SUT
-    private lateinit var loginUserUseCase: LoginUserUseCase
+    private lateinit var registerUserUseCase: RegisterUserUseCase
 
     @Before
     fun setUp() {
-        loginUserUseCase = LoginUserUseCase(userRepository)
+        registerUserUseCase = RegisterUserUseCase(userRepository)
     }
 
     @Test
@@ -45,15 +46,16 @@ class LoginUserUseCaseTest {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val resource = flow {
-                emit(Resource.Success<UserCredential>(
+                emit(
+                    Resource.Success<UserCredential>(
                     generateUserCredential()
                 ))
             }
 
-            doReturn(resource).`when`(userRepository).login(any())
+            doReturn(resource).`when`(userRepository).register(any())
 
             // Act
-            val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
+            val actResource = registerUserUseCase.invoke(generateRegisterRequest()).first()
             var userCredential = UserCredential()
 
             when (actResource) {
@@ -65,11 +67,11 @@ class LoginUserUseCaseTest {
             }
 
             // Assert
-            assertEquals("Username should be 'george'", "george", userCredential.username)
-            assertEquals("Access token should be 'abc'", "abc", userCredential.accessToken)
+            Assert.assertEquals("Username should be 'george'", "george", userCredential.username)
+            Assert.assertEquals("Access token should be 'abc'", "abc", userCredential.accessToken)
 
             // Verify
-            verify(userRepository).login(any())
+            verify(userRepository).register(any())
         }
     }
 
@@ -81,16 +83,20 @@ class LoginUserUseCaseTest {
                 emit(Resource.Error<UserCredential>())
             }
 
-            doReturn(resource).`when`(userRepository).login(any())
+            doReturn(resource).`when`(userRepository).register(any())
 
             // Act
-            val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
+            val actResource = registerUserUseCase.invoke(generateRegisterRequest()).first()
 
             // Assert
-            assertEquals("Resource should be error", Resource.Error<UserCredential>(), actResource)
+            Assert.assertEquals(
+                "Resource should be error",
+                Resource.Error<UserCredential>(),
+                actResource
+            )
 
             // Verify
-            verify(userRepository).login(any())
+            verify(userRepository).register(any())
         }
     }
 }

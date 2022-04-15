@@ -16,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingItem
-import com.kebunby.kebunby.ui.theme.Primary
+import com.kebunby.kebunby.ui.theme.PrimaryLight
 
 @Composable
 fun OnboardingItemScreen(item: OnboardingItem) {
@@ -42,7 +42,7 @@ fun OnboardingItemScreen(item: OnboardingItem) {
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.h1
             )
-            Spacer(modifier = Modifier.height(15.dp))
+            Spacer(modifier = Modifier.height(10.dp))
         }
 
         if (item.description != null) {

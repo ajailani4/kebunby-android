@@ -1,6 +1,6 @@
 package com.kebunby.kebunby.data.model
 
 data class UserCredential(
-    val username: String,
-    val accessToken: String
+    val username: String? = null,
+    val accessToken: String? = null
 )

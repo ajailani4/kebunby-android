@@ -33,7 +33,7 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
-import com.kebunby.kebunby.ui.theme.Primary
+import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
@@ -76,14 +76,14 @@ fun LoginScreen(
                         .padding(top = 50.dp)
                         .align(CenterHorizontally),
                     text = stringResource(id = R.string.login),
-                    color = Primary,
+                    color = MaterialTheme.colors.primary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.h1
                 )
                 Spacer(modifier = Modifier.height(30.dp))
                 Text(
                     text = stringResource(id = R.string.username),
-                    color = Color.Black,
+                    color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.body1
                 )
@@ -115,8 +115,8 @@ fun LoginScreen(
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
-                    text = stringResource(id = R.string.enter_password),
-                    color = Color.Black,
+                    text = stringResource(id = R.string.password),
+                    color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.body1
                 )
@@ -152,6 +152,11 @@ fun LoginScreen(
                         }
                     },
                     singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = poppinsFamily,
+                        fontSize = 15.sp
+                    ),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password
                     ),
@@ -177,7 +182,7 @@ fun LoginScreen(
                     Text(
                         modifier = Modifier.padding(5.dp),
                         text = stringResource(id = R.string.login),
-                        color = Color.White,
+                        color = MaterialTheme.colors.onPrimary,
                         fontWeight = FontWeight.Bold,
                         style = MaterialTheme.typography.subtitle1
                     )
@@ -191,7 +196,7 @@ fun LoginScreen(
 
                         withStyle(
                             style = SpanStyle(
-                                color = Primary,
+                                color = MaterialTheme.colors.primary,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             )
@@ -200,7 +205,7 @@ fun LoginScreen(
                         }
                     },
                     style = MaterialTheme.typography.subtitle1,
-                    onClick = {}
+                    onClick = { navController.navigate(Screen.RegisterScreen.route) }
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -223,7 +228,7 @@ fun LoginScreen(
                 navController.navigate(Screen.HomeScreen.route) {
                     launchSingleTop = true
 
-                    popUpTo(Screen.LoginScreen.route) {
+                    popUpTo(Screen.OnboardingScreen.route) {
                         inclusive = true
                     }
                 }

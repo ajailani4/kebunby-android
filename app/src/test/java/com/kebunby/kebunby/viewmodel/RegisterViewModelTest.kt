@@ -2,11 +2,11 @@ package com.kebunby.kebunby.viewmodel
 
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.UserCredential
-import com.kebunby.kebunby.domain.use_case.user.LoginUserUseCase
+import com.kebunby.kebunby.domain.use_case.user.RegisterUserUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.SaveUserCredentialUseCase
-import com.kebunby.kebunby.ui.feature.login.LoginEvent
-import com.kebunby.kebunby.ui.feature.login.LoginState
-import com.kebunby.kebunby.ui.feature.login.LoginViewModel
+import com.kebunby.kebunby.ui.feature.register.RegisterEvent
+import com.kebunby.kebunby.ui.feature.register.RegisterState
+import com.kebunby.kebunby.ui.feature.register.RegisterViewModel
 import com.kebunby.kebunby.util.TestCoroutineRule
 import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,91 +24,91 @@ import org.mockito.kotlin.verify
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class LoginViewModelTest {
+class RegisterViewModelTest {
 
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
     // Dependency
     @Mock
-    private lateinit var loginUserUseCase: LoginUserUseCase
+    private lateinit var registerUserUseCase: RegisterUserUseCase
 
     @Mock
     private lateinit var saveUserCredentialUseCase: SaveUserCredentialUseCase
 
     // SUT
-    private lateinit var loginViewModel: LoginViewModel
+    private lateinit var registerViewModel: RegisterViewModel
 
     @Before
     fun setUp() {
-        loginViewModel = LoginViewModel(loginUserUseCase, saveUserCredentialUseCase)
+        registerViewModel = RegisterViewModel(registerUserUseCase, saveUserCredentialUseCase)
     }
 
     @Test
-    fun login_ShouldReturnSuccess() {
+    fun register_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val resource = flow {
                 emit(Resource.Success(generateUserCredential()))
             }
 
-            doReturn(resource).`when`(loginUserUseCase).invoke(any())
+            doReturn(resource).`when`(registerUserUseCase).invoke(any())
 
             // Act
-            loginViewModel.onEvent(LoginEvent.Submit)
+            registerViewModel.onEvent(RegisterEvent.Submit)
 
-            val loginState = loginViewModel.loginState
+            val registerState = registerViewModel.registerState
             var isSuccess = false
 
-            when (loginState) {
-                is LoginState.Success -> isSuccess = true
+            when (registerState) {
+                is RegisterState.Success -> isSuccess = true
 
-                is LoginState.Fail -> isSuccess = false
+                is RegisterState.Fail -> isSuccess = false
 
-                is LoginState.Error -> isSuccess = false
+                is RegisterState.Error -> isSuccess = false
 
                 else -> {}
             }
 
             // Assert
-            assertEquals("Should be success", true, isSuccess)
+            assertEquals("Should return success", true, isSuccess)
 
             // Verify
-            verify(loginUserUseCase).invoke(any())
+            verify(registerUserUseCase).invoke(any())
         }
     }
 
     @Test
-    fun login_ShouldReturnFail() {
+    fun register_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val resource = flow {
                 emit(Resource.Error<UserCredential>())
             }
 
-            doReturn(resource).`when`(loginUserUseCase).invoke(any())
+            doReturn(resource).`when`(registerUserUseCase).invoke(any())
 
             // Act
-            loginViewModel.onEvent(LoginEvent.Submit)
+            registerViewModel.onEvent(RegisterEvent.Submit)
 
-            val loginState = loginViewModel.loginState
+            val registerState = registerViewModel.registerState
             var isSuccess = false
 
-            when (loginState) {
-                is LoginState.Success -> isSuccess = true
+            when (registerState) {
+                is RegisterState.Success -> isSuccess = true
 
-                is LoginState.Fail -> isSuccess = false
+                is RegisterState.Fail -> isSuccess = false
 
-                is LoginState.Error -> isSuccess = false
+                is RegisterState.Error -> isSuccess = false
 
                 else -> {}
             }
 
             // Assert
-            assertEquals("Should be fail", false, isSuccess)
+            assertEquals("Should return fail", false, isSuccess)
 
             // Verify
-            verify(loginUserUseCase).invoke(any())
+            verify(registerUserUseCase).invoke(any())
         }
     }
 }
