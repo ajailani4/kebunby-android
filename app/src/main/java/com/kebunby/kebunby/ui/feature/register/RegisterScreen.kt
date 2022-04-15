@@ -285,7 +285,7 @@ fun RegisterScreen(
                                 }
                             },
                             style = MaterialTheme.typography.subtitle1,
-                            onClick = {}
+                            onClick = { navController.navigate(Screen.LoginScreen.route) }
                         )
                     }
                 }

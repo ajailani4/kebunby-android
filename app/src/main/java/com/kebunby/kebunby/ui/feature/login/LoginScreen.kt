@@ -205,7 +205,7 @@ fun LoginScreen(
                         }
                     },
                     style = MaterialTheme.typography.subtitle1,
-                    onClick = {}
+                    onClick = { navController.navigate(Screen.RegisterScreen.route) }
                 )
             }
             Spacer(modifier = Modifier.height(20.dp))
