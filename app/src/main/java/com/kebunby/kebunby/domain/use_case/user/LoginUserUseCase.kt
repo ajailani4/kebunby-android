@@ -10,5 +10,6 @@ class LoginUserUseCase @Inject constructor(
     private suspend fun login(loginRequest: LoginRequest) =
         userRepository.login(loginRequest)
 
-    suspend operator fun invoke(loginRequest: LoginRequest) = login(loginRequest)
+    suspend operator fun invoke(loginRequest: LoginRequest) =
+        login(loginRequest)
 }

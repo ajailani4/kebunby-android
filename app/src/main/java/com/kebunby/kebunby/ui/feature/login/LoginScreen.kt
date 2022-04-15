@@ -152,6 +152,11 @@ fun LoginScreen(
                         }
                     },
                     singleLine = true,
+                    textStyle = TextStyle(
+                        color = Color.Black,
+                        fontFamily = poppinsFamily,
+                        fontSize = 15.sp
+                    ),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Password
                     ),
@@ -223,7 +228,7 @@ fun LoginScreen(
                 navController.navigate(Screen.HomeScreen.route) {
                     launchSingleTop = true
 
-                    popUpTo(Screen.LoginScreen.route) {
+                    popUpTo(Screen.OnboardingScreen.route) {
                         inclusive = true
                     }
                 }

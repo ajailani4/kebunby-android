@@ -25,8 +25,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -35,9 +38,26 @@ import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.Person
 import compose.icons.evaicons.outline.*
+import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(
+    navController: NavController,
+    registerViewModel: RegisterViewModel = hiltViewModel()
+) {
+    val onEvent = registerViewModel::onEvent
+    val registerState = registerViewModel.registerState
+    val username = registerViewModel.username
+    val onUsernameChanged = registerViewModel::onUsernameChanged
+    val email = registerViewModel.email
+    val onEmailChanged = registerViewModel::onEmailChanged
+    val name = registerViewModel.name
+    val onNameChanged = registerViewModel::onNameChanged
+    val password = registerViewModel.password
+    val onPasswordChanged = registerViewModel::onPasswordChanged
+    val passwordVisibility = registerViewModel.passwordVisibility
+    val onPasswordVisibilityChanged = registerViewModel::onPasswordVisibilityChanged
+
     val context = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -78,8 +98,8 @@ fun RegisterScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(5.dp))
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = "",
-                            onValueChange = {},
+                            value = username,
+                            onValueChange = onUsernameChanged,
                             leadingIcon = {
                                 Icon(
                                     imageVector = EvaIcons.Outline.Person,
@@ -111,8 +131,8 @@ fun RegisterScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(5.dp))
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = "",
-                            onValueChange = {},
+                            value = email,
+                            onValueChange = onEmailChanged,
                             leadingIcon = {
                                 Icon(
                                     imageVector = EvaIcons.Outline.Email,
@@ -132,6 +152,9 @@ fun RegisterScreen(navController: NavController) {
                                 color = Color.Black,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
+                            ),
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Email
                             )
                         )
                         Spacer(modifier = Modifier.height(20.dp))
@@ -144,8 +167,8 @@ fun RegisterScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(5.dp))
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = "",
-                            onValueChange = {},
+                            value = name,
+                            onValueChange = onNameChanged,
                             leadingIcon = {
                                 Icon(
                                     imageVector = EvaIcons.Fill.Person,
@@ -177,8 +200,8 @@ fun RegisterScreen(navController: NavController) {
                         Spacer(modifier = Modifier.height(5.dp))
                         OutlinedTextField(
                             modifier = Modifier.fillMaxWidth(),
-                            value = "",
-                            onValueChange = {},
+                            value = password,
+                            onValueChange = onPasswordChanged,
                             leadingIcon = {
                                 Icon(
                                     imageVector = EvaIcons.Outline.Lock,
@@ -194,9 +217,9 @@ fun RegisterScreen(navController: NavController) {
                                 )
                             },
                             trailingIcon = {
-                                IconButton(onClick = {}) {
+                                IconButton(onClick = onPasswordVisibilityChanged) {
                                     Icon(
-                                        imageVector = if (true) {
+                                        imageVector = if (passwordVisibility) {
                                             EvaIcons.Outline.Eye
                                         } else {
                                             EvaIcons.Outline.EyeOff
@@ -206,31 +229,39 @@ fun RegisterScreen(navController: NavController) {
                                 }
                             },
                             singleLine = true,
+                            textStyle = TextStyle(
+                                color = Color.Black,
+                                fontFamily = poppinsFamily,
+                                fontSize = 15.sp
+                            ),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password
                             ),
-                            visualTransformation = if (true) VisualTransformation.None else PasswordVisualTransformation()
+                            visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation()
                         )
                         Spacer(modifier = Modifier.height(30.dp))
                         Button(
                             modifier = Modifier.fillMaxWidth(),
                             shape = RoundedCornerShape(15.dp),
-                            enabled = true,
+                            enabled = registerState != RegisterState.Registering,
                             onClick = {
-                                /*if (username.isNotEmpty() && password.isNotEmpty()) {
-                                    onEvent(LoginEvent.Submit)
+                                if (
+                                    username.isNotEmpty() && email.isNotEmpty() &&
+                                    name.isNotEmpty() && password.isNotEmpty()
+                                ) {
+                                    onEvent(RegisterEvent.Submit)
                                 } else {
                                     coroutineScope.launch {
                                         scaffoldState.snackbarHostState.showSnackbar(
                                             context.resources.getString(R.string.fill_the_form)
                                         )
                                     }
-                                }*/
+                                }
                             }
                         ) {
                             Text(
                                 modifier = Modifier.padding(5.dp),
-                                text = stringResource(id = R.string.login),
+                                text = stringResource(id = R.string.register),
                                 color = MaterialTheme.colors.onPrimary,
                                 fontWeight = FontWeight.Bold,
                                 style = MaterialTheme.typography.subtitle1
@@ -258,6 +289,49 @@ fun RegisterScreen(navController: NavController) {
                         )
                     }
                 }
+            }
+        }
+
+        // Observe register state
+        when (registerState) {
+            is RegisterState.Idle -> {}
+
+            is RegisterState.Registering -> {
+                FullSizeProgressBar()
+            }
+
+            is RegisterState.Success -> {
+                navController.navigate(Screen.HomeScreen.route) {
+                    launchSingleTop = true
+
+                    popUpTo(Screen.OnboardingScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+
+            is RegisterState.Fail -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        registerState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(RegisterEvent.Idle)
+            }
+
+            is RegisterState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        registerState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(RegisterEvent.Idle)
             }
         }
     }
