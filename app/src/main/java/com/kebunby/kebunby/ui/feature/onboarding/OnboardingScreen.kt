@@ -26,7 +26,6 @@ import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.feature.onboarding.component.OnboardingItemScreen
 import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.PrimaryVariantLight
-import com.kebunby.kebunby.ui.theme.Red
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)

@@ -9,7 +9,7 @@ val SecondaryLight = Color(0xFF3DB35F)
 val SecondaryVariantLight = Color(0xFF006376)
 val BackgroundLight = Color.White
 val SurfaceLight = Color.White
-val ErrorLight = Color(0xFFEB3923)
+val ErrorLight = Color(0xFFB00020)
 val OnPrimaryLight = Color.White
 val OnSecondaryLight = Color.White
 val OnBackgroundLight = Color.Black
@@ -18,4 +18,3 @@ val OnErrorLight = Color.White
 
 // Common
 val Grey = Color(0xFFBDBDBD)
-val Red = Color(0xFFFF5A46)
