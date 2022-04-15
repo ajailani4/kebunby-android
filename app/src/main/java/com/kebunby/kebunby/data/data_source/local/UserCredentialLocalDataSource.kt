@@ -22,8 +22,8 @@ class UserCredentialLocalDataSource @Inject constructor(
 
     suspend fun saveUserCredential(userCredential: UserCredential) {
         context.dataStore.edit {
-            it[USERNAME] = userCredential.username
-            it[ACCESS_TOKEN] = userCredential.accessToken
+            it[USERNAME] = userCredential.username!!
+            it[ACCESS_TOKEN] = userCredential.accessToken!!
         }
     }
 

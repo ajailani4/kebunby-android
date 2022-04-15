@@ -6,6 +6,7 @@ import com.kebunby.kebunby.data.repository.impl.UserRepositoryImpl
 import com.kebunby.kebunby.domain.use_case.user.LoginUserUseCase
 import com.kebunby.kebunby.util.TestCoroutineRule
 import com.kebunby.kebunby.util.generateLoginRequest
+import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import org.junit.Assert.assertEquals
@@ -43,16 +44,28 @@ class LoginUserUseCaseTest {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val resource = flow {
-                emit(Resource.Success<UserCredential>())
+                emit(Resource.Success<UserCredential>(
+                    generateUserCredential()
+                ))
             }
 
             doReturn(resource).`when`(userRepositoryImpl).login(any())
 
             // Act
             val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
+            var userCredential = UserCredential()
+
+            when (actResource) {
+                is Resource.Success -> {
+                    userCredential = actResource.data!!
+                }
+
+                is Resource.Error -> {}
+            }
 
             // Assert
-            assertEquals("Resource should be success", Resource.Success<UserCredential>(), actResource)
+            assertEquals("Username should be 'george'", "george", userCredential.username)
+            assertEquals("Access token should be 'abc'", "abc", userCredential.accessToken)
 
             // Verify
             verify(userRepositoryImpl).login(any())
