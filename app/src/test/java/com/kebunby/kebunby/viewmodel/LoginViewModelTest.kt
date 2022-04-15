@@ -79,12 +79,12 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun login_ShouldReturnUsernameOrPasswordIsIncorrect() {
+    fun login_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
             // Arrange
-            val resource = Resource.Error<UserCredential>(
-                "Username or password is incorrect"
-            )
+            val resource = flow {
+                emit(Resource.Error<UserCredential>())
+            }
 
             doReturn(resource).`when`(loginUserUseCase).invoke(any())
 
@@ -105,7 +105,7 @@ class LoginViewModelTest {
             }
 
             // Assert
-            assertEquals("Should be 'Username or password is incorrect", false, isSuccess)
+            assertEquals("Should be fail", false, isSuccess)
 
             // Verify
             verify(loginUserUseCase).invoke(any())
