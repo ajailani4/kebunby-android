@@ -27,5 +27,17 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         composable(route = Screen.HomeScreen.route) {
             HomeScreen()
         }
+
+        composable(route = Screen.ExploreScreen.route) {
+            // ExploreScreen()
+        }
+
+        composable(route = Screen.ShopScreen.route) {
+            // ShopScreen()
+        }
+
+        composable(route = Screen.ProfileScreen.route) {
+            // ProfileScreen()
+        }
     }
 }
