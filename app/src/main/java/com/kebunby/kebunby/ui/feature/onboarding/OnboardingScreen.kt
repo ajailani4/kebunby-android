@@ -88,7 +88,7 @@ fun OnboardingScreen(navController: NavController) {
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = MaterialTheme.shapes.medium,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                     onClick = { navController.navigate(Screen.LoginScreen.route) }
                 ) {
@@ -103,7 +103,7 @@ fun OnboardingScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(20.dp))
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = MaterialTheme.shapes.medium,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                     border = BorderStroke(width = 1.dp, color = Color.White),
                     onClick = { navController.navigate(Screen.RegisterScreen.route) }

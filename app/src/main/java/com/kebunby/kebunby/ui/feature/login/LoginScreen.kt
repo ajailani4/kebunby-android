@@ -165,7 +165,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = MaterialTheme.shapes.medium,
                     enabled = loginState != LoginState.LoggingIn,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {

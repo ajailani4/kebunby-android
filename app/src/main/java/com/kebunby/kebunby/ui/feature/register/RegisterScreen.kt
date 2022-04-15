@@ -242,7 +242,7 @@ fun RegisterScreen(
                         Spacer(modifier = Modifier.height(30.dp))
                         Button(
                             modifier = Modifier.fillMaxWidth(),
-                            shape = RoundedCornerShape(15.dp),
+                            shape = MaterialTheme.shapes.medium,
                             enabled = registerState != RegisterState.Registering,
                             onClick = {
                                 if (
