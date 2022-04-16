@@ -11,6 +11,7 @@
     <string name="skip">Lewati</string>
     <string name="login">Masuk</string>
     <string name="register">Daftar</string>
+
     <string name="username">Username</string>
     <string name="enter_username">Masukkan username</string>
     <string name="password">Kata Sandi</string>
@@ -27,4 +28,8 @@
     <string name="incorrect_username_or_pass">Username atau password salah</string>
     <string name="something_wrong_happened">Maaf, terjadi kesalahan</string>
     <string name="username_already_exists">Username sudah ada. Coba yang lain</string>
+
+    <string name="hello">Halo</string>
+    <string name="have_a_nice_day">Semoga harimu menyenangkan</string>
+    <string name="trending">Sedang Tren</string>
 </resources>
