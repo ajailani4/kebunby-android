@@ -1,12 +1,9 @@
 package com.kebunby.kebunby.ui.feature.home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -19,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
 
 @Composable
 fun HomeScreen() {
@@ -29,6 +27,7 @@ fun HomeScreen() {
     ) {
         Column(modifier = Modifier.background(color = MaterialTheme.colors.primary)) {
             HomeHeader()
+            HomeContent()
         }
     }
 }
@@ -74,10 +73,11 @@ fun HomeContent() {
         Column(modifier = Modifier.padding(20.dp)) {
             Text(
                 text = stringResource(id = R.string.trending),
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colors.onBackground,
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.h3
             )
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }
