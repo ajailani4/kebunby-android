@@ -12,7 +12,7 @@ val Typography = Typography(
         fontSize = 24.sp
     ),
     h2 = TextStyle(
-        fontFamily = poppinsFamily,
+        fontFamily = montserratFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 20.sp
     ),
