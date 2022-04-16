@@ -104,7 +104,7 @@ fun ForBeginnerSection() {
 
 @Composable
 fun PlantCategorySection() {
-    TitleSection(title = stringResource(id = R.string.trending))
+    TitleSection(title = stringResource(id = R.string.plant_categories))
     Spacer(modifier = Modifier.height(10.dp))
     // PlantCategoryCard()
 }
