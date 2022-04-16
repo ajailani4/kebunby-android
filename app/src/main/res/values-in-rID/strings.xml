@@ -32,4 +32,6 @@
     <string name="hello">Halo</string>
     <string name="have_a_nice_day">Semoga harimu menyenangkan</string>
     <string name="trending">Sedang Tren</string>
+    <string name="for_beginner">Untuk Pemula</string>
+    <string name="view_all">Lihat semua</string>
 </resources>

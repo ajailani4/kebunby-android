@@ -16,7 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
+import com.kebunby.kebunby.ui.feature.home.component.TitleSection
 
 @Composable
 fun HomeScreen() {
@@ -71,13 +73,38 @@ fun HomeContent() {
         color = MaterialTheme.colors.background
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
-            Text(
-                text = stringResource(id = R.string.trending),
-                color = MaterialTheme.colors.onBackground,
-                fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.h3
-            )
-            Spacer(modifier = Modifier.height(10.dp))
+            TrendingSection()
+            Spacer(modifier = Modifier.height(20.dp))
+            ForBeginnerSection()
+            Spacer(modifier = Modifier.height(20.dp))
+            PlantCategorySection()
         }
     }
+}
+
+@Composable
+fun TrendingSection() {
+    TitleSection(
+        title = stringResource(id = R.string.trending),
+        isViewAllEnabled = true
+    )
+    Spacer(modifier = Modifier.height(10.dp))
+    // PlantMiniCard()
+}
+
+@Composable
+fun ForBeginnerSection() {
+    TitleSection(
+        title = stringResource(id = R.string.for_beginner),
+        isViewAllEnabled = true
+    )
+    Spacer(modifier = Modifier.height(10.dp))
+    // PlantMiniCard()
+}
+
+@Composable
+fun PlantCategorySection() {
+    TitleSection(title = stringResource(id = R.string.trending))
+    Spacer(modifier = Modifier.height(10.dp))
+    // PlantCategoryCard()
 }
