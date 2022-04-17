@@ -18,6 +18,7 @@ val OnErrorLight = Color.White
 
 // Common
 val Grey = Color(0xFFBDBDBD)
+val Red = Color(0xFFEB5757)
 
 // Plant Categories Color
 val DecorativePlant = Color(0xFFC20C00)

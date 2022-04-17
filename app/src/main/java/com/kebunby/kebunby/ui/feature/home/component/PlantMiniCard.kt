@@ -15,14 +15,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.ui.theme.Grey
+import com.kebunby.kebunby.ui.theme.Red
 import compose.icons.EvaIcons
+import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
+import compose.icons.evaicons.fill.Heart
 import compose.icons.evaicons.outline.Heart
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlantMiniCard() {
+fun PlantMiniCard(plantItem: PlantItem) {
     Card(
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.surface,
@@ -33,7 +37,7 @@ fun PlantMiniCard() {
             Box {
                 Image(
                     modifier = Modifier.size(170.dp),
-                    painter = /*rememberImagePainter()*/painterResource(id = R.drawable.img_default_ava),
+                    painter = /*rememberImagePainter(plantItem.image)*/painterResource(id = R.drawable.img_default_ava),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Plant image"
                 )
@@ -48,8 +52,12 @@ fun PlantMiniCard() {
                         modifier = Modifier
                             .padding(5.dp)
                             .size(20.dp),
-                        imageVector = EvaIcons.Outline.Heart,
-                        tint = Grey,
+                        imageVector = if (plantItem.isFavorited) {
+                            EvaIcons.Fill.Heart
+                        } else {
+                            EvaIcons.Outline.Heart
+                        },
+                        tint = if (plantItem.isFavorited) Grey else Red,
                         contentDescription = "Love icon"
                     )
                 }
@@ -60,14 +68,14 @@ fun PlantMiniCard() {
                     .padding(horizontal = 15.dp)
             ) {
                 Text(
-                    text = "Decorative",
+                    text = plantItem.category,
                     color = Grey,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.caption
                 )
                 Text(
-                    text = "Monstera Obliqua",
+                    text = plantItem.name,
                     color = MaterialTheme.colors.onSurface,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
@@ -77,10 +85,4 @@ fun PlantMiniCard() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun PreviewMiniPlantCard() {
-    PlantMiniCard()
 }
