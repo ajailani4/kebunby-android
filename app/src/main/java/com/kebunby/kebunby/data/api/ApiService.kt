@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.data.api
 
+import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.data.model.request.LoginRequest
 import com.kebunby.kebunby.data.model.request.RegisterRequest
