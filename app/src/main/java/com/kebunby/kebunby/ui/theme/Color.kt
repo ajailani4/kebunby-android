@@ -21,6 +21,6 @@ val Grey = Color(0xFFBDBDBD)
 val Red = Color(0xFFEB5757)
 
 // Plant Categories Color
-val DecorativePlant = Color(0xFFC20C00)
-val Vegetable = Color(0xFF3DB35F)
-val FruitTree = Color(0xFFD2D700)
+val DecorativePlantColor = Color(0xFFC20C00)
+val VegetablesColor = Color(0xFF3DB35F)
+val FruitsColor = Color(0xFFD2D700)
