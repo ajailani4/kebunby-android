@@ -32,7 +32,7 @@ fun TitleSection(
             Text(
                 text = stringResource(id = R.string.view_all),
                 color = Grey,
-                style = MaterialTheme.typography.body2
+                style = MaterialTheme.typography.body1
             )
         }
     }
