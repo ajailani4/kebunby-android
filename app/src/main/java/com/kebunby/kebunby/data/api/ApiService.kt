@@ -21,4 +21,9 @@ interface ApiService {
     suspend fun register(
         @Body registerRequest: RegisterRequest
     ): Response<BaseResponse<UserCredential>>
+
+    @GET("users/{username}")
+    suspend fun getUserProfile(
+        @Path("username") username: String
+    ): Response<BaseResponse<User>>
 }

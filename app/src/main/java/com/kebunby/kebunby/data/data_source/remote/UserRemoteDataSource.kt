@@ -11,4 +11,6 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun login(loginRequest: LoginRequest) = apiService.login(loginRequest)
 
     suspend fun register(registerRequest: RegisterRequest) = apiService.register(registerRequest)
+
+    suspend fun getUserProfile(username: String) = apiService.getUserProfile(username)
 }
