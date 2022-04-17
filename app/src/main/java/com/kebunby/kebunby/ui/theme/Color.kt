@@ -19,3 +19,4 @@ val OnErrorLight = Color.White
 // Common
 val Grey = Color(0xFFBDBDBD)
 val Red = Color(0xFFEB5757)
+val BackgroundShimmer = Color(0xFFC7C7C7)
