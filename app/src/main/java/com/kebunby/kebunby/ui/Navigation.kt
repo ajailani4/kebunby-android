@@ -25,7 +25,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         }
 
         composable(route = Screen.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen(navController)
         }
 
         composable(route = Screen.ExploreScreen.route) {

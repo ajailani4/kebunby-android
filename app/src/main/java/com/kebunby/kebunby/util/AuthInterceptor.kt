@@ -5,8 +5,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import javax.inject.Inject
 
-class AuthInterceptor(
+class AuthInterceptor @Inject constructor(
     private val getUserCredentialUseCase: GetUserCredentialUseCase
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {

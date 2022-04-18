@@ -5,6 +5,8 @@ import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.User
 
 sealed class HomeState {
+    object Idle : HomeState()
+
     object LoadingUserProfile : HomeState()
     object LoadingTrendingPlants : HomeState()
     object LoadingForBeginnerPlants : HomeState()
