@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
+import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantsUseCase
 import com.kebunby.kebunby.domain.use_case.user.GetUserProfileUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
@@ -20,16 +21,19 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
-    private val getPlantsUseCase: GetPlantsUseCase
+    private val getPlantsUseCase: GetPlantsUseCase,
+    private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase
 ) : ViewModel() {
     var userProfileState by mutableStateOf<HomeState>(HomeState.Idle)
     var trendingPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var forBeginnerPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
+    var plantCategoriesState by mutableStateOf<HomeState>(HomeState.Idle)
 
     init {
         onEvent(HomeEvent.LoadUserProfile)
         onEvent(HomeEvent.LoadTrendingPlants)
         onEvent(HomeEvent.LoadForBeginnerPlants)
+        onEvent(HomeEvent.LoadPlantCategories)
     }
 
     fun onEvent(event: HomeEvent) {
@@ -39,6 +43,8 @@ class HomeViewModel @Inject constructor(
             HomeEvent.LoadTrendingPlants -> getTrendingPlants()
 
             HomeEvent.LoadForBeginnerPlants -> getForBeginnerPlants()
+
+            HomeEvent.LoadPlantCategories -> getPlantCategories()
         }
     }
 
@@ -101,6 +107,24 @@ class HomeViewModel @Inject constructor(
                     is Resource.Success -> HomeState.ForBeginnerPlants(it.data)
 
                     is Resource.Error -> HomeState.FailForBeginnerPlants(it.message)
+                }
+            }
+        }
+    }
+
+    private fun getPlantCategories() {
+        plantCategoriesState = HomeState.LoadingPlantCategories
+
+        viewModelScope.launch {
+            val resource = getPlantCategoriesUseCase.invoke()
+
+            resource.catch {
+                plantCategoriesState = HomeState.ErrorPlantCategories(it.localizedMessage)
+            }.collect {
+                plantCategoriesState = when (it) {
+                    is Resource.Success -> HomeState.PlantCategories(it.data)
+
+                    is Resource.Error -> HomeState.FailPlantCategories(it.message)
                 }
             }
         }

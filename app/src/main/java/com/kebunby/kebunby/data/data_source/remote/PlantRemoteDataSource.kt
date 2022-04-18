@@ -20,4 +20,6 @@ class PlantRemoteDataSource @Inject constructor(
             forBeginner = forBeginner,
             searchQuery = searchQuery
         )
+
+    suspend fun getPlantCategories() = apiService.getPlantCategories()
 }

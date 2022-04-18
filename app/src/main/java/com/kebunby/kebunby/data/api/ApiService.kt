@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.data.api
 
+import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.data.model.UserCredential
@@ -33,4 +34,7 @@ interface ApiService {
         @Query("forBeginner") forBeginner: Boolean?,
         @Query("searchQuery") searchQuery: String?
     ): Response<BaseResponse<List<PlantItem>>>
+
+    @GET("categories")
+    suspend fun getPlantCategories(): Response<BaseResponse<List<PlantCategory>>>
 }

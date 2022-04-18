@@ -2,6 +2,7 @@ package com.kebunby.kebunby.ui.feature.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -24,6 +25,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.feature.home.component.HomeUserProfileShimmer
+import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
 import com.kebunby.kebunby.ui.feature.home.component.TitleSection
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +41,7 @@ fun HomeScreen(
     val userProfileState = homeViewModel.userProfileState
     val trendingPlantsState = homeViewModel.trendingPlantsState
     val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState
+    val plantCategoriesState = homeViewModel.plantCategoriesState
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -58,6 +61,7 @@ fun HomeScreen(
                 HomeContent(
                     trendingPlantsState = trendingPlantsState,
                     forBeginnerPlantsState = forBeginnerPlantsState,
+                    plantCategoriesState = plantCategoriesState,
                     coroutineScope = coroutineScope,
                     scaffoldState = scaffoldState
                 )
@@ -148,6 +152,7 @@ fun HomeHeader(
 fun HomeContent(
     trendingPlantsState: HomeState,
     forBeginnerPlantsState: HomeState,
+    plantCategoriesState: HomeState,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -169,7 +174,11 @@ fun HomeContent(
                 scaffoldState = scaffoldState
             )
             Spacer(modifier = Modifier.height(20.dp))
-            PlantCategorySection()
+            PlantCategorySection(
+                plantCategoriesState = plantCategoriesState,
+                coroutineScope = coroutineScope,
+                scaffoldState = scaffoldState
+            )
         }
     }
 }
@@ -308,11 +317,60 @@ fun ForBeginnerSection(
 }
 
 @Composable
-fun PlantCategorySection() {
+fun PlantCategorySection(
+    plantCategoriesState: HomeState,
+    coroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState
+) {
     TitleSection(
         modifier = Modifier.padding(horizontal = 20.dp),
         title = stringResource(id = R.string.plant_categories)
     )
     Spacer(modifier = Modifier.height(10.dp))
-    // PlantCategoryCard()
+
+    // Observe plant categories state
+    when (plantCategoriesState) {
+        is HomeState.LoadingPlantCategories -> {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is HomeState.PlantCategories -> {
+            val plantCategories = plantCategoriesState.plantCategories
+
+            plantCategories?.forEach { plantCategory ->
+                PlantCategoryCard(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    plantCategory = plantCategory
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+        }
+
+        is HomeState.FailPlantCategories -> {
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    plantCategoriesState.message?.let { message ->
+                        scaffoldState.snackbarHostState.showSnackbar(message)
+                    }
+                }
+            }
+        }
+
+        is HomeState.ErrorPlantCategories -> {
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    plantCategoriesState.message?.let { message ->
+                        scaffoldState.snackbarHostState.showSnackbar(message)
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
 }

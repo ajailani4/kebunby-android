@@ -2,7 +2,6 @@ package com.kebunby.kebunby.ui.feature.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import com.kebunby.kebunby.R
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -15,9 +14,12 @@ import com.kebunby.kebunby.data.model.PlantCategory
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlantCategoryCard(plantCategory: PlantCategory) {
+fun PlantCategoryCard(
+    modifier: Modifier = Modifier,
+    plantCategory: PlantCategory
+) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 5.dp,
@@ -28,9 +30,7 @@ fun PlantCategoryCard(plantCategory: PlantCategory) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                modifier = Modifier
-                    .size(40.dp)
-                    .padding(5.dp),
+                modifier = Modifier.size(30.dp),
                 painter = painterResource(
                     id = when (plantCategory.id) {
                         1 -> R.drawable.ic_decorative_plant
@@ -43,7 +43,7 @@ fun PlantCategoryCard(plantCategory: PlantCategory) {
             )
             Spacer(modifier = Modifier.width(15.dp))
             Text(
-                text = "Tanaman Hias",
+                text = plantCategory.category,
                 color = MaterialTheme.colors.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle2
