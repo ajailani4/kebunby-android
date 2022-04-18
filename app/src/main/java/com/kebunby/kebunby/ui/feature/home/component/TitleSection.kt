@@ -20,11 +20,12 @@ import com.kebunby.kebunby.ui.theme.poppinsFamily
 
 @Composable
 fun TitleSection(
+    modifier: Modifier = Modifier,
     title: String,
     isViewAllEnabled: Boolean = false
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(

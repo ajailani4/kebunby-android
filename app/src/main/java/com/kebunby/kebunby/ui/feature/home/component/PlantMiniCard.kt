@@ -15,6 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Red
@@ -24,6 +26,7 @@ import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.Heart
 import compose.icons.evaicons.outline.Heart
 
+@ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlantMiniCard(plantItem: PlantItem) {
@@ -36,8 +39,12 @@ fun PlantMiniCard(plantItem: PlantItem) {
         Column {
             Box {
                 Image(
-                    modifier = Modifier.size(170.dp),
-                    painter = /*rememberImagePainter(plantItem.image)*/painterResource(id = R.drawable.img_default_ava),
+                    modifier = Modifier.size(160.dp),
+                    painter = if (plantItem.image != null) {
+                        rememberImagePainter(plantItem.image)
+                    } else {
+                        painterResource(id = R.drawable.img_default_ava)
+                    },
                     contentScale = ContentScale.Crop,
                     contentDescription = "Plant image"
                 )
@@ -57,7 +64,7 @@ fun PlantMiniCard(plantItem: PlantItem) {
                         } else {
                             EvaIcons.Outline.Heart
                         },
-                        tint = if (plantItem.isFavorited) Grey else Red,
+                        tint = if (plantItem.isFavorited) Red else Grey,
                         contentDescription = "Love icon"
                     )
                 }
