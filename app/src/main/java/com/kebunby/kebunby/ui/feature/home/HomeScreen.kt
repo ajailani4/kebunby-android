@@ -24,7 +24,6 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.feature.home.component.HomeUserProfileShimmer
-import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
 import com.kebunby.kebunby.ui.feature.home.component.TitleSection
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +38,7 @@ fun HomeScreen(
     val onEvent = homeViewModel::onEvent
     val userProfileState = homeViewModel.userProfileState
     val trendingPlantsState = homeViewModel.trendingPlantsState
+    val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -57,6 +57,7 @@ fun HomeScreen(
                 )
                 HomeContent(
                     trendingPlantsState = trendingPlantsState,
+                    forBeginnerPlantsState = forBeginnerPlantsState,
                     coroutineScope = coroutineScope,
                     scaffoldState = scaffoldState
                 )
@@ -142,9 +143,11 @@ fun HomeHeader(
     }
 }
 
+@ExperimentalCoilApi
 @Composable
 fun HomeContent(
     trendingPlantsState: HomeState,
+    forBeginnerPlantsState: HomeState,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -160,7 +163,11 @@ fun HomeContent(
                 scaffoldState = scaffoldState
             )
             Spacer(modifier = Modifier.height(20.dp))
-            ForBeginnerSection()
+            ForBeginnerSection(
+                forBeginnerPlantsState = forBeginnerPlantsState,
+                coroutineScope = coroutineScope,
+                scaffoldState = scaffoldState
+            )
             Spacer(modifier = Modifier.height(20.dp))
             PlantCategorySection()
         }
@@ -234,8 +241,13 @@ fun TrendingSection(
     }
 }
 
+@ExperimentalCoilApi
 @Composable
-fun ForBeginnerSection() {
+fun ForBeginnerSection(
+    forBeginnerPlantsState: HomeState,
+    coroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState
+) {
     TitleSection(
         modifier = Modifier
             .padding(horizontal = 20.dp),
@@ -243,7 +255,56 @@ fun ForBeginnerSection() {
         isViewAllEnabled = true
     )
     Spacer(modifier = Modifier.height(10.dp))
-    // PlantMiniCard()
+
+    // Observe for beginner plants
+    when (forBeginnerPlantsState) {
+        is HomeState.LoadingForBeginnerPlants -> {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is HomeState.ForBeginnerPlants -> {
+            val forBeginnerPlants = forBeginnerPlantsState.plants
+
+            if (forBeginnerPlants != null) {
+                LazyRow(contentPadding = PaddingValues(horizontal = 20.dp)) {
+                    items(forBeginnerPlants) { plantItem ->
+                        PlantMiniCard(plantItem)
+
+                        if (plantItem != forBeginnerPlants.last()) {
+                            Spacer(modifier = Modifier.width(18.dp))
+                        }
+                    }
+                }
+            }
+        }
+
+        is HomeState.FailForBeginnerPlants -> {
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    forBeginnerPlantsState.message?.let { message ->
+                        scaffoldState.snackbarHostState.showSnackbar(message)
+                    }
+                }
+            }
+        }
+
+        is HomeState.ErrorForBeginnerPlants -> {
+            LaunchedEffect(Unit) {
+                coroutineScope.launch {
+                    forBeginnerPlantsState.message?.let { message ->
+                        scaffoldState.snackbarHostState.showSnackbar(message)
+                    }
+                }
+            }
+        }
+
+        else -> {}
+    }
 }
 
 @Composable

@@ -24,10 +24,12 @@ class HomeViewModel @Inject constructor(
 ) : ViewModel() {
     var userProfileState by mutableStateOf<HomeState>(HomeState.Idle)
     var trendingPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
+    var forBeginnerPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
 
     init {
         onEvent(HomeEvent.LoadUserProfile)
         onEvent(HomeEvent.LoadTrendingPlants)
+        onEvent(HomeEvent.LoadForBeginnerPlants)
     }
 
     fun onEvent(event: HomeEvent) {
@@ -35,6 +37,8 @@ class HomeViewModel @Inject constructor(
             HomeEvent.LoadUserProfile -> getUserProfile()
 
             HomeEvent.LoadTrendingPlants -> getTrendingPlants()
+
+            HomeEvent.LoadForBeginnerPlants -> getForBeginnerPlants()
         }
     }
 
@@ -75,6 +79,28 @@ class HomeViewModel @Inject constructor(
                     is Resource.Success -> HomeState.TrendingPlants(it.data)
 
                     is Resource.Error -> HomeState.FailTrendingPlants(it.message)
+                }
+            }
+        }
+    }
+
+    private fun getForBeginnerPlants() {
+        forBeginnerPlantsState = HomeState.LoadingForBeginnerPlants
+
+        viewModelScope.launch {
+            val resource = getPlantsUseCase.invoke(
+                page = 1,
+                size = 5,
+                forBeginner = true
+            )
+
+            resource.catch {
+                forBeginnerPlantsState = HomeState.ErrorForBeginnerPlants(it.localizedMessage)
+            }.collect {
+                forBeginnerPlantsState = when (it) {
+                    is Resource.Success -> HomeState.ForBeginnerPlants(it.data)
+
+                    is Resource.Error -> HomeState.FailForBeginnerPlants(it.message)
                 }
             }
         }
