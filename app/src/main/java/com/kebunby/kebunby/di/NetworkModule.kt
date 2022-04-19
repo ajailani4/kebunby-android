@@ -1,7 +1,6 @@
 package com.kebunby.kebunby.di
 
 import com.kebunby.kebunby.BuildConfig
-import com.kebunby.kebunby.data.api.PlantCategoryService
 import com.kebunby.kebunby.data.api.PlantService
 import com.kebunby.kebunby.data.api.UserService
 import com.kebunby.kebunby.util.AuthInterceptor
@@ -37,8 +36,4 @@ class NetworkModule {
     @Provides
     fun providePlantService(retrofit: Retrofit): PlantService =
         retrofit.create(PlantService::class.java)
-
-    @Provides
-    fun providePlantCategoryService(retrofit: Retrofit): PlantCategoryService =
-        retrofit.create(PlantCategoryService::class.java)
 }
