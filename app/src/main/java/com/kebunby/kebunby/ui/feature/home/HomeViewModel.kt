@@ -1,11 +1,13 @@
 package com.kebunby.kebunby.ui.feature.home
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
+import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantsUseCase
 import com.kebunby.kebunby.domain.use_case.user.GetUserProfileUseCase
@@ -28,6 +30,7 @@ class HomeViewModel @Inject constructor(
     var trendingPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var forBeginnerPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var plantCategoriesState by mutableStateOf<HomeState>(HomeState.Idle)
+    var trendingPlants = mutableStateListOf<PlantItem>()
 
     init {
         onEvent(HomeEvent.LoadUserProfile)
@@ -46,6 +49,14 @@ class HomeViewModel @Inject constructor(
 
             HomeEvent.LoadPlantCategories -> getPlantCategories()
         }
+    }
+
+    fun setTrendingPlants(plants: List<PlantItem>) {
+        trendingPlants.addAll(plants)
+    }
+
+    fun updateTrendingPlants(index: Int, plant: PlantItem) {
+        trendingPlants[index] = plant
     }
 
     private fun getUserProfile() {

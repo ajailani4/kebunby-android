@@ -29,7 +29,10 @@ import compose.icons.evaicons.outline.Heart
 @ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlantMiniCard(plantItem: PlantItem) {
+fun PlantMiniCard(
+    plantItem: PlantItem,
+    onFavorited: () -> Unit
+) {
     Card(
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.surface,
@@ -53,7 +56,8 @@ fun PlantMiniCard(plantItem: PlantItem) {
                         .padding(8.dp)
                         .align(Alignment.TopEnd),
                     shape = CircleShape,
-                    color = Color.White
+                    color = Color.White,
+                    onClick = onFavorited
                 ) {
                     Icon(
                         modifier = Modifier

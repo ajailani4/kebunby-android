@@ -2,9 +2,9 @@ package com.kebunby.kebunby.ui.feature.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.ui.feature.home.component.HomeUserProfileShimmer
 import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
@@ -42,6 +43,10 @@ fun HomeScreen(
     val trendingPlantsState = homeViewModel.trendingPlantsState
     val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState
     val plantCategoriesState = homeViewModel.plantCategoriesState
+
+    val trendingPlants = homeViewModel.trendingPlants
+    val setTrendingPlants = homeViewModel::setTrendingPlants
+    val updateTrendingPlants = homeViewModel::updateTrendingPlants
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -62,6 +67,9 @@ fun HomeScreen(
                     trendingPlantsState = trendingPlantsState,
                     forBeginnerPlantsState = forBeginnerPlantsState,
                     plantCategoriesState = plantCategoriesState,
+                    trendingPlants = trendingPlants,
+                    setTrendingPlants = setTrendingPlants,
+                    updateTrendingPlants = updateTrendingPlants,
                     coroutineScope = coroutineScope,
                     scaffoldState = scaffoldState
                 )
@@ -153,6 +161,9 @@ fun HomeContent(
     trendingPlantsState: HomeState,
     forBeginnerPlantsState: HomeState,
     plantCategoriesState: HomeState,
+    trendingPlants: List<PlantItem>,
+    setTrendingPlants: (List<PlantItem>) -> Unit,
+    updateTrendingPlants: (Int, PlantItem) -> Unit,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -164,6 +175,9 @@ fun HomeContent(
         Column {
             TrendingSection(
                 trendingPlantsState = trendingPlantsState,
+                trendingPlants = trendingPlants,
+                setTrendingPlants = setTrendingPlants,
+                updateTrendingPlants = updateTrendingPlants,
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
             )
@@ -187,6 +201,9 @@ fun HomeContent(
 @Composable
 fun TrendingSection(
     trendingPlantsState: HomeState,
+    trendingPlants: List<PlantItem>,
+    setTrendingPlants: (List<PlantItem>) -> Unit,
+    updateTrendingPlants: (Int, PlantItem) -> Unit,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -211,12 +228,14 @@ fun TrendingSection(
         }
 
         is HomeState.TrendingPlants -> {
-            val trendingPlants = trendingPlantsState.plants
+            if (trendingPlantsState.plants != null) {
+                setTrendingPlants(trendingPlantsState.plants)
 
-            if (trendingPlants != null) {
                 LazyRow(contentPadding = PaddingValues(horizontal = 20.dp)) {
-                    items(trendingPlants) { plantItem ->
-                        PlantMiniCard(plantItem)
+                    itemsIndexed(trendingPlants) { i, plantItem ->
+                        PlantMiniCard(plantItem) {
+                            updateTrendingPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
+                        }
 
                         if (plantItem != trendingPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))
@@ -282,7 +301,7 @@ fun ForBeginnerSection(
             if (forBeginnerPlants != null) {
                 LazyRow(contentPadding = PaddingValues(horizontal = 20.dp)) {
                     items(forBeginnerPlants) { plantItem ->
-                        PlantMiniCard(plantItem)
+                        PlantMiniCard(plantItem) {}
 
                         if (plantItem != forBeginnerPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))

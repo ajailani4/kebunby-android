@@ -7,5 +7,5 @@ data class PlantItem(
     val category: String,
     val wateringFreq: String,
     val popularity: Int,
-    val isFavorited: Boolean
+    var isFavorited: Boolean
 )
