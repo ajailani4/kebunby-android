@@ -5,4 +5,5 @@ sealed class HomeEvent {
     object LoadTrendingPlants : HomeEvent()
     object LoadForBeginnerPlants : HomeEvent()
     object LoadPlantCategories : HomeEvent()
+    object AddFavoritePlant : HomeEvent()
 }

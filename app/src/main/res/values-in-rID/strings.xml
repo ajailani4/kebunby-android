@@ -35,4 +35,5 @@
     <string name="for_beginner">Untuk Pemula</string>
     <string name="view_all">Lihat semua</string>
     <string name="plant_categories">Kategori Tanaman</string>
+    <string name="user_act_already_exists">Aktivitas pengguna sudah ada</string>
 </resources>

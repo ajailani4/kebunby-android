@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.PlantItem
+import com.kebunby.kebunby.data.model.request.UserActPlantRequest
+import com.kebunby.kebunby.domain.use_case.plant.AddUserPlantActUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantsUseCase
 import com.kebunby.kebunby.domain.use_case.user.GetUserProfileUseCase
@@ -24,12 +26,15 @@ class HomeViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantsUseCase: GetPlantsUseCase,
-    private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase
+    private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase,
+    private val addUserPlantActUseCase: AddUserPlantActUseCase
 ) : ViewModel() {
     var userProfileState by mutableStateOf<HomeState>(HomeState.Idle)
     var trendingPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var forBeginnerPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var plantCategoriesState by mutableStateOf<HomeState>(HomeState.Idle)
+    var addUserFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
+    private var selectedPlant by mutableStateOf(0)
     var trendingPlants = mutableStateListOf<PlantItem>()
 
     init {
@@ -48,7 +53,13 @@ class HomeViewModel @Inject constructor(
             HomeEvent.LoadForBeginnerPlants -> getForBeginnerPlants()
 
             HomeEvent.LoadPlantCategories -> getPlantCategories()
+
+            HomeEvent.AddFavoritePlant -> addUserFavPlant()
         }
+    }
+
+    fun onSelectedPlantChanged(plantId: Int) {
+        selectedPlant = plantId
     }
 
     fun setTrendingPlants(plants: List<PlantItem>) {
@@ -136,6 +147,30 @@ class HomeViewModel @Inject constructor(
                     is Resource.Success -> HomeState.PlantCategories(it.data)
 
                     is Resource.Error -> HomeState.FailPlantCategories(it.message)
+                }
+            }
+        }
+    }
+
+    private fun addUserFavPlant() {
+        viewModelScope.launch {
+            val userCredential = getUserCredentialUseCase.invoke().first()
+
+            val resource = addUserPlantActUseCase.invoke(
+                username = userCredential.username!!,
+                isFavorited = true,
+                userActPlantRequest = UserActPlantRequest(selectedPlant)
+            )
+
+            resource.catch {
+                addUserFavPlantState = HomeState.ErrorAddFavoritePlant(it.localizedMessage)
+            }.collect {
+                when (it) {
+                    is Resource.Success -> {}
+
+                    is Resource.Error -> {
+                        addUserFavPlantState = HomeState.ErrorAddFavoritePlant(it.message)
+                    }
                 }
             }
         }

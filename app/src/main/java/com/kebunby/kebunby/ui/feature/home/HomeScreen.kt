@@ -43,7 +43,9 @@ fun HomeScreen(
     val trendingPlantsState = homeViewModel.trendingPlantsState
     val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState
     val plantCategoriesState = homeViewModel.plantCategoriesState
+    val addUserFavPlantState = homeViewModel.addUserFavPlantState
 
+    val onSelectedPlantChanged = homeViewModel::onSelectedPlantChanged
     val trendingPlants = homeViewModel.trendingPlants
     val setTrendingPlants = homeViewModel::setTrendingPlants
     val updateTrendingPlants = homeViewModel::updateTrendingPlants
@@ -64,15 +66,42 @@ fun HomeScreen(
                     scaffoldState = scaffoldState
                 )
                 HomeContent(
+                    onEvent = onEvent,
                     trendingPlantsState = trendingPlantsState,
                     forBeginnerPlantsState = forBeginnerPlantsState,
                     plantCategoriesState = plantCategoriesState,
+                    onSelectedPlantChanged = onSelectedPlantChanged,
                     trendingPlants = trendingPlants,
                     setTrendingPlants = setTrendingPlants,
                     updateTrendingPlants = updateTrendingPlants,
                     coroutineScope = coroutineScope,
                     scaffoldState = scaffoldState
                 )
+            }
+
+            // Observe add user favorite plant state
+            when (addUserFavPlantState) {
+                is HomeState.FailAddFavoritePlant -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            addUserFavPlantState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                is HomeState.ErrorAddFavoritePlant -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            addUserFavPlantState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                else -> {}
             }
         }
     }
@@ -158,9 +187,11 @@ fun HomeHeader(
 @ExperimentalCoilApi
 @Composable
 fun HomeContent(
+    onEvent: (HomeEvent) -> Unit,
     trendingPlantsState: HomeState,
     forBeginnerPlantsState: HomeState,
     plantCategoriesState: HomeState,
+    onSelectedPlantChanged: (Int) -> Unit,
     trendingPlants: List<PlantItem>,
     setTrendingPlants: (List<PlantItem>) -> Unit,
     updateTrendingPlants: (Int, PlantItem) -> Unit,
@@ -174,7 +205,9 @@ fun HomeContent(
     ) {
         Column {
             TrendingSection(
+                onEvent = onEvent,
                 trendingPlantsState = trendingPlantsState,
+                onSelectedPlantChanged = onSelectedPlantChanged,
                 trendingPlants = trendingPlants,
                 setTrendingPlants = setTrendingPlants,
                 updateTrendingPlants = updateTrendingPlants,
@@ -200,7 +233,9 @@ fun HomeContent(
 @ExperimentalCoilApi
 @Composable
 fun TrendingSection(
+    onEvent: (HomeEvent) -> Unit,
     trendingPlantsState: HomeState,
+    onSelectedPlantChanged: (Int) -> Unit,
     trendingPlants: List<PlantItem>,
     setTrendingPlants: (List<PlantItem>) -> Unit,
     updateTrendingPlants: (Int, PlantItem) -> Unit,
@@ -229,12 +264,19 @@ fun TrendingSection(
 
         is HomeState.TrendingPlants -> {
             if (trendingPlantsState.plants != null) {
-                setTrendingPlants(trendingPlantsState.plants)
+                if (trendingPlants.isEmpty()) {
+                    setTrendingPlants(trendingPlantsState.plants)
+                }
 
                 LazyRow(contentPadding = PaddingValues(horizontal = 20.dp)) {
                     itemsIndexed(trendingPlants) { i, plantItem ->
                         PlantMiniCard(plantItem) {
                             updateTrendingPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
+
+                            if (!plantItem.isFavorited) {
+                                onSelectedPlantChanged(plantItem.id)
+                                onEvent(HomeEvent.AddFavoritePlant)
+                            }
                         }
 
                         if (plantItem != trendingPlants.last()) {
