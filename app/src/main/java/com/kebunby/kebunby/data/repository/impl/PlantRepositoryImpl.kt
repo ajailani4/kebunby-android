@@ -66,10 +66,27 @@ class PlantRepositoryImpl @Inject constructor(
 
             when (response.code()) {
                 201 -> emit(Resource.Success(response.body()?.data))
+            }
+        }
 
-                409 -> emit(Resource.Error(context.getString(R.string.user_act_already_exists)))
+    override suspend fun deleteUserPlantAct(
+        username: String,
+        plantId: Int,
+        isPlanting: Boolean?,
+        isPlanted: Boolean?,
+        isFavorited: Boolean?
+    ) =
+        flow {
+            val response = plantRemoteDataSource.deleteUserPlantAct(
+                username = username,
+                plantId = plantId,
+                isPlanting = isPlanting,
+                isPlanted = isPlanted,
+                isFavorited = isFavorited
+            )
 
-                else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
+            when (response.code()) {
+                200 -> emit(Resource.Success(response.body()?.data))
             }
         }
 }

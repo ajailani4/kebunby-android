@@ -38,4 +38,19 @@ class PlantRemoteDataSource @Inject constructor(
             isFavorited = isFavorited,
             userActPlantRequest = userActPlantRequest
         )
+
+    suspend fun deleteUserPlantAct(
+        username: String,
+        plantId: Int,
+        isPlanting: Boolean?,
+        isPlanted: Boolean?,
+        isFavorited: Boolean?
+    ) =
+        plantService.deleteUserPlantAct(
+            username = username,
+            plantId = plantId,
+            isPlanting = isPlanting,
+            isPlanted = isPlanted,
+            isFavorited = isFavorited
+        )
 }

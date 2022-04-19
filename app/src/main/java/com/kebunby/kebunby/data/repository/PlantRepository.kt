@@ -24,4 +24,12 @@ interface PlantRepository {
         isFavorited: Boolean?,
         userActPlantRequest: UserActPlantRequest
     ): Flow<Resource<Any>>
+
+    suspend fun deleteUserPlantAct(
+        username: String,
+        plantId: Int,
+        isPlanting: Boolean?,
+        isPlanted: Boolean?,
+        isFavorited: Boolean?
+    ): Flow<Resource<Any>>
 }

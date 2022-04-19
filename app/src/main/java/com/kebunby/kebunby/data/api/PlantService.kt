@@ -28,4 +28,13 @@ interface PlantService {
         @Query("isFavorited") isFavorited: Boolean?,
         @Body userActPlantRequest: UserActPlantRequest
     ): Response<BaseResponse<Any>>
+
+    @DELETE("users/{username}/plants/{plantId}")
+    suspend fun deleteUserPlantAct(
+        @Path("username") username: String,
+        @Path("plantId") plantId: Int,
+        @Query("isPlanting") isPlanting: Boolean?,
+        @Query("isPlanted") isPlanted: Boolean?,
+        @Query("isFavorited") isFavorited: Boolean?
+    ): Response<BaseResponse<Any>>
 }

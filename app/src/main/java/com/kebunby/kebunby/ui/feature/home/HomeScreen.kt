@@ -44,6 +44,7 @@ fun HomeScreen(
     val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState
     val plantCategoriesState = homeViewModel.plantCategoriesState
     val addUserFavPlantState = homeViewModel.addUserFavPlantState
+    val deleteUserFavPlantState = homeViewModel.deleteUserFavPlantState
 
     val onSelectedPlantChanged = homeViewModel::onSelectedPlantChanged
     val trendingPlants = homeViewModel.trendingPlants
@@ -87,7 +88,7 @@ fun HomeScreen(
 
             // Observe add user favorite plant state
             when (addUserFavPlantState) {
-                is HomeState.FailAddFavoritePlant -> {
+                is HomeState.ErrorAddFavoritePlant -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
                             addUserFavPlantState.message?.let { message ->
@@ -97,10 +98,15 @@ fun HomeScreen(
                     }
                 }
 
-                is HomeState.ErrorAddFavoritePlant -> {
+                else -> {}
+            }
+
+            // Observe delete user favorite plant state
+            when (deleteUserFavPlantState) {
+                is HomeState.ErrorDeleteFavoritePlant -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
-                            addUserFavPlantState.message?.let { message ->
+                            deleteUserFavPlantState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }
                         }
@@ -284,14 +290,19 @@ fun TrendingSection(
 
                 LazyRow(contentPadding = PaddingValues(horizontal = 20.dp)) {
                     itemsIndexed(trendingPlants) { i, plantItem ->
-                        PlantMiniCard(plantItem) {
-                            updateTrendingPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
-
-                            if (!plantItem.isFavorited) {
+                        PlantMiniCard(
+                            plantItem = plantItem,
+                            onFavorited = {
+                                updateTrendingPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
                                 onSelectedPlantChanged(plantItem.id)
-                                onEvent(HomeEvent.AddFavoritePlant)
+
+                                if (!plantItem.isFavorited) {
+                                    onEvent(HomeEvent.AddFavoritePlant)
+                                } else {
+                                    onEvent(HomeEvent.DeleteFavoritePlant)
+                                }
                             }
-                        }
+                        )
 
                         if (plantItem != trendingPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))
@@ -364,14 +375,19 @@ fun ForBeginnerSection(
 
                 LazyRow(contentPadding = PaddingValues(horizontal = 20.dp)) {
                     itemsIndexed(forBeginnerPlants) { i, plantItem ->
-                        PlantMiniCard(plantItem) {
-                            updateForBeginnerPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
-
-                            if (!plantItem.isFavorited) {
+                        PlantMiniCard(
+                            plantItem = plantItem,
+                            onFavorited = {
+                                updateForBeginnerPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
                                 onSelectedPlantChanged(plantItem.id)
-                                onEvent(HomeEvent.AddFavoritePlant)
+
+                                if (!plantItem.isFavorited) {
+                                    onEvent(HomeEvent.AddFavoritePlant)
+                                } else {
+                                    onEvent(HomeEvent.DeleteFavoritePlant)
+                                }
                             }
-                        }
+                        )
 
                         if (plantItem != forBeginnerPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))

@@ -10,6 +10,7 @@ import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.request.UserActPlantRequest
 import com.kebunby.kebunby.domain.use_case.plant.AddUserPlantActUseCase
+import com.kebunby.kebunby.domain.use_case.plant.DeleteUserPlantActUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantsUseCase
 import com.kebunby.kebunby.domain.use_case.user.GetUserProfileUseCase
@@ -27,13 +28,15 @@ class HomeViewModel @Inject constructor(
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantsUseCase: GetPlantsUseCase,
     private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase,
-    private val addUserPlantActUseCase: AddUserPlantActUseCase
+    private val addUserPlantActUseCase: AddUserPlantActUseCase,
+    private val deleteUserPlantActUseCase: DeleteUserPlantActUseCase
 ) : ViewModel() {
     var userProfileState by mutableStateOf<HomeState>(HomeState.Idle)
     var trendingPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var forBeginnerPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var plantCategoriesState by mutableStateOf<HomeState>(HomeState.Idle)
     var addUserFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
+    var deleteUserFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
     private var selectedPlant by mutableStateOf(0)
     var trendingPlants = mutableStateListOf<PlantItem>()
     var forBeginnerPlants = mutableStateListOf<PlantItem>()
@@ -56,6 +59,8 @@ class HomeViewModel @Inject constructor(
             HomeEvent.LoadPlantCategories -> getPlantCategories()
 
             HomeEvent.AddFavoritePlant -> addUserFavPlant()
+
+            HomeEvent.DeleteFavoritePlant -> deleteUserFavPlant()
         }
     }
 
@@ -177,9 +182,29 @@ class HomeViewModel @Inject constructor(
                 when (it) {
                     is Resource.Success -> {}
 
-                    is Resource.Error -> {
-                        addUserFavPlantState = HomeState.ErrorAddFavoritePlant(it.message)
-                    }
+                    is Resource.Error -> {}
+                }
+            }
+        }
+    }
+
+    private fun deleteUserFavPlant() {
+        viewModelScope.launch {
+            val userCredential = getUserCredentialUseCase.invoke().first()
+
+            val resource = deleteUserPlantActUseCase.invoke(
+                username = userCredential.username!!,
+                plantId = selectedPlant,
+                isFavorited = true
+            )
+
+            resource.catch {
+                deleteUserFavPlantState = HomeState.ErrorAddFavoritePlant(it.localizedMessage)
+            }.collect {
+                when (it) {
+                    is Resource.Success -> {}
+
+                    is Resource.Error -> {}
                 }
             }
         }

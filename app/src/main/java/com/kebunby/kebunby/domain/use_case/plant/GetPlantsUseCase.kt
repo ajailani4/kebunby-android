@@ -12,14 +12,13 @@ class GetPlantsUseCase @Inject constructor(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
-    ) =
-        plantRepository.getPlants(
-            page = page,
-            size = size,
-            isTrending = isTrending,
-            forBeginner = forBeginner,
-            searchQuery = searchQuery
-        )
+    ) = plantRepository.getPlants(
+        page = page,
+        size = size,
+        isTrending = isTrending,
+        forBeginner = forBeginner,
+        searchQuery = searchQuery
+    )
 
     suspend operator fun invoke(
         page: Int,
@@ -27,12 +26,11 @@ class GetPlantsUseCase @Inject constructor(
         isTrending: Boolean? = null,
         forBeginner: Boolean? = null,
         searchQuery: String? = null
-    ) =
-        getPlants(
-            page = page,
-            size = size,
-            isTrending = isTrending,
-            forBeginner = forBeginner,
-            searchQuery = searchQuery
-        )
+    ) = getPlants(
+        page = page,
+        size = size,
+        isTrending = isTrending,
+        forBeginner = forBeginner,
+        searchQuery = searchQuery
+    )
 }
