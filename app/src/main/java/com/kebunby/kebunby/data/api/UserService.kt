@@ -10,7 +10,7 @@ import com.kebunby.kebunby.data.model.response.BaseResponse
 import retrofit2.Response
 import retrofit2.http.*
 
-interface ApiService {
+interface UserService {
     @POST("login")
     suspend fun login(
         @Body loginRequest: LoginRequest
@@ -25,16 +25,4 @@ interface ApiService {
     suspend fun getUserProfile(
         @Path("username") username: String
     ): Response<BaseResponse<User>>
-
-    @GET("plants")
-    suspend fun getPlants(
-        @Query("page") page: Int,
-        @Query("size") size: Int,
-        @Query("isTrending") isTrending: Boolean?,
-        @Query("forBeginner") forBeginner: Boolean?,
-        @Query("searchQuery") searchQuery: String?
-    ): Response<BaseResponse<List<PlantItem>>>
-
-    @GET("categories")
-    suspend fun getPlantCategories(): Response<BaseResponse<List<PlantCategory>>>
 }

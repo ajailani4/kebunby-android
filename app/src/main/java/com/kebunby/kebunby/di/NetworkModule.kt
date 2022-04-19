@@ -1,7 +1,9 @@
 package com.kebunby.kebunby.di
 
 import com.kebunby.kebunby.BuildConfig
-import com.kebunby.kebunby.data.api.ApiService
+import com.kebunby.kebunby.data.api.PlantCategoryService
+import com.kebunby.kebunby.data.api.PlantService
+import com.kebunby.kebunby.data.api.UserService
 import com.kebunby.kebunby.util.AuthInterceptor
 import dagger.Module
 import dagger.Provides
@@ -29,6 +31,14 @@ class NetworkModule {
             .build()
 
     @Provides
-    fun provideApiService(retrofit: Retrofit): ApiService =
-        retrofit.create(ApiService::class.java)
+    fun provideUserService(retrofit: Retrofit): UserService =
+        retrofit.create(UserService::class.java)
+
+    @Provides
+    fun providePlantService(retrofit: Retrofit): PlantService =
+        retrofit.create(PlantService::class.java)
+
+    @Provides
+    fun providePlantCategoryService(retrofit: Retrofit): PlantCategoryService =
+        retrofit.create(PlantCategoryService::class.java)
 }
