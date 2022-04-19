@@ -49,6 +49,9 @@ fun HomeScreen(
     val trendingPlants = homeViewModel.trendingPlants
     val setTrendingPlants = homeViewModel::setTrendingPlants
     val updateTrendingPlants = homeViewModel::updateTrendingPlants
+    val forBeginnerPlants = homeViewModel.forBeginnerPlants
+    val setForBeginnerPlants = homeViewModel::setForBeginnerPlants
+    val updateForBeginnerPlants = homeViewModel::updateForBeginnerPlants
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -74,6 +77,9 @@ fun HomeScreen(
                     trendingPlants = trendingPlants,
                     setTrendingPlants = setTrendingPlants,
                     updateTrendingPlants = updateTrendingPlants,
+                    forBeginnerPlants = forBeginnerPlants,
+                    setForBeginnerPlants = setForBeginnerPlants,
+                    updateForBeginnerPlants = updateForBeginnerPlants,
                     coroutineScope = coroutineScope,
                     scaffoldState = scaffoldState
                 )
@@ -195,6 +201,9 @@ fun HomeContent(
     trendingPlants: List<PlantItem>,
     setTrendingPlants: (List<PlantItem>) -> Unit,
     updateTrendingPlants: (Int, PlantItem) -> Unit,
+    forBeginnerPlants: List<PlantItem>,
+    setForBeginnerPlants: (List<PlantItem>) -> Unit,
+    updateForBeginnerPlants: (Int, PlantItem) -> Unit,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -216,7 +225,12 @@ fun HomeContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
             ForBeginnerSection(
+                onEvent = onEvent,
                 forBeginnerPlantsState = forBeginnerPlantsState,
+                onSelectedPlantChanged = onSelectedPlantChanged,
+                forBeginnerPlants = forBeginnerPlants,
+                setForBeginnerPlants = setForBeginnerPlants,
+                updateForBeginnerPlants = updateForBeginnerPlants,
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
             )
@@ -314,7 +328,12 @@ fun TrendingSection(
 @ExperimentalCoilApi
 @Composable
 fun ForBeginnerSection(
+    onEvent: (HomeEvent) -> Unit,
     forBeginnerPlantsState: HomeState,
+    onSelectedPlantChanged: (Int) -> Unit,
+    forBeginnerPlants: List<PlantItem>,
+    setForBeginnerPlants: (List<PlantItem>) -> Unit,
+    updateForBeginnerPlants: (Int, PlantItem) -> Unit,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -338,12 +357,21 @@ fun ForBeginnerSection(
         }
 
         is HomeState.ForBeginnerPlants -> {
-            val forBeginnerPlants = forBeginnerPlantsState.plants
+            if (forBeginnerPlantsState.plants != null) {
+                if (forBeginnerPlants.isEmpty()) {
+                    setForBeginnerPlants(forBeginnerPlantsState.plants)
+                }
 
-            if (forBeginnerPlants != null) {
                 LazyRow(contentPadding = PaddingValues(horizontal = 20.dp)) {
-                    items(forBeginnerPlants) { plantItem ->
-                        PlantMiniCard(plantItem) {}
+                    itemsIndexed(forBeginnerPlants) { i, plantItem ->
+                        PlantMiniCard(plantItem) {
+                            updateForBeginnerPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
+
+                            if (!plantItem.isFavorited) {
+                                onSelectedPlantChanged(plantItem.id)
+                                onEvent(HomeEvent.AddFavoritePlant)
+                            }
+                        }
 
                         if (plantItem != forBeginnerPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))

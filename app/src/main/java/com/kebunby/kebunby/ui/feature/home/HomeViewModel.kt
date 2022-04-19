@@ -36,6 +36,7 @@ class HomeViewModel @Inject constructor(
     var addUserFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
     private var selectedPlant by mutableStateOf(0)
     var trendingPlants = mutableStateListOf<PlantItem>()
+    var forBeginnerPlants = mutableStateListOf<PlantItem>()
 
     init {
         onEvent(HomeEvent.LoadUserProfile)
@@ -68,6 +69,14 @@ class HomeViewModel @Inject constructor(
 
     fun updateTrendingPlants(index: Int, plant: PlantItem) {
         trendingPlants[index] = plant
+    }
+
+    fun setForBeginnerPlants(plants: List<PlantItem>) {
+        forBeginnerPlants.addAll(plants)
+    }
+
+    fun updateForBeginnerPlants(index: Int, plant: PlantItem) {
+        forBeginnerPlants[index] = plant
     }
 
     private fun getUserProfile() {
