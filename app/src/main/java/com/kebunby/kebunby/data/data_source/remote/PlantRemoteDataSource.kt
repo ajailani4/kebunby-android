@@ -1,10 +1,11 @@
 package com.kebunby.kebunby.data.data_source.remote
 
+import com.kebunby.kebunby.data.api.PlantService
 import com.kebunby.kebunby.data.api.UserService
 import javax.inject.Inject
 
 class PlantRemoteDataSource @Inject constructor(
-    private val userService: UserService
+    private val plantService: PlantService
 ) {
     suspend fun getPlants(
         page: Int,
@@ -13,7 +14,7 @@ class PlantRemoteDataSource @Inject constructor(
         forBeginner: Boolean?,
         searchQuery: String?
     ) =
-        userService.getPlants(
+        plantService.getPlants(
             page = page,
             size = size,
             isTrending = isTrending,
@@ -21,5 +22,5 @@ class PlantRemoteDataSource @Inject constructor(
             searchQuery = searchQuery
         )
 
-    suspend fun getPlantCategories() = userService.getPlantCategories()
+    suspend fun getPlantCategories() = plantService.getPlantCategories()
 }
