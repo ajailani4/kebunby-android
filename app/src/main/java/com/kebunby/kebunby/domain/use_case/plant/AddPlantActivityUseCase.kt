@@ -1,36 +1,37 @@
 package com.kebunby.kebunby.domain.use_case.plant
 
+import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import javax.inject.Inject
 
-class DeleteUserPlantActUseCase @Inject constructor(
+class AddPlantActivityUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private suspend fun deleteUserPlantAct(
+    private suspend fun addPlantActivity(
         username: String,
-        plantId: Int,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
-        isFavorited: Boolean?
-    ) = plantRepository.deleteUserPlantAct(
+        isFavorited: Boolean?,
+        userPlantActRequest: PlantActRequest
+    ) = plantRepository.addPlantActivity(
         username = username,
-        plantId = plantId,
         isPlanting = isPlanting,
         isPlanted = isPlanted,
-        isFavorited = isFavorited
+        isFavorited = isFavorited,
+        userPlantActRequest = userPlantActRequest
     )
 
     suspend operator fun invoke(
         username: String,
-        plantId: Int,
         isPlanting: Boolean? = null,
         isPlanted: Boolean? = null,
-        isFavorited: Boolean? = null
-    ) = deleteUserPlantAct(
+        isFavorited: Boolean? = null,
+        userPlantActRequest: PlantActRequest
+    ) = addPlantActivity(
         username = username,
-        plantId = plantId,
         isPlanting = isPlanting,
         isPlanted = isPlanted,
-        isFavorited = isFavorited
+        isFavorited = isFavorited,
+        userPlantActRequest = userPlantActRequest
     )
 }

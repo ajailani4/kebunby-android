@@ -1,7 +1,7 @@
 package com.kebunby.kebunby.data.data_source.remote
 
 import com.kebunby.kebunby.data.api.PlantService
-import com.kebunby.kebunby.data.model.request.UserActPlantRequest
+import com.kebunby.kebunby.data.model.request.PlantActRequest
 import javax.inject.Inject
 
 class PlantRemoteDataSource @Inject constructor(
@@ -24,29 +24,29 @@ class PlantRemoteDataSource @Inject constructor(
 
     suspend fun getPlantCategories() = plantService.getPlantCategories()
 
-    suspend fun addUserPlantAct(
+    suspend fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?,
-        userActPlantRequest: UserActPlantRequest
+        userPlantActRequest: PlantActRequest
     ) =
-        plantService.addUserPlantAct(
+        plantService.addPlantActivity(
             username = username,
             isPlanting = isPlanting,
             isPlanted = isPlanted,
             isFavorited = isFavorited,
-            userActPlantRequest = userActPlantRequest
+            userPlantActRequest = userPlantActRequest
         )
 
-    suspend fun deleteUserPlantAct(
+    suspend fun deletePlantActivity(
         username: String,
         plantId: Int,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?
     ) =
-        plantService.deleteUserPlantAct(
+        plantService.deletePlantActivity(
             username = username,
             plantId = plantId,
             isPlanting = isPlanting,

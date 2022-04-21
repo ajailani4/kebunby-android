@@ -8,9 +8,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.PlantItem
-import com.kebunby.kebunby.data.model.request.UserActPlantRequest
-import com.kebunby.kebunby.domain.use_case.plant.AddUserPlantActUseCase
-import com.kebunby.kebunby.domain.use_case.plant.DeleteUserPlantActUseCase
+import com.kebunby.kebunby.data.model.request.PlantActRequest
+import com.kebunby.kebunby.domain.use_case.plant.AddPlantActivityUseCase
+import com.kebunby.kebunby.domain.use_case.plant.DeletePlantActivityUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantsUseCase
 import com.kebunby.kebunby.domain.use_case.user.GetUserProfileUseCase
@@ -28,15 +28,15 @@ class HomeViewModel @Inject constructor(
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantsUseCase: GetPlantsUseCase,
     private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase,
-    private val addUserPlantActUseCase: AddUserPlantActUseCase,
-    private val deleteUserPlantActUseCase: DeleteUserPlantActUseCase
+    private val addPlantActivityUseCase: AddPlantActivityUseCase,
+    private val deletePlantActivityUseCase: DeletePlantActivityUseCase
 ) : ViewModel() {
     var userProfileState by mutableStateOf<HomeState>(HomeState.Idle)
     var trendingPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var forBeginnerPlantsState by mutableStateOf<HomeState>(HomeState.Idle)
     var plantCategoriesState by mutableStateOf<HomeState>(HomeState.Idle)
-    var addUserFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
-    var deleteUserFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
+    var addFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
+    var deleteFavPlantState by mutableStateOf<HomeState>(HomeState.Idle)
     private var selectedPlant by mutableStateOf(0)
     var trendingPlants = mutableStateListOf<PlantItem>()
     var forBeginnerPlants = mutableStateListOf<PlantItem>()
@@ -170,14 +170,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
 
-            val resource = addUserPlantActUseCase.invoke(
+            val resource = addPlantActivityUseCase.invoke(
                 username = userCredential.username!!,
                 isFavorited = true,
-                userActPlantRequest = UserActPlantRequest(selectedPlant)
+                userPlantActRequest = PlantActRequest(selectedPlant)
             )
 
             resource.catch {
-                addUserFavPlantState = HomeState.ErrorAddFavoritePlant(it.localizedMessage)
+                addFavPlantState = HomeState.ErrorAddFavoritePlant(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
@@ -192,14 +192,14 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
 
-            val resource = deleteUserPlantActUseCase.invoke(
+            val resource = deletePlantActivityUseCase.invoke(
                 username = userCredential.username!!,
                 plantId = selectedPlant,
                 isFavorited = true
             )
 
             resource.catch {
-                deleteUserFavPlantState = HomeState.ErrorAddFavoritePlant(it.localizedMessage)
+                deleteFavPlantState = HomeState.ErrorAddFavoritePlant(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}

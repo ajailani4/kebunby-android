@@ -3,7 +3,6 @@ package com.kebunby.kebunby.ui.feature.home
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -43,8 +42,8 @@ fun HomeScreen(
     val trendingPlantsState = homeViewModel.trendingPlantsState
     val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState
     val plantCategoriesState = homeViewModel.plantCategoriesState
-    val addUserFavPlantState = homeViewModel.addUserFavPlantState
-    val deleteUserFavPlantState = homeViewModel.deleteUserFavPlantState
+    val addFavPlantState = homeViewModel.addFavPlantState
+    val deleteFavPlantState = homeViewModel.deleteFavPlantState
 
     val onSelectedPlantChanged = homeViewModel::onSelectedPlantChanged
     val trendingPlants = homeViewModel.trendingPlants
@@ -87,11 +86,11 @@ fun HomeScreen(
             }
 
             // Observe add user favorite plant state
-            when (addUserFavPlantState) {
+            when (addFavPlantState) {
                 is HomeState.ErrorAddFavoritePlant -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
-                            addUserFavPlantState.message?.let { message ->
+                            addFavPlantState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }
                         }
@@ -102,11 +101,11 @@ fun HomeScreen(
             }
 
             // Observe delete user favorite plant state
-            when (deleteUserFavPlantState) {
+            when (deleteFavPlantState) {
                 is HomeState.ErrorDeleteFavoritePlant -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
-                            deleteUserFavPlantState.message?.let { message ->
+                            deleteFavPlantState.message?.let { message ->
                                 scaffoldState.snackbarHostState.showSnackbar(message)
                             }
                         }

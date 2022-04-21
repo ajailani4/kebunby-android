@@ -1,5 +1,5 @@
 package com.kebunby.kebunby.data.model.request
 
-data class UserActPlantRequest(
+data class PlantActRequest(
     var plantId: Int
 )

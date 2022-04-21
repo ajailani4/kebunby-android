@@ -4,7 +4,7 @@ import android.content.Context
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
-import com.kebunby.kebunby.data.model.request.UserActPlantRequest
+import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.flow
@@ -48,20 +48,20 @@ class PlantRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun addUserPlantAct(
+    override suspend fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?,
-        userActPlantRequest: UserActPlantRequest
+        userPlantActRequest: PlantActRequest
     ) =
         flow {
-            val response = plantRemoteDataSource.addUserPlantAct(
+            val response = plantRemoteDataSource.addPlantActivity(
                 username = username,
                 isPlanting = isPlanting,
                 isPlanted = isPlanted,
                 isFavorited = isFavorited,
-                userActPlantRequest = userActPlantRequest
+                userPlantActRequest = userPlantActRequest
             )
 
             when (response.code()) {
@@ -69,7 +69,7 @@ class PlantRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun deleteUserPlantAct(
+    override suspend fun deletePlantActivity(
         username: String,
         plantId: Int,
         isPlanting: Boolean?,
@@ -77,7 +77,7 @@ class PlantRepositoryImpl @Inject constructor(
         isFavorited: Boolean?
     ) =
         flow {
-            val response = plantRemoteDataSource.deleteUserPlantAct(
+            val response = plantRemoteDataSource.deletePlantActivity(
                 username = username,
                 plantId = plantId,
                 isPlanting = isPlanting,
