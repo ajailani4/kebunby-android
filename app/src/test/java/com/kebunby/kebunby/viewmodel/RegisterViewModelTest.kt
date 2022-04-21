@@ -57,17 +57,14 @@ class RegisterViewModelTest {
             // Act
             registerViewModel.onEvent(RegisterEvent.Submit)
 
-            val registerState = registerViewModel.registerState
-            var isSuccess = false
+            val isSuccess = when (registerViewModel.registerState) {
+                is RegisterState.Success -> true
 
-            when (registerState) {
-                is RegisterState.Success -> isSuccess = true
+                is RegisterState.Fail -> false
 
-                is RegisterState.Fail -> isSuccess = false
+                is RegisterState.Error -> false
 
-                is RegisterState.Error -> isSuccess = false
-
-                else -> {}
+                else -> false
             }
 
             // Assert
@@ -91,17 +88,14 @@ class RegisterViewModelTest {
             // Act
             registerViewModel.onEvent(RegisterEvent.Submit)
 
-            val registerState = registerViewModel.registerState
-            var isSuccess = false
+            val isSuccess = when (registerViewModel.registerState) {
+                is RegisterState.Success -> true
 
-            when (registerState) {
-                is RegisterState.Success -> isSuccess = true
+                is RegisterState.Fail -> false
 
-                is RegisterState.Fail -> isSuccess = false
+                is RegisterState.Error -> false
 
-                is RegisterState.Error -> isSuccess = false
-
-                else -> {}
+                else -> false
             }
 
             // Assert
