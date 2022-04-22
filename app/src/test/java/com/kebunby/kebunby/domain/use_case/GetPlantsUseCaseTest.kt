@@ -109,7 +109,7 @@ class GetPlantsUseCaseTest {
 
             // Assert
             assertEquals(
-                "Resource should be fail",
+                "Resource should be error",
                 Resource.Error<List<PlantItem>>(),
                 actualResource
             )
