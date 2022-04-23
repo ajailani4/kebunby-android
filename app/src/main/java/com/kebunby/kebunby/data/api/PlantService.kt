@@ -26,7 +26,7 @@ interface PlantService {
         @Query("isPlanting") isPlanting: Boolean?,
         @Query("isPlanted") isPlanted: Boolean?,
         @Query("isFavorited") isFavorited: Boolean?,
-        @Body userPlantActRequest: PlantActRequest
+        @Body plantActRequest: PlantActRequest
     ): Response<BaseResponse<Any>>
 
     @DELETE("users/{username}/plants/{plantId}")

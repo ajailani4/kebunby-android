@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoJUnitRunner
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mock
 import org.mockito.kotlin.any
@@ -54,7 +53,7 @@ class AddPlantActivityUseCaseTest {
                 isPlanting = isNull(),
                 isPlanted = isNull(),
                 isFavorited = anyBoolean(),
-                userPlantActRequest = any()
+                plantActRequest = any()
             )
 
             // Act
@@ -63,7 +62,7 @@ class AddPlantActivityUseCaseTest {
                 isPlanting = null,
                 isPlanted = null,
                 isFavorited = true,
-                userPlantActRequest = generatePlantActRequest()
+                plantActRequest = generatePlantActRequest()
             ).first()
 
             // Assert
@@ -79,7 +78,7 @@ class AddPlantActivityUseCaseTest {
                 isPlanting = isNull(),
                 isPlanted = isNull(),
                 isFavorited = anyBoolean(),
-                userPlantActRequest = any()
+                plantActRequest = any()
             )
         }
     }
@@ -97,7 +96,7 @@ class AddPlantActivityUseCaseTest {
                 isPlanting = isNull(),
                 isPlanted = isNull(),
                 isFavorited = anyBoolean(),
-                userPlantActRequest = any()
+                plantActRequest = any()
             )
 
             // Act
@@ -106,7 +105,7 @@ class AddPlantActivityUseCaseTest {
                 isPlanting = null,
                 isPlanted = null,
                 isFavorited = true,
-                userPlantActRequest = generatePlantActRequest()
+                plantActRequest = generatePlantActRequest()
             ).first()
 
             // Assert
@@ -122,7 +121,7 @@ class AddPlantActivityUseCaseTest {
                 isPlanting = isNull(),
                 isPlanted = isNull(),
                 isFavorited = anyBoolean(),
-                userPlantActRequest = any()
+                plantActRequest = any()
             )
         }
     }

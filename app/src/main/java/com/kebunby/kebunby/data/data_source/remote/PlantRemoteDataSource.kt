@@ -29,14 +29,14 @@ class PlantRemoteDataSource @Inject constructor(
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?,
-        userPlantActRequest: PlantActRequest
+        plantActRequest: PlantActRequest
     ) =
         plantService.addPlantActivity(
             username = username,
             isPlanting = isPlanting,
             isPlanted = isPlanted,
             isFavorited = isFavorited,
-            userPlantActRequest = userPlantActRequest
+            plantActRequest = plantActRequest
         )
 
     suspend fun deletePlantActivity(

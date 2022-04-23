@@ -463,7 +463,7 @@ class HomeViewModelTest {
                 isPlanting = isNull(),
                 isPlanted = isNull(),
                 isFavorited = anyBoolean(),
-                userPlantActRequest = any()
+                plantActRequest = any()
             )
 
             // Act
@@ -494,7 +494,7 @@ class HomeViewModelTest {
                 isPlanting = isNull(),
                 isPlanted = isNull(),
                 isFavorited = anyBoolean(),
-                userPlantActRequest = any()
+                plantActRequest = any()
             )
         }
     }

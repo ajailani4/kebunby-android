@@ -53,7 +53,7 @@ class PlantRepositoryImpl @Inject constructor(
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?,
-        userPlantActRequest: PlantActRequest
+        plantActRequest: PlantActRequest
     ) =
         flow {
             val response = plantRemoteDataSource.addPlantActivity(
@@ -61,7 +61,7 @@ class PlantRepositoryImpl @Inject constructor(
                 isPlanting = isPlanting,
                 isPlanted = isPlanted,
                 isFavorited = isFavorited,
-                userPlantActRequest = userPlantActRequest
+                plantActRequest = plantActRequest
             )
 
             when (response.code()) {

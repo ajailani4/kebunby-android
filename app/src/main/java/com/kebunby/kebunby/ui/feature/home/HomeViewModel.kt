@@ -173,7 +173,7 @@ class HomeViewModel @Inject constructor(
             val resource = addPlantActivityUseCase.invoke(
                 username = userCredential.username!!,
                 isFavorited = true,
-                userPlantActRequest = PlantActRequest(selectedPlant)
+                plantActRequest = PlantActRequest(selectedPlant)
             )
 
             resource.catch {

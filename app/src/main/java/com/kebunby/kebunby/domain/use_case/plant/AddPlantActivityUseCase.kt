@@ -12,13 +12,13 @@ class AddPlantActivityUseCase @Inject constructor(
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?,
-        userPlantActRequest: PlantActRequest
+        plantActRequest: PlantActRequest
     ) = plantRepository.addPlantActivity(
         username = username,
         isPlanting = isPlanting,
         isPlanted = isPlanted,
         isFavorited = isFavorited,
-        userPlantActRequest = userPlantActRequest
+        plantActRequest = plantActRequest
     )
 
     suspend operator fun invoke(
@@ -26,12 +26,12 @@ class AddPlantActivityUseCase @Inject constructor(
         isPlanting: Boolean? = null,
         isPlanted: Boolean? = null,
         isFavorited: Boolean? = null,
-        userPlantActRequest: PlantActRequest
+        plantActRequest: PlantActRequest
     ) = addPlantActivity(
         username = username,
         isPlanting = isPlanting,
         isPlanted = isPlanted,
         isFavorited = isFavorited,
-        userPlantActRequest = userPlantActRequest
+        plantActRequest = plantActRequest
     )
 }
