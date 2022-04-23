@@ -3,7 +3,6 @@ package com.kebunby.kebunby.ui.feature.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -33,7 +32,6 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
-import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
@@ -165,7 +163,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = MaterialTheme.shapes.medium,
                     enabled = loginState != LoginState.LoggingIn,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {

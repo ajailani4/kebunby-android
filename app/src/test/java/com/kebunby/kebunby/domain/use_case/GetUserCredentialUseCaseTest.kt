@@ -8,8 +8,7 @@ import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -52,8 +51,8 @@ class GetUserCredentialUseCaseTest {
             val actUserCredential = getUserCredentialUseCase.invoke().first()
 
             // Assert
-            Assert.assertEquals("Username should be 'george'", "george", actUserCredential.username)
-            Assert.assertEquals("Access token should be 'abc'", "abc", actUserCredential.accessToken)
+            assertEquals("Username should be 'george'", "george", actUserCredential.username)
+            assertEquals("Access token should be 'abc'", "abc", actUserCredential.accessToken)
 
             // Verify
             verify(userCredentialRepository).getUserCredential()
@@ -79,8 +78,8 @@ class GetUserCredentialUseCaseTest {
             val actUserCredential = getUserCredentialUseCase.invoke().first()
 
             // Assert
-            Assert.assertEquals("Username should be empty", "", actUserCredential.username)
-            Assert.assertEquals("Access token should be empty", "", actUserCredential.accessToken)
+            assertEquals("Username should be empty", "", actUserCredential.username)
+            assertEquals("Access token should be empty", "", actUserCredential.accessToken)
 
             // Verify
             verify(userCredentialRepository).getUserCredential()

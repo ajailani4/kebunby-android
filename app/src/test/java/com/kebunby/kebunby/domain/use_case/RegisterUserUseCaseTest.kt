@@ -5,7 +5,6 @@ import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.data.repository.UserRepository
 import com.kebunby.kebunby.domain.use_case.user.RegisterUserUseCase
 import com.kebunby.kebunby.util.TestCoroutineRule
-import com.kebunby.kebunby.util.generateLoginRequest
 import com.kebunby.kebunby.util.generateRegisterRequest
 import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -48,8 +47,9 @@ class RegisterUserUseCaseTest {
             val resource = flow {
                 emit(
                     Resource.Success<UserCredential>(
-                    generateUserCredential()
-                ))
+                        generateUserCredential()
+                    )
+                )
             }
 
             doReturn(resource).`when`(userRepository).register(any())

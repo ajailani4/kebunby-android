@@ -57,17 +57,14 @@ class LoginViewModelTest {
             // Act
             loginViewModel.onEvent(LoginEvent.Submit)
 
-            val loginState = loginViewModel.loginState
-            var isSuccess = false
+            val isSuccess = when (loginViewModel.loginState) {
+                is LoginState.Success -> true
 
-            when (loginState) {
-                is LoginState.Success -> isSuccess = true
+                is LoginState.Fail -> false
 
-                is LoginState.Fail -> isSuccess = false
+                is LoginState.Error -> false
 
-                is LoginState.Error -> isSuccess = false
-
-                else -> {}
+                else -> false
             }
 
             // Assert
@@ -91,17 +88,14 @@ class LoginViewModelTest {
             // Act
             loginViewModel.onEvent(LoginEvent.Submit)
 
-            val loginState = loginViewModel.loginState
-            var isSuccess = false
+            val isSuccess = when (loginViewModel.loginState) {
+                is LoginState.Success -> true
 
-            when (loginState) {
-                is LoginState.Success -> isSuccess = true
+                is LoginState.Fail -> false
 
-                is LoginState.Fail -> isSuccess = false
+                is LoginState.Error -> false
 
-                is LoginState.Error -> isSuccess = false
-
-                else -> {}
+                else -> false
             }
 
             // Assert

@@ -5,7 +5,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -26,7 +25,6 @@ import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.feature.onboarding.component.OnboardingItemScreen
 import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.PrimaryVariantLight
-import com.kebunby.kebunby.ui.theme.Red
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -89,7 +87,7 @@ fun OnboardingScreen(navController: NavController) {
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = MaterialTheme.shapes.medium,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                     onClick = { navController.navigate(Screen.LoginScreen.route) }
                 ) {
@@ -104,7 +102,7 @@ fun OnboardingScreen(navController: NavController) {
                 Spacer(modifier = Modifier.height(20.dp))
                 OutlinedButton(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(15.dp),
+                    shape = MaterialTheme.shapes.medium,
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
                     border = BorderStroke(width = 1.dp, color = Color.White),
                     onClick = { navController.navigate(Screen.RegisterScreen.route) }

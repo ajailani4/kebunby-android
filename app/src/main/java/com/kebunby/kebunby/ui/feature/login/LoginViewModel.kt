@@ -69,9 +69,7 @@ class LoginViewModel @Inject constructor(
                         LoginState.Success
                     }
 
-                    is Resource.Error -> {
-                        LoginState.Fail(it.message)
-                    }
+                    is Resource.Error -> LoginState.Fail(it.message)
                 }
             }
         }

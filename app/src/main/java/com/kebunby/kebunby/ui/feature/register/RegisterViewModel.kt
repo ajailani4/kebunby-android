@@ -81,9 +81,7 @@ class RegisterViewModel @Inject constructor(
                         RegisterState.Success
                     }
 
-                    is Resource.Error -> {
-                        RegisterState.Fail(it.message)
-                    }
+                    is Resource.Error -> RegisterState.Fail(it.message)
                 }
             }
         }

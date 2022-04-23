@@ -12,7 +12,7 @@ val Typography = Typography(
         fontSize = 24.sp
     ),
     h2 = TextStyle(
-        fontFamily = poppinsFamily,
+        fontFamily = montserratFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 20.sp
     ),
@@ -26,10 +26,20 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 15.sp
     ),
+    subtitle2 = TextStyle(
+        fontFamily = poppinsFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 15.sp
+    ),
     body1 = TextStyle(
         fontFamily = poppinsFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp
+    ),
+    body2 = TextStyle(
+        fontFamily = poppinsFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 13.sp
     ),
     caption = TextStyle(
         fontFamily = poppinsFamily,

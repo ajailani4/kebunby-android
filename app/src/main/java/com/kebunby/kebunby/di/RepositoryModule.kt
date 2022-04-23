@@ -1,7 +1,9 @@
 package com.kebunby.kebunby.di
 
+import com.kebunby.kebunby.data.repository.PlantRepository
 import com.kebunby.kebunby.data.repository.UserCredentialRepository
 import com.kebunby.kebunby.data.repository.UserRepository
+import com.kebunby.kebunby.data.repository.impl.PlantRepositoryImpl
 import com.kebunby.kebunby.data.repository.impl.UserCredentialRepositoryImpl
 import com.kebunby.kebunby.data.repository.impl.UserRepositoryImpl
 import dagger.Binds
@@ -21,4 +23,9 @@ abstract class RepositoryModule {
     abstract fun bindUserCredentialRepository(
         userCredentialRepositoryImpl: UserCredentialRepositoryImpl
     ): UserCredentialRepository
+
+    @Binds
+    abstract fun bindPlantRepository(
+        plantRepositoryImpl: PlantRepositoryImpl
+    ): PlantRepository
 }

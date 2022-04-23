@@ -1,7 +1,6 @@
 package com.kebunby.kebunby.ui.feature.onboarding.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,10 +12,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingItem
-import com.kebunby.kebunby.ui.theme.PrimaryLight
 
 @Composable
 fun OnboardingItemScreen(item: OnboardingItem) {
