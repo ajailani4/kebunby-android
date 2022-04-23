@@ -5,6 +5,7 @@ import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.data.model.request.LoginRequest
+import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.model.request.RegisterRequest
 
 fun generateUserCredential() =
@@ -68,4 +69,9 @@ fun generatePlantCategories() =
         generatePlantCategory(),
         generatePlantCategory(),
         generatePlantCategory()
+    )
+
+fun generatePlantActRequest() =
+    PlantActRequest(
+        plantId = 1
     )
