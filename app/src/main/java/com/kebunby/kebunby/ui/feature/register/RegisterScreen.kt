@@ -8,8 +8,9 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +32,6 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
-import com.kebunby.kebunby.ui.theme.PrimaryLight
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill

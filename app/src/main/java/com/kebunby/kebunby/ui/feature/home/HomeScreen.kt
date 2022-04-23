@@ -1,11 +1,14 @@
 package com.kebunby.kebunby.ui.feature.home
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -292,7 +295,10 @@ fun TrendingSection(
                         PlantMiniCard(
                             plantItem = plantItem,
                             onFavorited = {
-                                updateTrendingPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
+                                updateTrendingPlants(
+                                    i,
+                                    plantItem.copy(isFavorited = !plantItem.isFavorited)
+                                )
                                 onSelectedPlantChanged(plantItem.id)
 
                                 if (!plantItem.isFavorited) {
@@ -377,7 +383,10 @@ fun ForBeginnerSection(
                         PlantMiniCard(
                             plantItem = plantItem,
                             onFavorited = {
-                                updateForBeginnerPlants(i, plantItem.copy(isFavorited = !plantItem.isFavorited))
+                                updateForBeginnerPlants(
+                                    i,
+                                    plantItem.copy(isFavorited = !plantItem.isFavorited)
+                                )
                                 onSelectedPlantChanged(plantItem.id)
 
                                 if (!plantItem.isFavorited) {

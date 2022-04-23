@@ -23,7 +23,7 @@ fun BottomBar(navController: NavController) {
         backgroundColor = MaterialTheme.colors.background
     ) {
         val navBarStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute= navBarStackEntry?.destination?.route
+        val currentRoute = navBarStackEntry?.destination?.route
 
         items.map { screen ->
             BottomNavigationItem(

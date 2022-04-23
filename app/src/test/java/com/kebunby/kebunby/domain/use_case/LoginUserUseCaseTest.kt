@@ -3,13 +3,13 @@ package com.kebunby.kebunby.domain.use_case
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.data.repository.UserRepository
-import com.kebunby.kebunby.data.repository.impl.UserRepositoryImpl
 import com.kebunby.kebunby.domain.use_case.user.LoginUserUseCase
 import com.kebunby.kebunby.util.TestCoroutineRule
 import com.kebunby.kebunby.util.generateLoginRequest
 import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -45,9 +45,11 @@ class LoginUserUseCaseTest {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val resource = flow {
-                emit(Resource.Success<UserCredential>(
-                    generateUserCredential()
-                ))
+                emit(
+                    Resource.Success<UserCredential>(
+                        generateUserCredential()
+                    )
+                )
             }
 
             doReturn(resource).`when`(userRepository).login(any())

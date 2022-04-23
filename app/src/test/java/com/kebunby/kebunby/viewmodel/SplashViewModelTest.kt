@@ -7,7 +7,6 @@ import com.kebunby.kebunby.util.TestCoroutineRule
 import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import org.junit.Assert.assertEquals
 import org.junit.Before

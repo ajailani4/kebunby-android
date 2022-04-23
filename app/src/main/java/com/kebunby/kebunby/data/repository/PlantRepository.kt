@@ -13,7 +13,7 @@ interface PlantRepository {
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
-    ) : Flow<Resource<List<PlantItem>>>
+    ): Flow<Resource<List<PlantItem>>>
 
     suspend fun getPlantCategories(): Flow<Resource<List<PlantCategory>>>
 
