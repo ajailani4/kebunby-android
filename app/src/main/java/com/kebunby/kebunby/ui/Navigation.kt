@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.kebunby.kebunby.ui.feature.home.HomeScreen
 import com.kebunby.kebunby.ui.feature.login.LoginScreen
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingScreen
+import com.kebunby.kebunby.ui.feature.plant_list.PlantListScreen
 import com.kebunby.kebunby.ui.feature.register.RegisterScreen
 
 @Composable
@@ -24,6 +25,11 @@ fun Navigation(navController: NavHostController, startDestination: String) {
             RegisterScreen(navController)
         }
 
+        composable(route = Screen.PlantListScreen.route) {
+            PlantListScreen(navController)
+        }
+
+        // Bottom nav menu
         composable(route = Screen.HomeScreen.route) {
             HomeScreen(navController)
         }

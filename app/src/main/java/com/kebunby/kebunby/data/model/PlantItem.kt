@@ -5,6 +5,7 @@ data class PlantItem(
     val name: String,
     val image: String?,
     val category: String,
+    val growthEst: String,
     val wateringFreq: String,
     val popularity: Int,
     var isFavorited: Boolean

@@ -19,6 +19,8 @@ sealed class Screen(
 
     object RegisterScreen : Screen("register_screen")
 
+    object PlantListScreen : Screen("plant_list_screen")
+
     // Bottom nav menu
     object HomeScreen : Screen(
         route = "home_screen",

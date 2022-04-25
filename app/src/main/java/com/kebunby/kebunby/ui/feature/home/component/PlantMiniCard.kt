@@ -55,7 +55,7 @@ fun PlantMiniCard(
                 )
                 Surface(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(5.dp)
                         .align(Alignment.TopEnd),
                     shape = CircleShape,
                     color = Color.White,
