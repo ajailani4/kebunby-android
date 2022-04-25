@@ -96,7 +96,7 @@ fun OnboardingScreen(navController: NavController) {
                         text = stringResource(id = R.string.login),
                         color = PrimaryLight,
                         fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h3
+                        style = MaterialTheme.typography.h4
                     )
                 }
                 Spacer(modifier = Modifier.height(20.dp))
@@ -112,7 +112,7 @@ fun OnboardingScreen(navController: NavController) {
                         text = stringResource(id = R.string.register),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.h3
+                        style = MaterialTheme.typography.h4
                     )
                 }
             }

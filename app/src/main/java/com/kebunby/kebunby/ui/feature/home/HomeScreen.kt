@@ -156,7 +156,7 @@ fun HomeHeader(
                     Text(
                         text = stringResource(id = R.string.have_a_nice_day),
                         color = MaterialTheme.colors.onPrimary,
-                        style = MaterialTheme.typography.h3
+                        style = MaterialTheme.typography.h4
                     )
                 }
                 Image(

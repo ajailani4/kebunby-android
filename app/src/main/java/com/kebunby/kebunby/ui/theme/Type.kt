@@ -19,6 +19,11 @@ val Typography = Typography(
     h3 = TextStyle(
         fontFamily = montserratFamily,
         fontWeight = FontWeight.Normal,
+        fontSize = 18.sp
+    ),
+    h4 = TextStyle(
+        fontFamily = montserratFamily,
+        fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     subtitle1 = TextStyle(

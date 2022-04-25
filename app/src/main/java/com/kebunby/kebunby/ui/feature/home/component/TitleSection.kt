@@ -32,7 +32,7 @@ fun TitleSection(
             text = title,
             color = MaterialTheme.colors.onBackground,
             fontWeight = FontWeight.SemiBold,
-            style = MaterialTheme.typography.h3
+            style = MaterialTheme.typography.h4
         )
 
         if (isViewAllEnabled) {
