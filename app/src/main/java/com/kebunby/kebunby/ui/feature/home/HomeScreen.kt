@@ -27,6 +27,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantItem
+import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.feature.home.component.HomeUserProfileShimmer
 import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
@@ -72,6 +73,7 @@ fun HomeScreen(
                     scaffoldState = scaffoldState
                 )
                 HomeContent(
+                    navController = navController,
                     onEvent = onEvent,
                     trendingPlantsState = trendingPlantsState,
                     forBeginnerPlantsState = forBeginnerPlantsState,
@@ -201,6 +203,7 @@ fun HomeHeader(
 @ExperimentalCoilApi
 @Composable
 fun HomeContent(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     trendingPlantsState: HomeState,
     forBeginnerPlantsState: HomeState,
@@ -222,6 +225,7 @@ fun HomeContent(
     ) {
         Column {
             TrendingSection(
+                navController = navController,
                 onEvent = onEvent,
                 trendingPlantsState = trendingPlantsState,
                 onSelectedPlantChanged = onSelectedPlantChanged,
@@ -255,6 +259,7 @@ fun HomeContent(
 @ExperimentalCoilApi
 @Composable
 fun TrendingSection(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     trendingPlantsState: HomeState,
     onSelectedPlantChanged: (Int) -> Unit,
@@ -307,7 +312,9 @@ fun TrendingSection(
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
                             }
-                        )
+                        ) {
+                            navController.navigate(Screen.PlantListScreen.route)
+                        }
 
                         if (plantItem != trendingPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))
@@ -395,7 +402,7 @@ fun ForBeginnerSection(
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
                             }
-                        )
+                        ) {}
 
                         if (plantItem != forBeginnerPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))

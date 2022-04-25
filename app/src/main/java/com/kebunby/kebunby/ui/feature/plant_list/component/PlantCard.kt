@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -51,9 +52,9 @@ fun PlantCard(plantItem: PlantItem) {
                     style = MaterialTheme.typography.body1
                 )
                 Spacer(modifier = Modifier.height(15.dp))
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(17.dp),
                         imageVector = EvaIcons.Outline.Clock,
                         tint = Grey,
                         contentDescription = "Estimation time icon"
@@ -66,9 +67,9 @@ fun PlantCard(plantItem: PlantItem) {
                     )
                 }
                 Spacer(modifier = Modifier.height(3.dp))
-                Row {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier.size(17.dp),
                         imageVector = SimpleIcons.Rainmeter,
                         tint = Grey,
                         contentDescription = "Watering frequency icon"
@@ -83,21 +84,4 @@ fun PlantCard(plantItem: PlantItem) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewPlantCard() {
-    PlantCard(
-        plantItem = PlantItem(
-            id = 1,
-            name = "Tanaman",
-            image = "test",
-            category = "Tanaman Hias",
-            growthEst = "2-3 Tahun",
-            wateringFreq = "3x Sehari",
-            popularity = 10,
-            isFavorited = true
-        )
-    )
 }
