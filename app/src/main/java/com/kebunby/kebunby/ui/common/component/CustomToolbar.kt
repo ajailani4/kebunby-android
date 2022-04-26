@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.ui.common.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -12,57 +13,60 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import compose.icons.EvaIcons
+import compose.icons.evaicons.Fill
+import compose.icons.evaicons.fill.ArrowBack
 
 @Composable
 fun CustomToolbar(
     navController: NavController,
     title: String,
     hasBackButton: Boolean = false,
-    isBackedImmediately: Boolean = true,
+    isBackImmediately: Boolean = true,
     onBackButtonClicked: () -> Unit = {}
 ) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        color = MaterialTheme.colors.primary
+    Box(
+        modifier = Modifier
+            .background(color = MaterialTheme.colors.primary)
+            .fillMaxWidth()
+            .padding(16.dp),
     ) {
-        Box(modifier = Modifier.padding(16.dp)) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                if (hasBackButton) {
-                    IconButton(
-                        modifier = Modifier.size(24.dp),
-                        onClick = {
-                            if (isBackedImmediately) {
-                                navController.navigateUp()
-                            } else {
-                                onBackButtonClicked()
-                            }
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            if (hasBackButton) {
+                IconButton(
+                    modifier = Modifier.size(24.dp),
+                    onClick = {
+                        if (isBackImmediately) {
+                            navController.navigateUp()
+                        } else {
+                            onBackButtonClicked()
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            tint = Color.White,
-                            contentDescription = "Arrow Back"
-                        )
                     }
+                ) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        tint = Color.White,
+                        contentDescription = "Arrow Back"
+                    )
                 }
             }
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    modifier = Modifier.sizeIn(maxWidth = 250.dp),
-                    text = title,
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.h3
-                )
-            }
+        }
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                modifier = Modifier.sizeIn(maxWidth = 250.dp),
+                text = title,
+                color = Color.White,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = MaterialTheme.typography.h4
+            )
         }
     }
 }
