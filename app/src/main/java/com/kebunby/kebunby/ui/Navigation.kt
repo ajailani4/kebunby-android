@@ -2,8 +2,10 @@ package com.kebunby.kebunby.ui
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.kebunby.kebunby.ui.feature.home.HomeScreen
 import com.kebunby.kebunby.ui.feature.login.LoginScreen
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingScreen
@@ -25,7 +27,23 @@ fun Navigation(navController: NavHostController, startDestination: String) {
             RegisterScreen(navController)
         }
 
-        composable(route = Screen.PlantListScreen.route) {
+        composable(
+            route = Screen.PlantListScreen.route + "?isTrending={isTrending}&forBeginner={forBeginner}&searchQuery={searchQuery}",
+            arguments = listOf(
+                navArgument("isTrending") {
+                    type = NavType.BoolType
+                    defaultValue = false
+                },
+                navArgument("forBeginner") {
+                    type = NavType.BoolType
+                    defaultValue = false
+                },
+                navArgument("searchQuery") {
+                    type = NavType.StringType
+                    nullable = true
+                }
+            )
+        ) {
             PlantListScreen(navController)
         }
 

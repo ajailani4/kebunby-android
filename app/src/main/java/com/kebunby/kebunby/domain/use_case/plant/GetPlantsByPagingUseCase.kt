@@ -6,7 +6,7 @@ import javax.inject.Inject
 class GetPlantsByPagingUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private suspend fun getPlantsByPaging(
+    private fun getPlantsByPaging(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
@@ -16,7 +16,7 @@ class GetPlantsByPagingUseCase @Inject constructor(
         searchQuery = searchQuery
     )
 
-    suspend operator fun invoke(
+    operator fun invoke(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?

@@ -66,15 +66,16 @@ fun Content(startDestination: String) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val hasNoBottomMenuRoutes = listOf(
-        Screen.OnboardingScreen.route,
-        Screen.LoginScreen.route,
-        Screen.RegisterScreen.route
+    val hasBottomMenuRoutes = listOf(
+        Screen.HomeScreen.route,
+        Screen.ExploreScreen.route,
+        Screen.ShopScreen.route,
+        Screen.ProfileScreen.route
     )
 
     Scaffold(
         bottomBar = {
-            if (!hasNoBottomMenuRoutes.contains(currentRoute)) {
+            if (hasBottomMenuRoutes.contains(currentRoute)) {
                 BottomBar(navController)
             }
         }

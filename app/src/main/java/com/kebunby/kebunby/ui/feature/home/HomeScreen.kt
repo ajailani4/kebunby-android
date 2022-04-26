@@ -237,6 +237,7 @@ fun HomeContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
             ForBeginnerSection(
+                navController = navController,
                 onEvent = onEvent,
                 forBeginnerPlantsState = forBeginnerPlantsState,
                 onSelectedPlantChanged = onSelectedPlantChanged,
@@ -274,7 +275,10 @@ fun TrendingSection(
             .padding(top = 20.dp)
             .padding(horizontal = 20.dp),
         title = stringResource(id = R.string.trending),
-        isViewAllEnabled = true
+        isViewAllEnabled = true,
+        onViewAllClicked = {
+            navController.navigate(Screen.PlantListScreen.route + "?isTrending=true")
+        }
     )
     Spacer(modifier = Modifier.height(10.dp))
 
@@ -312,9 +316,7 @@ fun TrendingSection(
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
                             }
-                        ) {
-                            navController.navigate(Screen.PlantListScreen.route)
-                        }
+                        ) {}
 
                         if (plantItem != trendingPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))
@@ -351,6 +353,7 @@ fun TrendingSection(
 @ExperimentalCoilApi
 @Composable
 fun ForBeginnerSection(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     forBeginnerPlantsState: HomeState,
     onSelectedPlantChanged: (Int) -> Unit,
@@ -364,7 +367,10 @@ fun ForBeginnerSection(
         modifier = Modifier
             .padding(horizontal = 20.dp),
         title = stringResource(id = R.string.for_beginner),
-        isViewAllEnabled = true
+        isViewAllEnabled = true,
+        onViewAllClicked = {
+            navController.navigate(Screen.PlantListScreen.route + "?forBeginner=true")
+        }
     )
     Spacer(modifier = Modifier.height(10.dp))
 

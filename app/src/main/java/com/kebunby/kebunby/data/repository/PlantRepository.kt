@@ -16,7 +16,7 @@ interface PlantRepository {
         searchQuery: String?
     ): Flow<Resource<List<PlantItem>>>
 
-    suspend fun getPlantsByPaging(
+    fun getPlantsByPaging(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
