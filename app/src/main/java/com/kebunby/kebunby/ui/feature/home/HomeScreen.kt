@@ -68,6 +68,7 @@ fun HomeScreen(
         ) {
             Column(modifier = Modifier.background(color = MaterialTheme.colors.primary)) {
                 HomeHeader(
+                    onEvent = onEvent,
                     userProfileState = userProfileState,
                     coroutineScope = coroutineScope,
                     scaffoldState = scaffoldState
@@ -100,6 +101,8 @@ fun HomeScreen(
                             }
                         }
                     }
+
+                    onEvent(HomeEvent.Idle)
                 }
 
                 else -> {}
@@ -115,6 +118,8 @@ fun HomeScreen(
                             }
                         }
                     }
+
+                    onEvent(HomeEvent.Idle)
                 }
 
                 else -> {}
@@ -126,6 +131,7 @@ fun HomeScreen(
 @ExperimentalCoilApi
 @Composable
 fun HomeHeader(
+    onEvent: (HomeEvent) -> Unit,
     userProfileState: HomeState,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
@@ -183,6 +189,8 @@ fun HomeHeader(
                         }
                     }
                 }
+
+                onEvent(HomeEvent.Idle)
             }
 
             is HomeState.ErrorUserProfile -> {
@@ -193,6 +201,8 @@ fun HomeHeader(
                         }
                     }
                 }
+
+                onEvent(HomeEvent.Idle)
             }
 
             else -> {}
@@ -249,6 +259,7 @@ fun HomeContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
             PlantCategorySection(
+                onEvent = onEvent,
                 plantCategoriesState = plantCategoriesState,
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
@@ -334,6 +345,8 @@ fun TrendingSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         is HomeState.ErrorTrendingPlants -> {
@@ -344,6 +357,8 @@ fun TrendingSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         else -> {}
@@ -426,6 +441,8 @@ fun ForBeginnerSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         is HomeState.ErrorForBeginnerPlants -> {
@@ -436,6 +453,8 @@ fun ForBeginnerSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         else -> {}
@@ -444,6 +463,7 @@ fun ForBeginnerSection(
 
 @Composable
 fun PlantCategorySection(
+    onEvent: (HomeEvent) -> Unit,
     plantCategoriesState: HomeState,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
@@ -485,6 +505,8 @@ fun PlantCategorySection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         is HomeState.ErrorPlantCategories -> {
@@ -495,6 +517,8 @@ fun PlantCategorySection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         else -> {}

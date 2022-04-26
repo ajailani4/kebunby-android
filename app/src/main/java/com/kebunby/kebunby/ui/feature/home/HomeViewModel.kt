@@ -50,6 +50,8 @@ class HomeViewModel @Inject constructor(
 
     fun onEvent(event: HomeEvent) {
         when (event) {
+            HomeEvent.Idle -> idle()
+
             HomeEvent.LoadUserProfile -> getUserProfile()
 
             HomeEvent.LoadTrendingPlants -> getTrendingPlants()
@@ -82,6 +84,15 @@ class HomeViewModel @Inject constructor(
 
     fun updateForBeginnerPlants(index: Int, plant: PlantItem) {
         forBeginnerPlants[index] = plant
+    }
+
+    private fun idle() {
+        userProfileState = HomeState.Idle
+        trendingPlantsState = HomeState.Idle
+        forBeginnerPlantsState = HomeState.Idle
+        plantCategoriesState = HomeState.Idle
+        addFavPlantState = HomeState.Idle
+        deleteFavPlantState = HomeState.Idle
     }
 
     private fun getUserProfile() {
