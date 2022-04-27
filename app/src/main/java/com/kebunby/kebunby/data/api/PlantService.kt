@@ -17,6 +17,13 @@ interface PlantService {
         @Query("searchQuery") searchQuery: String?
     ): Response<BaseResponse<List<PlantItem>>>
 
+    @GET("categories/{categoryId}/plants")
+    suspend fun getPlantsByCategory(
+        @Path("categoryId") categoryId: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+    ): Response<BaseResponse<List<PlantItem>>>
+
     @GET("categories")
     suspend fun getPlantCategories(): Response<BaseResponse<List<PlantCategory>>>
 

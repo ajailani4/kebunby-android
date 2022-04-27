@@ -22,6 +22,12 @@ interface PlantRepository {
         searchQuery: String?
     ): Flow<PagingData<PlantItem>>
 
+    fun getPagingPlantsByCat(
+        categoryId: Int,
+        page: Int,
+        size: Int
+    ): Flow<PagingData<PlantItem>>
+
     suspend fun getPlantCategories(): Flow<Resource<List<PlantCategory>>>
 
     suspend fun addPlantActivity(

@@ -5,8 +5,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.Resource
-import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
 import com.kebunby.kebunby.data.data_source.remote.PagingDataSource
+import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -23,42 +23,57 @@ class PlantRepositoryImpl @Inject constructor(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
-    ) =
-        flow {
-            val response = plantRemoteDataSource.getPlants(
-                page = page,
-                size = size,
-                isTrending = isTrending,
-                forBeginner = forBeginner,
-                searchQuery = searchQuery
-            )
+    ) = flow {
+        val response = plantRemoteDataSource.getPlants(
+            page = page,
+            size = size,
+            isTrending = isTrending,
+            forBeginner = forBeginner,
+            searchQuery = searchQuery
+        )
 
-            when (response.code()) {
-                200 -> emit(Resource.Success(response.body()?.data))
+        when (response.code()) {
+            200 -> emit(Resource.Success(response.body()?.data))
 
-                else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
-            }
+            else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
         }
+    }
 
     override fun getPagingPlants(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
-    ) =
-        Pager(
-            config = PagingConfig(enablePlaceholders = false, pageSize = 10),
-            pagingSourceFactory = {
-                PagingDataSource { page, size ->
-                    plantRemoteDataSource.getPlants(
-                        page = page,
-                        size = size,
-                        isTrending = isTrending,
-                        forBeginner = forBeginner,
-                        searchQuery = searchQuery
-                    )
-                }
+    ) = Pager(
+        config = PagingConfig(enablePlaceholders = false, pageSize = 10),
+        pagingSourceFactory = {
+            PagingDataSource { page, size ->
+                plantRemoteDataSource.getPlants(
+                    page = page,
+                    size = size,
+                    isTrending = isTrending,
+                    forBeginner = forBeginner,
+                    searchQuery = searchQuery
+                )
             }
-        ).flow
+        }
+    ).flow
+
+    override fun getPagingPlantsByCat(
+        categoryId: Int,
+        page: Int,
+        size: Int
+    ) = Pager(
+        config = PagingConfig(enablePlaceholders = false, pageSize = 10),
+        pagingSourceFactory = {
+            PagingDataSource { page, size ->
+                plantRemoteDataSource.getPlantsByCategory(
+                    categoryId = categoryId,
+                    page = page,
+                    size = size
+                )
+            }
+        }
+    ).flow
 
     override suspend fun getPlantCategories() =
         flow {
@@ -77,20 +92,19 @@ class PlantRepositoryImpl @Inject constructor(
         isPlanted: Boolean?,
         isFavorited: Boolean?,
         plantActRequest: PlantActRequest
-    ) =
-        flow {
-            val response = plantRemoteDataSource.addPlantActivity(
-                username = username,
-                isPlanting = isPlanting,
-                isPlanted = isPlanted,
-                isFavorited = isFavorited,
-                plantActRequest = plantActRequest
-            )
+    ) = flow {
+        val response = plantRemoteDataSource.addPlantActivity(
+            username = username,
+            isPlanting = isPlanting,
+            isPlanted = isPlanted,
+            isFavorited = isFavorited,
+            plantActRequest = plantActRequest
+        )
 
-            when (response.code()) {
-                201 -> emit(Resource.Success(response.body()?.data))
-            }
+        when (response.code()) {
+            201 -> emit(Resource.Success(response.body()?.data))
         }
+    }
 
     override suspend fun deletePlantActivity(
         username: String,
@@ -98,18 +112,17 @@ class PlantRepositoryImpl @Inject constructor(
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?
-    ) =
-        flow {
-            val response = plantRemoteDataSource.deletePlantActivity(
-                username = username,
-                plantId = plantId,
-                isPlanting = isPlanting,
-                isPlanted = isPlanted,
-                isFavorited = isFavorited
-            )
+    ) = flow {
+        val response = plantRemoteDataSource.deletePlantActivity(
+            username = username,
+            plantId = plantId,
+            isPlanting = isPlanting,
+            isPlanted = isPlanted,
+            isFavorited = isFavorited
+        )
 
-            when (response.code()) {
-                200 -> emit(Resource.Success(response.body()?.data))
-            }
+        when (response.code()) {
+            200 -> emit(Resource.Success(response.body()?.data))
         }
+    }
 }
