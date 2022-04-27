@@ -40,7 +40,7 @@ class PlantRepositoryImpl @Inject constructor(
             }
         }
 
-    override fun getPlantsByPaging(
+    override fun getPagingPlants(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
