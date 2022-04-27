@@ -44,7 +44,7 @@ fun PlantListScreen(
                         stringResource(id = R.string.for_beginner)
                     }
 
-                    else -> searchQuery ?: "Plants"
+                    else -> searchQuery ?: stringResource(id = R.string.plants)
                 },
                 hasBackButton = true
             )
