@@ -3,16 +3,13 @@ package com.kebunby.kebunby.data.repository.impl
 import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
-import androidx.paging.PagingData
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
-import com.kebunby.kebunby.data.data_source.remote.PlantsPagingDataSource
-import com.kebunby.kebunby.data.model.PlantItem
+import com.kebunby.kebunby.data.data_source.remote.PagingDataSource
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -51,7 +48,7 @@ class PlantRepositoryImpl @Inject constructor(
         Pager(
             config = PagingConfig(enablePlaceholders = false, pageSize = 10),
             pagingSourceFactory = {
-                PlantsPagingDataSource { page, size ->
+                PagingDataSource { page, size ->
                     plantRemoteDataSource.getPlants(
                         page = page,
                         size = size,

@@ -6,7 +6,7 @@ import com.kebunby.kebunby.data.model.response.BaseResponse
 import retrofit2.Response
 import java.lang.Exception
 
-class PlantsPagingDataSource<T : Any>(
+class PagingDataSource<T : Any>(
     private inline val serviceMethod: suspend (page: Int, size: Int) -> Response<BaseResponse<List<T>>>
 ) : PagingSource<Int, T>() {
     override suspend fun load(params: LoadParams<Int>) =
