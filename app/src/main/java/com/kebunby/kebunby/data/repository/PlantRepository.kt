@@ -8,7 +8,7 @@ import com.kebunby.kebunby.data.model.request.PlantActRequest
 import kotlinx.coroutines.flow.Flow
 
 interface PlantRepository {
-    suspend fun getPlants(
+    fun getPlants(
         page: Int,
         size: Int,
         isTrending: Boolean?,
@@ -28,9 +28,9 @@ interface PlantRepository {
         size: Int
     ): Flow<PagingData<PlantItem>>
 
-    suspend fun getPlantCategories(): Flow<Resource<List<PlantCategory>>>
+    fun getPlantCategories(): Flow<Resource<List<PlantCategory>>>
 
-    suspend fun addPlantActivity(
+    fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
@@ -38,7 +38,7 @@ interface PlantRepository {
         plantActRequest: PlantActRequest
     ): Flow<Resource<Any>>
 
-    suspend fun deletePlantActivity(
+    fun deletePlantActivity(
         username: String,
         plantId: Int,
         isPlanting: Boolean?,

@@ -7,9 +7,9 @@ import javax.inject.Inject
 class RegisterUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    private suspend fun register(registerRequest: RegisterRequest) =
+    private fun register(registerRequest: RegisterRequest) =
         userRepository.register(registerRequest)
 
-    suspend operator fun invoke(registerRequest: RegisterRequest) =
+    operator fun invoke(registerRequest: RegisterRequest) =
         register(registerRequest)
 }

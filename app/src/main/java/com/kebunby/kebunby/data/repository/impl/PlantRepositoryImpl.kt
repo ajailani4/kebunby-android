@@ -17,7 +17,7 @@ class PlantRepositoryImpl @Inject constructor(
     private val plantRemoteDataSource: PlantRemoteDataSource,
     @ApplicationContext private val context: Context
 ) : PlantRepository {
-    override suspend fun getPlants(
+    override fun getPlants(
         page: Int,
         size: Int,
         isTrending: Boolean?,
@@ -75,7 +75,7 @@ class PlantRepositoryImpl @Inject constructor(
         }
     ).flow
 
-    override suspend fun getPlantCategories() =
+    override fun getPlantCategories() =
         flow {
             val response = plantRemoteDataSource.getPlantCategories()
 
@@ -86,7 +86,7 @@ class PlantRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun addPlantActivity(
+    override fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
@@ -106,7 +106,7 @@ class PlantRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun deletePlantActivity(
+    override fun deletePlantActivity(
         username: String,
         plantId: Int,
         isPlanting: Boolean?,

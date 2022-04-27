@@ -7,7 +7,7 @@ import javax.inject.Inject
 class AddPlantActivityUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private suspend fun addPlantActivity(
+    private fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
@@ -21,7 +21,7 @@ class AddPlantActivityUseCase @Inject constructor(
         plantActRequest = plantActRequest
     )
 
-    suspend operator fun invoke(
+    operator fun invoke(
         username: String,
         isPlanting: Boolean? = null,
         isPlanted: Boolean? = null,

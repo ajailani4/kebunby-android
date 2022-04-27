@@ -6,7 +6,7 @@ import javax.inject.Inject
 class GetPlantsUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private suspend fun getPlants(
+    private fun getPlants(
         page: Int,
         size: Int,
         isTrending: Boolean?,
@@ -20,7 +20,7 @@ class GetPlantsUseCase @Inject constructor(
         searchQuery = searchQuery
     )
 
-    suspend operator fun invoke(
+    operator fun invoke(
         page: Int,
         size: Int,
         isTrending: Boolean? = null,

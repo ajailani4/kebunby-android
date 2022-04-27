@@ -15,7 +15,7 @@ class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
     @ApplicationContext private val context: Context
 ) : UserRepository {
-    override suspend fun login(loginRequest: LoginRequest) =
+    override fun login(loginRequest: LoginRequest) =
         flow {
             val response = userRemoteDataSource.login(loginRequest)
 
@@ -28,7 +28,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun register(registerRequest: RegisterRequest) =
+    override fun register(registerRequest: RegisterRequest) =
         flow {
             val response = userRemoteDataSource.register(registerRequest)
 
@@ -41,7 +41,7 @@ class UserRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun getUserProfile(username: String) =
+    override fun getUserProfile(username: String) =
         flow {
             val response = userRemoteDataSource.getUserProfile(username)
 
