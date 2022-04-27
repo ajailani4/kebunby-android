@@ -16,7 +16,6 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
-import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.plant_list.component.PlantCard
 
@@ -26,10 +25,16 @@ fun PlantListScreen(
     navController: NavController,
     plantListViewModel: PlantListViewModel = hiltViewModel()
 ) {
-    val plantList = plantListViewModel.getPlantsByPaging().collectAsLazyPagingItems()
     val isTrending = plantListViewModel.isTrending
     val forBeginner = plantListViewModel.forBeginner
     val searchQuery = plantListViewModel.searchQuery
+    val categoryId = plantListViewModel.categoryId
+    val category = plantListViewModel.category
+    val plantList = if (categoryId!! > 0) {
+        plantListViewModel.getPagingPlantsByCat().collectAsLazyPagingItems()
+    } else {
+        plantListViewModel.getPagingPlants().collectAsLazyPagingItems()
+    }
 
     Scaffold(
         topBar = {
@@ -44,7 +49,15 @@ fun PlantListScreen(
                         stringResource(id = R.string.for_beginner)
                     }
 
-                    else -> searchQuery ?: stringResource(id = R.string.plants)
+                    category != null -> {
+                        category
+                    }
+
+                    searchQuery != null -> {
+                        searchQuery
+                    }
+
+                    else -> "Plants"
                 },
                 hasBackButton = true
             )

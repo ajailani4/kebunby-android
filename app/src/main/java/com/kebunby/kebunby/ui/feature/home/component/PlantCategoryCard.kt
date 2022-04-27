@@ -19,14 +19,15 @@ import com.kebunby.kebunby.data.model.PlantCategory
 @Composable
 fun PlantCategoryCard(
     modifier: Modifier = Modifier,
-    plantCategory: PlantCategory
+    plantCategory: PlantCategory,
+    onClick: () -> Unit
 ) {
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 5.dp,
-        onClick = {}
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier.padding(15.dp),

@@ -28,7 +28,8 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         }
 
         composable(
-            route = Screen.PlantListScreen.route + "?isTrending={isTrending}&forBeginner={forBeginner}&searchQuery={searchQuery}",
+            route = Screen.PlantListScreen.route +
+                "?isTrending={isTrending}&forBeginner={forBeginner}&searchQuery={searchQuery}&categoryId={categoryId}&category={category}",
             arguments = listOf(
                 navArgument("isTrending") {
                     type = NavType.BoolType
@@ -41,6 +42,16 @@ fun Navigation(navController: NavHostController, startDestination: String) {
                 navArgument("searchQuery") {
                     type = NavType.StringType
                     nullable = true
+                    defaultValue = null
+                },
+                navArgument("categoryId") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                },
+                navArgument("category") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = null
                 }
             )
         ) {

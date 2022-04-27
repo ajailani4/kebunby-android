@@ -259,6 +259,7 @@ fun HomeContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
             PlantCategorySection(
+                navController = navController,
                 onEvent = onEvent,
                 plantCategoriesState = plantCategoriesState,
                 coroutineScope = coroutineScope,
@@ -326,8 +327,9 @@ fun TrendingSection(
                                 } else {
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
-                            }
-                        ) {}
+                            },
+                            onClick = {}
+                        )
 
                         if (plantItem != trendingPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))
@@ -422,8 +424,9 @@ fun ForBeginnerSection(
                                 } else {
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
-                            }
-                        ) {}
+                            },
+                            onClick = {}
+                        )
 
                         if (plantItem != forBeginnerPlants.last()) {
                             Spacer(modifier = Modifier.width(18.dp))
@@ -463,6 +466,7 @@ fun ForBeginnerSection(
 
 @Composable
 fun PlantCategorySection(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     plantCategoriesState: HomeState,
     coroutineScope: CoroutineScope,
@@ -491,7 +495,12 @@ fun PlantCategorySection(
             plantCategories?.forEach { plantCategory ->
                 PlantCategoryCard(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    plantCategory = plantCategory
+                    plantCategory = plantCategory,
+                    onClick = {
+                        navController.navigate(
+                            Screen.PlantListScreen.route + "?categoryId=${plantCategory.id}&category=${plantCategory.category}"
+                        )
+                    }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
             }

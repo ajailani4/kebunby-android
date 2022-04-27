@@ -58,11 +58,7 @@ class PlantRepositoryImpl @Inject constructor(
         }
     ).flow
 
-    override fun getPagingPlantsByCat(
-        categoryId: Int,
-        page: Int,
-        size: Int
-    ) = Pager(
+    override fun getPagingPlantsByCat(categoryId: Int) = Pager(
         config = PagingConfig(enablePlaceholders = false, pageSize = 10),
         pagingSourceFactory = {
             PagingDataSource { page, size ->
