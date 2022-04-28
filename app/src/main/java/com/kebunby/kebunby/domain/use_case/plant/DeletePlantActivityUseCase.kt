@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DeletePlantActivityUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private suspend fun deletePlantActivity(
+    private fun deletePlantActivity(
         username: String,
         plantId: Int,
         isPlanting: Boolean?,
@@ -20,7 +20,7 @@ class DeletePlantActivityUseCase @Inject constructor(
         isFavorited = isFavorited
     )
 
-    suspend operator fun invoke(
+    operator fun invoke(
         username: String,
         plantId: Int,
         isPlanting: Boolean? = null,

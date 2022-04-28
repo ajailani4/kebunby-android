@@ -8,9 +8,9 @@ import com.kebunby.kebunby.data.model.request.RegisterRequest
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun login(loginRequest: LoginRequest): Flow<Resource<UserCredential>>
+    fun login(loginRequest: LoginRequest): Flow<Resource<UserCredential>>
 
-    suspend fun register(registerRequest: RegisterRequest): Flow<Resource<UserCredential>>
+    fun register(registerRequest: RegisterRequest): Flow<Resource<UserCredential>>
 
-    suspend fun getUserProfile(username: String): Flow<Resource<User>>
+    fun getUserProfile(username: String): Flow<Resource<User>>
 }

@@ -6,8 +6,8 @@ import javax.inject.Inject
 class GetPlantCategoriesUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private suspend fun getPlantCategories() =
+    private fun getPlantCategories() =
         plantRepository.getPlantCategories()
 
-    suspend operator fun invoke() = getPlantCategories()
+    operator fun invoke() = getPlantCategories()
 }

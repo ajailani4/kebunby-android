@@ -33,13 +33,14 @@ import compose.icons.evaicons.outline.Heart
 @Composable
 fun PlantMiniCard(
     plantItem: PlantItem,
-    onFavorited: () -> Unit
+    onFavorited: () -> Unit,
+    onClick: () -> Unit
 ) {
     Card(
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 5.dp,
-        onClick = {}
+        onClick = onClick
     ) {
         Column {
             Box {
@@ -54,9 +55,7 @@ fun PlantMiniCard(
                     contentDescription = "Plant image"
                 )
                 Surface(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .align(Alignment.TopEnd),
+                    modifier = Modifier.align(Alignment.TopEnd),
                     shape = CircleShape,
                     color = Color.White,
                     onClick = onFavorited

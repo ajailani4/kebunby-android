@@ -3,32 +3,24 @@ package com.kebunby.kebunby.domain.use_case.plant
 import com.kebunby.kebunby.data.repository.PlantRepository
 import javax.inject.Inject
 
-class GetPlantsUseCase @Inject constructor(
+class GetPagingPlantsUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private fun getPlants(
-        page: Int,
-        size: Int,
+    private fun getPagingPlants(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
-    ) = plantRepository.getPlants(
-        page = page,
-        size = size,
+    ) = plantRepository.getPagingPlants(
         isTrending = isTrending,
         forBeginner = forBeginner,
         searchQuery = searchQuery
     )
 
     operator fun invoke(
-        page: Int,
-        size: Int,
-        isTrending: Boolean? = null,
-        forBeginner: Boolean? = null,
-        searchQuery: String? = null
-    ) = getPlants(
-        page = page,
-        size = size,
+        isTrending: Boolean?,
+        forBeginner: Boolean?,
+        searchQuery: String?
+    ) = getPagingPlants(
         isTrending = isTrending,
         forBeginner = forBeginner,
         searchQuery = searchQuery

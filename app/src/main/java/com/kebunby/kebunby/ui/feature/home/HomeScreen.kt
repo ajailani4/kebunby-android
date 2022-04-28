@@ -27,6 +27,7 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantItem
+import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.feature.home.component.HomeUserProfileShimmer
 import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
@@ -67,11 +68,13 @@ fun HomeScreen(
         ) {
             Column(modifier = Modifier.background(color = MaterialTheme.colors.primary)) {
                 HomeHeader(
+                    onEvent = onEvent,
                     userProfileState = userProfileState,
                     coroutineScope = coroutineScope,
                     scaffoldState = scaffoldState
                 )
                 HomeContent(
+                    navController = navController,
                     onEvent = onEvent,
                     trendingPlantsState = trendingPlantsState,
                     forBeginnerPlantsState = forBeginnerPlantsState,
@@ -98,6 +101,8 @@ fun HomeScreen(
                             }
                         }
                     }
+
+                    onEvent(HomeEvent.Idle)
                 }
 
                 else -> {}
@@ -113,6 +118,8 @@ fun HomeScreen(
                             }
                         }
                     }
+
+                    onEvent(HomeEvent.Idle)
                 }
 
                 else -> {}
@@ -124,6 +131,7 @@ fun HomeScreen(
 @ExperimentalCoilApi
 @Composable
 fun HomeHeader(
+    onEvent: (HomeEvent) -> Unit,
     userProfileState: HomeState,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
@@ -156,7 +164,7 @@ fun HomeHeader(
                     Text(
                         text = stringResource(id = R.string.have_a_nice_day),
                         color = MaterialTheme.colors.onPrimary,
-                        style = MaterialTheme.typography.h3
+                        style = MaterialTheme.typography.h4
                     )
                 }
                 Image(
@@ -181,6 +189,8 @@ fun HomeHeader(
                         }
                     }
                 }
+
+                onEvent(HomeEvent.Idle)
             }
 
             is HomeState.ErrorUserProfile -> {
@@ -191,6 +201,8 @@ fun HomeHeader(
                         }
                     }
                 }
+
+                onEvent(HomeEvent.Idle)
             }
 
             else -> {}
@@ -201,6 +213,7 @@ fun HomeHeader(
 @ExperimentalCoilApi
 @Composable
 fun HomeContent(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     trendingPlantsState: HomeState,
     forBeginnerPlantsState: HomeState,
@@ -222,6 +235,7 @@ fun HomeContent(
     ) {
         Column {
             TrendingSection(
+                navController = navController,
                 onEvent = onEvent,
                 trendingPlantsState = trendingPlantsState,
                 onSelectedPlantChanged = onSelectedPlantChanged,
@@ -233,6 +247,7 @@ fun HomeContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
             ForBeginnerSection(
+                navController = navController,
                 onEvent = onEvent,
                 forBeginnerPlantsState = forBeginnerPlantsState,
                 onSelectedPlantChanged = onSelectedPlantChanged,
@@ -244,6 +259,8 @@ fun HomeContent(
             )
             Spacer(modifier = Modifier.height(20.dp))
             PlantCategorySection(
+                navController = navController,
+                onEvent = onEvent,
                 plantCategoriesState = plantCategoriesState,
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
@@ -255,6 +272,7 @@ fun HomeContent(
 @ExperimentalCoilApi
 @Composable
 fun TrendingSection(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     trendingPlantsState: HomeState,
     onSelectedPlantChanged: (Int) -> Unit,
@@ -269,7 +287,10 @@ fun TrendingSection(
             .padding(top = 20.dp)
             .padding(horizontal = 20.dp),
         title = stringResource(id = R.string.trending),
-        isViewAllEnabled = true
+        isViewAllEnabled = true,
+        onViewAllClicked = {
+            navController.navigate(Screen.PlantListScreen.route + "?isTrending=true")
+        }
     )
     Spacer(modifier = Modifier.height(10.dp))
 
@@ -306,7 +327,8 @@ fun TrendingSection(
                                 } else {
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
-                            }
+                            },
+                            onClick = {}
                         )
 
                         if (plantItem != trendingPlants.last()) {
@@ -325,6 +347,8 @@ fun TrendingSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         is HomeState.ErrorTrendingPlants -> {
@@ -335,6 +359,8 @@ fun TrendingSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         else -> {}
@@ -344,6 +370,7 @@ fun TrendingSection(
 @ExperimentalCoilApi
 @Composable
 fun ForBeginnerSection(
+    navController: NavController,
     onEvent: (HomeEvent) -> Unit,
     forBeginnerPlantsState: HomeState,
     onSelectedPlantChanged: (Int) -> Unit,
@@ -357,7 +384,10 @@ fun ForBeginnerSection(
         modifier = Modifier
             .padding(horizontal = 20.dp),
         title = stringResource(id = R.string.for_beginner),
-        isViewAllEnabled = true
+        isViewAllEnabled = true,
+        onViewAllClicked = {
+            navController.navigate(Screen.PlantListScreen.route + "?forBeginner=true")
+        }
     )
     Spacer(modifier = Modifier.height(10.dp))
 
@@ -394,7 +424,8 @@ fun ForBeginnerSection(
                                 } else {
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
-                            }
+                            },
+                            onClick = {}
                         )
 
                         if (plantItem != forBeginnerPlants.last()) {
@@ -413,6 +444,8 @@ fun ForBeginnerSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         is HomeState.ErrorForBeginnerPlants -> {
@@ -423,6 +456,8 @@ fun ForBeginnerSection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         else -> {}
@@ -431,6 +466,8 @@ fun ForBeginnerSection(
 
 @Composable
 fun PlantCategorySection(
+    navController: NavController,
+    onEvent: (HomeEvent) -> Unit,
     plantCategoriesState: HomeState,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
@@ -458,7 +495,12 @@ fun PlantCategorySection(
             plantCategories?.forEach { plantCategory ->
                 PlantCategoryCard(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    plantCategory = plantCategory
+                    plantCategory = plantCategory,
+                    onClick = {
+                        navController.navigate(
+                            Screen.PlantListScreen.route + "?categoryId=${plantCategory.id}&category=${plantCategory.category}"
+                        )
+                    }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
             }
@@ -472,6 +514,8 @@ fun PlantCategorySection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         is HomeState.ErrorPlantCategories -> {
@@ -482,6 +526,8 @@ fun PlantCategorySection(
                     }
                 }
             }
+
+            onEvent(HomeEvent.Idle)
         }
 
         else -> {}

@@ -22,7 +22,8 @@ import com.kebunby.kebunby.ui.theme.poppinsFamily
 fun TitleSection(
     modifier: Modifier = Modifier,
     title: String,
-    isViewAllEnabled: Boolean = false
+    isViewAllEnabled: Boolean = false,
+    onViewAllClicked: () -> Unit = {}
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -48,7 +49,7 @@ fun TitleSection(
                         append(stringResource(id = R.string.view_all))
                     }
                 },
-                onClick = {}
+                onClick = { onViewAllClicked() }
             )
         }
     }

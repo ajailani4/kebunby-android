@@ -47,7 +47,7 @@ fun OnboardingItemScreen(item: OnboardingItem) {
                 text = stringResource(id = item.description),
                 textAlign = TextAlign.Center,
                 color = Color.White,
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.h4
             )
         }
     }

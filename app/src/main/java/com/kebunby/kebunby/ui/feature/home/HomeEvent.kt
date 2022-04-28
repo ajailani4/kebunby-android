@@ -1,6 +1,7 @@
 package com.kebunby.kebunby.ui.feature.home
 
 sealed class HomeEvent {
+    object Idle : HomeEvent()
     object LoadUserProfile : HomeEvent()
     object LoadTrendingPlants : HomeEvent()
     object LoadForBeginnerPlants : HomeEvent()

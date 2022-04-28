@@ -13,14 +13,23 @@ class PlantRemoteDataSource @Inject constructor(
         isTrending: Boolean?,
         forBeginner: Boolean?,
         searchQuery: String?
-    ) =
-        plantService.getPlants(
-            page = page,
-            size = size,
-            isTrending = isTrending,
-            forBeginner = forBeginner,
-            searchQuery = searchQuery
-        )
+    ) = plantService.getPlants(
+        page = page,
+        size = size,
+        isTrending = isTrending,
+        forBeginner = forBeginner,
+        searchQuery = searchQuery
+    )
+
+    suspend fun getPlantsByCategory(
+        categoryId: Int,
+        page: Int,
+        size: Int
+    ) = plantService.getPlantsByCategory(
+        categoryId = categoryId,
+        page = page,
+        size = size
+    )
 
     suspend fun getPlantCategories() = plantService.getPlantCategories()
 
@@ -30,14 +39,13 @@ class PlantRemoteDataSource @Inject constructor(
         isPlanted: Boolean?,
         isFavorited: Boolean?,
         plantActRequest: PlantActRequest
-    ) =
-        plantService.addPlantActivity(
-            username = username,
-            isPlanting = isPlanting,
-            isPlanted = isPlanted,
-            isFavorited = isFavorited,
-            plantActRequest = plantActRequest
-        )
+    ) = plantService.addPlantActivity(
+        username = username,
+        isPlanting = isPlanting,
+        isPlanted = isPlanted,
+        isFavorited = isFavorited,
+        plantActRequest = plantActRequest
+    )
 
     suspend fun deletePlantActivity(
         username: String,
@@ -45,12 +53,11 @@ class PlantRemoteDataSource @Inject constructor(
         isPlanting: Boolean?,
         isPlanted: Boolean?,
         isFavorited: Boolean?
-    ) =
-        plantService.deletePlantActivity(
-            username = username,
-            plantId = plantId,
-            isPlanting = isPlanting,
-            isPlanted = isPlanted,
-            isFavorited = isFavorited
-        )
+    ) = plantService.deletePlantActivity(
+        username = username,
+        plantId = plantId,
+        isPlanting = isPlanting,
+        isPlanted = isPlanted,
+        isFavorited = isFavorited
+    )
 }

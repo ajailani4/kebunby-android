@@ -42,6 +42,7 @@ fun generatePlantItem() =
         name = "Tanaman",
         image = "test",
         category = "Tanaman Hias",
+        growthEst = "2-3 Tahun",
         wateringFreq = "3x Sehari",
         popularity = 10,
         isFavorited = true

@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.data.repository
 
+import androidx.paging.PagingData
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
@@ -7,7 +8,7 @@ import com.kebunby.kebunby.data.model.request.PlantActRequest
 import kotlinx.coroutines.flow.Flow
 
 interface PlantRepository {
-    suspend fun getPlants(
+    fun getPlants(
         page: Int,
         size: Int,
         isTrending: Boolean?,
@@ -15,9 +16,17 @@ interface PlantRepository {
         searchQuery: String?
     ): Flow<Resource<List<PlantItem>>>
 
-    suspend fun getPlantCategories(): Flow<Resource<List<PlantCategory>>>
+    fun getPagingPlants(
+        isTrending: Boolean?,
+        forBeginner: Boolean?,
+        searchQuery: String?
+    ): Flow<PagingData<PlantItem>>
 
-    suspend fun addPlantActivity(
+    fun getPagingPlantsByCategory(categoryId: Int): Flow<PagingData<PlantItem>>
+
+    fun getPlantCategories(): Flow<Resource<List<PlantCategory>>>
+
+    fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,
         isPlanted: Boolean?,
@@ -25,7 +34,7 @@ interface PlantRepository {
         plantActRequest: PlantActRequest
     ): Flow<Resource<Any>>
 
-    suspend fun deletePlantActivity(
+    fun deletePlantActivity(
         username: String,
         plantId: Int,
         isPlanting: Boolean?,
