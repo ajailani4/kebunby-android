@@ -27,6 +27,6 @@ class PlantListViewModel @Inject constructor(
         searchQuery = searchQuery
     ).cachedIn(viewModelScope)
 
-    fun getPagingPlantsByCat() =
+    fun getPagingPlantsByCategory() =
         getPagingPlantsByCategoryUseCase.invoke(categoryId!!).cachedIn(viewModelScope)
 }

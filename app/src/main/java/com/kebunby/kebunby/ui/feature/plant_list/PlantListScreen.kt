@@ -31,7 +31,7 @@ fun PlantListScreen(
     val categoryId = plantListViewModel.categoryId
     val category = plantListViewModel.category
     val plantList = if (categoryId!! > 0) {
-        plantListViewModel.getPagingPlantsByCat().collectAsLazyPagingItems()
+        plantListViewModel.getPagingPlantsByCategory().collectAsLazyPagingItems()
     } else {
         plantListViewModel.getPagingPlants().collectAsLazyPagingItems()
     }
