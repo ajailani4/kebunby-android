@@ -328,7 +328,9 @@ fun TrendingSection(
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
                             },
-                            onClick = {}
+                            onClick = {
+                                navController.navigate(Screen.PlantDetailScreen.route)
+                            }
                         )
 
                         if (plantItem != trendingPlants.last()) {

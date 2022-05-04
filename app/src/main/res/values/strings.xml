@@ -37,4 +37,8 @@
     <string name="plant_categories">Plant Categories</string>
 
     <string name="plants">Plants</string>
+
+    <string name="tools_and_materials">Tools and Materials</string>
+    <string name="steps">Steps</string>
+    <string name="plant">Plant Now</string>
 </resources>

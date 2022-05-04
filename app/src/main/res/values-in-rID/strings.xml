@@ -37,4 +37,8 @@
     <string name="plant_categories">Kategori Tanaman</string>
 
     <string name="plants">Tanaman-tanaman</string>
+
+    <string name="tools_and_materials">Alat dan Bahan</string>
+    <string name="steps">Langkah-langkah</string>
+    <string name="plant">Tanam Sekarang</string>
 </resources>

@@ -47,9 +47,9 @@ fun CustomToolbar(
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
+                        imageVector = EvaIcons.Fill.ArrowBack,
                         tint = Color.White,
-                        contentDescription = "Arrow Back"
+                        contentDescription = "Back button"
                     )
                 }
             }
