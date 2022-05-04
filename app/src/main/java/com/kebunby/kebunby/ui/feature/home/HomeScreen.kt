@@ -329,7 +329,9 @@ fun TrendingSection(
                                 }
                             },
                             onClick = {
-                                navController.navigate(Screen.PlantDetailScreen.route)
+                                navController.navigate(
+                                    Screen.PlantDetailScreen.route + "?plantId=${plantItem.id}"
+                                )
                             }
                         )
 
@@ -427,7 +429,11 @@ fun ForBeginnerSection(
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
                             },
-                            onClick = {}
+                            onClick = {
+                                navController.navigate(
+                                    Screen.PlantDetailScreen.route + "?plantId=${plantItem.id}"
+                                )
+                            }
                         )
 
                         if (plantItem != forBeginnerPlants.last()) {

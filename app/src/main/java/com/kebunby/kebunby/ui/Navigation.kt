@@ -59,7 +59,14 @@ fun Navigation(navController: NavHostController, startDestination: String) {
             PlantListScreen(navController)
         }
 
-        composable(route = Screen.PlantDetailScreen.route) {
+        composable(
+            route = Screen.PlantDetailScreen.route + "?plantId={plantId}",
+            arguments = listOf(
+                navArgument("plantId") {
+                    type = NavType.IntType
+                }
+            )
+        ) {
             PlantDetailScreen(navController)
         }
 

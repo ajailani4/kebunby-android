@@ -18,6 +18,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
+import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.plant_list.component.PlantCard
 
@@ -83,7 +84,14 @@ fun PlantListScreen(
             }
 
             items(plantList) { plant ->
-                PlantCard(plantItem = plant)
+                PlantCard(
+                    plantItem = plant,
+                    onClick = {
+                        navController.navigate(
+                            Screen.PlantDetailScreen.route + "?plantId=${plant?.id}"
+                        )
+                    }
+                )
                 Spacer(modifier = Modifier.height(20.dp))
             }
 

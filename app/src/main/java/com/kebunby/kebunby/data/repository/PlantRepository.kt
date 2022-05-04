@@ -2,6 +2,7 @@ package com.kebunby.kebunby.data.repository
 
 import androidx.paging.PagingData
 import com.kebunby.kebunby.data.Resource
+import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.request.PlantActRequest
@@ -25,6 +26,8 @@ interface PlantRepository {
     fun getPagingPlantsByCategory(categoryId: Int): Flow<PagingData<PlantItem>>
 
     fun getPlantCategories(): Flow<Resource<List<PlantCategory>>>
+
+    fun getPlantDetail(id: Int): Flow<Resource<Plant>>
 
     fun addPlantActivity(
         username: String,

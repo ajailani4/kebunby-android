@@ -27,13 +27,16 @@ import compose.icons.simpleicons.Rainmeter
 @ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PlantCard(plantItem: PlantItem?) {
+fun PlantCard(
+    plantItem: PlantItem?,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.surface,
         elevation = 5.dp,
-        onClick = {}
+        onClick = onClick
     ) {
         Row(modifier = Modifier.padding(15.dp)) {
             Image(
