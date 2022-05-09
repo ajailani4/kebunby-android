@@ -60,9 +60,9 @@ class HomeViewModel @Inject constructor(
 
             HomeEvent.LoadPlantCategories -> getPlantCategories()
 
-            HomeEvent.AddFavoritePlant -> addUserFavPlant()
+            HomeEvent.AddFavoritePlant -> addFavoritePlant()
 
-            HomeEvent.DeleteFavoritePlant -> deleteUserFavPlant()
+            HomeEvent.DeleteFavoritePlant -> deleteFavPlant()
         }
     }
 
@@ -177,7 +177,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun addUserFavPlant() {
+    private fun addFavoritePlant() {
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
 
@@ -192,14 +192,13 @@ class HomeViewModel @Inject constructor(
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
-
                     is Resource.Error -> {}
                 }
             }
         }
     }
 
-    private fun deleteUserFavPlant() {
+    private fun deleteFavPlant() {
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
 
@@ -214,7 +213,6 @@ class HomeViewModel @Inject constructor(
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
-
                     is Resource.Error -> {}
                 }
             }

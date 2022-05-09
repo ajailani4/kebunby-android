@@ -26,6 +26,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.feature.home.HomeEvent
+import com.kebunby.kebunby.ui.feature.home.HomeState
 import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
 import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
 import com.kebunby.kebunby.ui.theme.Grey
@@ -47,7 +49,13 @@ fun PlantDetailScreen(
     navController: NavController,
     plantDetailViewModel: PlantDetailViewModel = hiltViewModel()
 ) {
+    val onEvent = plantDetailViewModel::onEvent
     val plantDetailState = plantDetailViewModel.plantDetailState
+    val addFavPlantState = plantDetailViewModel.addFavPlantState
+    val deleteFavPlantState = plantDetailViewModel.deleteFavPlantState
+    val isFavorited = plantDetailViewModel.isFavorited
+    val onFavoritePlant = plantDetailViewModel::onFavoritePlant
+
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -74,6 +82,8 @@ fun PlantDetailScreen(
 
                     is PlantDetailState.PlantDetail -> {
                         val plant = plantDetailState.plant!!
+
+                        if (isFavorited == null) onFavoritePlant(plant.isFavorited)
 
                         // Plant Image
                         Box {
@@ -109,11 +119,23 @@ fun PlantDetailScreen(
                                     shape = CircleShape,
                                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
                                     contentPadding = PaddingValues(0.dp),
-                                    onClick = {}
+                                    onClick = {
+                                        onFavoritePlant(!isFavorited!!)
+
+                                        if (isFavorited == false) {
+                                            onEvent(PlantDetailEvent.AddFavoritePlant)
+                                        } else {
+                                            onEvent(PlantDetailEvent.DeleteFavoritePlant)
+                                        }
+                                    }
                                 ) {
                                     Icon(
-                                        imageVector = EvaIcons.Outline.Heart,
-                                        tint = Grey,
+                                        imageVector = if (isFavorited == true) {
+                                            EvaIcons.Fill.Heart
+                                        } else {
+                                            EvaIcons.Outline.Heart
+                                        },
+                                        tint = if (isFavorited == true) Red else Grey,
                                         contentDescription = "Love button"
                                     )
                                 }
@@ -264,6 +286,36 @@ fun PlantDetailScreen(
                     )
                 }
             }
+        }
+
+        // Observe add user favorite plant state
+        when (addFavPlantState) {
+            is PlantDetailState.ErrorAddFavoritePlant -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        addFavPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
+        }
+
+        // Observe delete user favorite plant state
+        when (deleteFavPlantState) {
+            is PlantDetailState.ErrorDeleteFavoritePlant -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        deleteFavPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
         }
     }
 }
