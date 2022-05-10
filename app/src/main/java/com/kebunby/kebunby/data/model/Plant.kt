@@ -6,6 +6,8 @@ data class Plant(
     val latinName: String,
     val image: String,
     val category: String,
+    val isPlanting: Boolean,
+    val isPlanted: Boolean,
     val isFavorited: Boolean,
     val wateringFreq: String,
     val growthEst: String,

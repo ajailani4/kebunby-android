@@ -30,6 +30,7 @@ class PlantDetailViewModel @Inject constructor(
     var plantDetailState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
     var addFavPlantState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
     var deleteFavPlantState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
+    var addPlantingPlantState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
     var isFavorited by mutableStateOf<Boolean?>(null)
 
     init {
@@ -43,6 +44,8 @@ class PlantDetailViewModel @Inject constructor(
             PlantDetailEvent.AddFavoritePlant -> addFavoritePlant()
 
             PlantDetailEvent.DeleteFavoritePlant -> deleteFavoritePlant()
+
+            PlantDetailEvent.AddPlantingPlant -> addPlantingPlant()
         }
     }
 
@@ -108,6 +111,32 @@ class PlantDetailViewModel @Inject constructor(
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
+                    is Resource.Error -> {}
+                }
+            }
+        }
+    }
+
+    private fun addPlantingPlant() {
+        addPlantingPlantState = PlantDetailState.LoadingAddPlantingPlant
+
+        viewModelScope.launch {
+            val userCredential = getUserCredentialUseCase.invoke().first()
+
+            val resource = addPlantActivityUseCase.invoke(
+                username = userCredential.username!!,
+                isPlanting = true,
+                plantActRequest = PlantActRequest(savedStateHandle.get<Int>("plantId")!!)
+            )
+
+            resource.catch {
+                addPlantingPlantState = PlantDetailState.ErrorAddPlantingPlant(it.localizedMessage)
+            }.collect {
+                when (it) {
+                    is Resource.Success -> {
+                        addPlantingPlantState = PlantDetailState.SuccessAddPlantingPlant
+                    }
+
                     is Resource.Error -> {}
                 }
             }

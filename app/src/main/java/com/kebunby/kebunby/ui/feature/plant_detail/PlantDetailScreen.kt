@@ -1,33 +1,25 @@
 package com.kebunby.kebunby.ui.feature.plant_detail
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
-import com.kebunby.kebunby.ui.feature.home.HomeEvent
-import com.kebunby.kebunby.ui.feature.home.HomeState
+import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
 import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
 import com.kebunby.kebunby.ui.theme.Grey
@@ -53,6 +45,7 @@ fun PlantDetailScreen(
     val plantDetailState = plantDetailViewModel.plantDetailState
     val addFavPlantState = plantDetailViewModel.addFavPlantState
     val deleteFavPlantState = plantDetailViewModel.deleteFavPlantState
+    val addPlantingPlantState = plantDetailViewModel.addPlantingPlantState
     val isFavorited = plantDetailViewModel.isFavorited
     val onFavoritePlant = plantDetailViewModel::onFavoritePlant
 
@@ -61,30 +54,28 @@ fun PlantDetailScreen(
 
     Scaffold(scaffoldState = scaffoldState) {
         Box {
-            Column(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colors.background)
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                // Observe plant detail state
-                when (plantDetailState) {
-                    is PlantDetailState.LoadingPlantDetail -> {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 200.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
+            // Observe plant detail state
+            when (plantDetailState) {
+                is PlantDetailState.LoadingPlantDetail -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
                     }
+                }
 
-                    is PlantDetailState.PlantDetail -> {
-                        val plant = plantDetailState.plant!!
+                is PlantDetailState.PlantDetail -> {
+                    val plant = plantDetailState.plant!!
 
-                        if (isFavorited == null) onFavoritePlant(plant.isFavorited)
+                    if (isFavorited == null) onFavoritePlant(plant.isFavorited)
 
+                    Column(
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colors.background)
+                            .fillMaxSize()
+                            .verticalScroll(rememberScrollState())
+                    ) {
                         // Plant Image
                         Box {
                             Image(
@@ -242,53 +233,76 @@ fun PlantDetailScreen(
                             }
                         }
                     }
-
-                    is PlantDetailState.FailPlantDetail -> {
-                        LaunchedEffect(Unit) {
-                            coroutineScope.launch {
-                                plantDetailState.message?.let { message ->
-                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                    Surface(
+                        modifier = Modifier.align(Alignment.BottomCenter),
+                        color = MaterialTheme.colors.background
+                    ) {
+                        if (!plant.isPlanting) {
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(15.dp),
+                                shape = MaterialTheme.shapes.medium,
+                                enabled = plantDetailState != PlantDetailState.LoadingPlantDetail ||
+                                    addPlantingPlantState != PlantDetailState.LoadingAddPlantingPlant,
+                                onClick = {
+                                    onEvent(PlantDetailEvent.AddPlantingPlant)
                                 }
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.plant),
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.subtitle1
+                                )
+                            }
+                        } else if (plant.isPlanting) {
+                            OutlinedButton(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(15.dp),
+                                shape = MaterialTheme.shapes.medium,
+                                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                                border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.primary),
+                                enabled = plantDetailState != PlantDetailState.LoadingPlantDetail,
+                                onClick = {}
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.finish_planting),
+                                    color = MaterialTheme.colors.primary,
+                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.subtitle1
+                                )
                             }
                         }
                     }
+                }
 
-                    is PlantDetailState.ErrorPlantDetail -> {
-                        LaunchedEffect(Unit) {
-                            coroutineScope.launch {
-                                plantDetailState.message?.let { message ->
-                                    scaffoldState.snackbarHostState.showSnackbar(message)
-                                }
+                is PlantDetailState.FailPlantDetail -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantDetailState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
                             }
                         }
                     }
+                }
 
-                    else -> {}
+                is PlantDetailState.ErrorPlantDetail -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantDetailState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
                 }
-            }
-            Surface(
-                modifier = Modifier.align(Alignment.BottomCenter),
-                color = MaterialTheme.colors.background
-            ) {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    shape = MaterialTheme.shapes.medium,
-                    enabled = plantDetailState != PlantDetailState.LoadingPlantDetail,
-                    onClick = { }
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.plant),
-                        color = MaterialTheme.colors.onPrimary,
-                        fontWeight = FontWeight.Bold,
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                }
+
+                else -> {}
             }
         }
 
-        // Observe add user favorite plant state
+        // Observe add favorite plant state
         when (addFavPlantState) {
             is PlantDetailState.ErrorAddFavoritePlant -> {
                 LaunchedEffect(Unit) {
@@ -303,12 +317,37 @@ fun PlantDetailScreen(
             else -> {}
         }
 
-        // Observe delete user favorite plant state
+        // Observe delete favorite plant state
         when (deleteFavPlantState) {
             is PlantDetailState.ErrorDeleteFavoritePlant -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         deleteFavPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
+        }
+
+        // Observe add planting plant state
+        when (addPlantingPlantState) {
+            is PlantDetailState.LoadingAddPlantingPlant -> {
+                FullSizeProgressBar()
+            }
+
+            is PlantDetailState.SuccessAddPlantingPlant -> {
+                LaunchedEffect(Unit) {
+                    onEvent(PlantDetailEvent.LoadPlantDetail)
+                }
+            }
+
+            is PlantDetailState.ErrorAddPlantingPlant -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        addPlantingPlantState.message?.let { message ->
                             scaffoldState.snackbarHostState.showSnackbar(message)
                         }
                     }
