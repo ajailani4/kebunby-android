@@ -46,6 +46,7 @@ fun PlantDetailScreen(
     val addFavPlantState = plantDetailViewModel.addFavPlantState
     val deleteFavPlantState = plantDetailViewModel.deleteFavPlantState
     val addPlantingPlantState = plantDetailViewModel.addPlantingPlantState
+    val addPlantedPlantState = plantDetailViewModel.addPlantedPlantState
     val isFavorited = plantDetailViewModel.isFavorited
     val onFavoritePlant = plantDetailViewModel::onFavoritePlant
 
@@ -243,14 +244,17 @@ fun PlantDetailScreen(
                                     .fillMaxWidth()
                                     .padding(15.dp),
                                 shape = MaterialTheme.shapes.medium,
-                                enabled = plantDetailState != PlantDetailState.LoadingPlantDetail ||
-                                    addPlantingPlantState != PlantDetailState.LoadingAddPlantingPlant,
+                                enabled = !plant.isPlanted,
                                 onClick = {
                                     onEvent(PlantDetailEvent.AddPlantingPlant)
                                 }
                             ) {
                                 Text(
-                                    text = stringResource(id = R.string.plant),
+                                    text = if (!plant.isPlanted) {
+                                        stringResource(id = R.string.plant)
+                                    } else {
+                                        stringResource(id = R.string.already_planted)
+                                    },
                                     color = MaterialTheme.colors.onPrimary,
                                     fontWeight = FontWeight.Bold,
                                     style = MaterialTheme.typography.subtitle1
@@ -263,9 +267,14 @@ fun PlantDetailScreen(
                                     .padding(15.dp),
                                 shape = MaterialTheme.shapes.medium,
                                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                                border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.primary),
+                                border = BorderStroke(
+                                    width = 1.dp,
+                                    color = MaterialTheme.colors.primary
+                                ),
                                 enabled = plantDetailState != PlantDetailState.LoadingPlantDetail,
-                                onClick = {}
+                                onClick = {
+                                    onEvent(PlantDetailEvent.AddPlantedPlant)
+                                }
                             ) {
                                 Text(
                                     text = stringResource(id = R.string.finish_planting),
@@ -348,6 +357,31 @@ fun PlantDetailScreen(
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         addPlantingPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
+        }
+
+        // Observe add planted plant state
+        when (addPlantedPlantState) {
+            is PlantDetailState.LoadingAddPlantedPlant -> {
+                FullSizeProgressBar()
+            }
+
+            is PlantDetailState.SuccessAddPlantedPlant -> {
+                LaunchedEffect(Unit) {
+                    onEvent(PlantDetailEvent.LoadPlantDetail)
+                }
+            }
+
+            is PlantDetailState.ErrorAddPlantedPlant -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        addPlantedPlantState.message?.let { message ->
                             scaffoldState.snackbarHostState.showSnackbar(message)
                         }
                     }

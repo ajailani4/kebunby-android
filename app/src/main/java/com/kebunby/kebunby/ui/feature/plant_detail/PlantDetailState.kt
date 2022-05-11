@@ -7,9 +7,11 @@ sealed class PlantDetailState {
 
     object LoadingPlantDetail : PlantDetailState()
     object LoadingAddPlantingPlant : PlantDetailState()
+    object LoadingAddPlantedPlant : PlantDetailState()
 
     data class PlantDetail(val plant: Plant?) : PlantDetailState()
     object SuccessAddPlantingPlant : PlantDetailState()
+    object SuccessAddPlantedPlant : PlantDetailState()
 
     data class FailPlantDetail(val message: String?) : PlantDetailState()
 
@@ -17,4 +19,5 @@ sealed class PlantDetailState {
     data class ErrorAddFavoritePlant(val message: String?) : PlantDetailState()
     data class ErrorDeleteFavoritePlant(val message: String?) : PlantDetailState()
     data class ErrorAddPlantingPlant(val message: String?) : PlantDetailState()
+    data class ErrorAddPlantedPlant(val message: String?) : PlantDetailState()
 }
