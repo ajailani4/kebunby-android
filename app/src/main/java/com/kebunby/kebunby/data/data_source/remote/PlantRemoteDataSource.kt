@@ -33,6 +33,8 @@ class PlantRemoteDataSource @Inject constructor(
 
     suspend fun getPlantCategories() = plantService.getPlantCategories()
 
+    suspend fun getPlantDetail(id: Int) = plantService.getPlantDetail(id)
+
     suspend fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,

@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.data.api
 
+import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.request.PlantActRequest
@@ -26,6 +27,11 @@ interface PlantService {
 
     @GET("categories")
     suspend fun getPlantCategories(): Response<BaseResponse<List<PlantCategory>>>
+
+    @GET("plants/{id}")
+    suspend fun getPlantDetail(
+        @Path("id") id: Int
+    ): Response<BaseResponse<Plant>>
 
     @POST("users/{username}/plants")
     suspend fun addPlantActivity(

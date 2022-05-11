@@ -9,6 +9,7 @@ import androidx.navigation.navArgument
 import com.kebunby.kebunby.ui.feature.home.HomeScreen
 import com.kebunby.kebunby.ui.feature.login.LoginScreen
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingScreen
+import com.kebunby.kebunby.ui.feature.plant_detail.PlantDetailScreen
 import com.kebunby.kebunby.ui.feature.plant_list.PlantListScreen
 import com.kebunby.kebunby.ui.feature.register.RegisterScreen
 
@@ -56,6 +57,17 @@ fun Navigation(navController: NavHostController, startDestination: String) {
             )
         ) {
             PlantListScreen(navController)
+        }
+
+        composable(
+            route = Screen.PlantDetailScreen.route + "?plantId={plantId}",
+            arguments = listOf(
+                navArgument("plantId") {
+                    type = NavType.IntType
+                }
+            )
+        ) {
+            PlantDetailScreen(navController)
         }
 
         // Bottom nav menu

@@ -1,9 +1,11 @@
 package com.kebunby.kebunby.ui.feature.plant_list
 
+import androidx.compose.foundation.background
 import com.kebunby.kebunby.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +18,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
+import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.plant_list.component.PlantCard
 
@@ -63,7 +66,10 @@ fun PlantListScreen(
             )
         }
     ) {
-        LazyColumn(contentPadding = PaddingValues(20.dp)) {
+        LazyColumn(
+            modifier = Modifier.background(color = MaterialTheme.colors.background),
+            contentPadding = PaddingValues(20.dp)
+        ) {
             if (plantList.loadState.refresh == LoadState.Loading) {
                 item {
                     Box(
@@ -78,7 +84,14 @@ fun PlantListScreen(
             }
 
             items(plantList) { plant ->
-                PlantCard(plantItem = plant)
+                PlantCard(
+                    plantItem = plant,
+                    onClick = {
+                        navController.navigate(
+                            Screen.PlantDetailScreen.route + "?plantId=${plant?.id}"
+                        )
+                    }
+                )
                 Spacer(modifier = Modifier.height(20.dp))
             }
 

@@ -91,7 +91,7 @@ fun HomeScreen(
                 )
             }
 
-            // Observe add user favorite plant state
+            // Observe add favorite plant state
             when (addFavPlantState) {
                 is HomeState.ErrorAddFavoritePlant -> {
                     LaunchedEffect(Unit) {
@@ -108,7 +108,7 @@ fun HomeScreen(
                 else -> {}
             }
 
-            // Observe delete user favorite plant state
+            // Observe delete favorite plant state
             when (deleteFavPlantState) {
                 is HomeState.ErrorDeleteFavoritePlant -> {
                     LaunchedEffect(Unit) {
@@ -328,7 +328,11 @@ fun TrendingSection(
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
                             },
-                            onClick = {}
+                            onClick = {
+                                navController.navigate(
+                                    Screen.PlantDetailScreen.route + "?plantId=${plantItem.id}"
+                                )
+                            }
                         )
 
                         if (plantItem != trendingPlants.last()) {
@@ -425,7 +429,11 @@ fun ForBeginnerSection(
                                     onEvent(HomeEvent.DeleteFavoritePlant)
                                 }
                             },
-                            onClick = {}
+                            onClick = {
+                                navController.navigate(
+                                    Screen.PlantDetailScreen.route + "?plantId=${plantItem.id}"
+                                )
+                            }
                         )
 
                         if (plantItem != forBeginnerPlants.last()) {

@@ -7,9 +7,11 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.data_source.remote.PagingDataSource
 import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
+import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
@@ -75,6 +77,17 @@ class PlantRepositoryImpl @Inject constructor(
     override fun getPlantCategories() =
         flow {
             val response = plantRemoteDataSource.getPlantCategories()
+
+            when (response.code()) {
+                200 -> emit(Resource.Success(response.body()?.data))
+
+                else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
+            }
+        }
+
+    override fun getPlantDetail(id: Int) =
+        flow {
+            val response = plantRemoteDataSource.getPlantDetail(id)
 
             when (response.code()) {
                 200 -> emit(Resource.Success(response.body()?.data))
