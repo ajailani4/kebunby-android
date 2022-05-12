@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
 import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
@@ -57,7 +58,7 @@ fun PlantDetailScreen(
         Box {
             // Observe plant detail state
             when (plantDetailState) {
-                is PlantDetailState.LoadingPlantDetail -> {
+                is UIState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -66,8 +67,8 @@ fun PlantDetailScreen(
                     }
                 }
 
-                is PlantDetailState.PlantDetail -> {
-                    val plant = plantDetailState.plant!!
+                is UIState.Success -> {
+                    val plant = plantDetailState.data!!
 
                     if (isFavorited == null) onFavoritePlant(plant.isFavorited)
 
@@ -271,7 +272,7 @@ fun PlantDetailScreen(
                                     width = 1.dp,
                                     color = MaterialTheme.colors.primary
                                 ),
-                                enabled = plantDetailState != PlantDetailState.LoadingPlantDetail,
+                                enabled = plantDetailState != UIState.Loading,
                                 onClick = {
                                     onEvent(PlantDetailEvent.AddPlantedPlant)
                                 }
@@ -287,7 +288,7 @@ fun PlantDetailScreen(
                     }
                 }
 
-                is PlantDetailState.FailPlantDetail -> {
+                is UIState.Fail -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
                             plantDetailState.message?.let { message ->
@@ -297,7 +298,7 @@ fun PlantDetailScreen(
                     }
                 }
 
-                is PlantDetailState.ErrorPlantDetail -> {
+                is UIState.Error -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
                             plantDetailState.message?.let { message ->
@@ -313,7 +314,7 @@ fun PlantDetailScreen(
 
         // Observe add favorite plant state
         when (addFavPlantState) {
-            is PlantDetailState.ErrorAddFavoritePlant -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         addFavPlantState.message?.let { message ->
@@ -328,7 +329,7 @@ fun PlantDetailScreen(
 
         // Observe delete favorite plant state
         when (deleteFavPlantState) {
-            is PlantDetailState.ErrorDeleteFavoritePlant -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         deleteFavPlantState.message?.let { message ->
@@ -343,17 +344,17 @@ fun PlantDetailScreen(
 
         // Observe add planting plant state
         when (addPlantingPlantState) {
-            is PlantDetailState.LoadingAddPlantingPlant -> {
+            is UIState.Loading -> {
                 FullSizeProgressBar()
             }
 
-            is PlantDetailState.SuccessAddPlantingPlant -> {
+            is UIState.Success -> {
                 LaunchedEffect(Unit) {
                     onEvent(PlantDetailEvent.LoadPlantDetail)
                 }
             }
 
-            is PlantDetailState.ErrorAddPlantingPlant -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         addPlantingPlantState.message?.let { message ->
@@ -368,17 +369,17 @@ fun PlantDetailScreen(
 
         // Observe add planted plant state
         when (addPlantedPlantState) {
-            is PlantDetailState.LoadingAddPlantedPlant -> {
+            is UIState.Loading -> {
                 FullSizeProgressBar()
             }
 
-            is PlantDetailState.SuccessAddPlantedPlant -> {
+            is UIState.Success -> {
                 LaunchedEffect(Unit) {
                     onEvent(PlantDetailEvent.LoadPlantDetail)
                 }
             }
 
-            is PlantDetailState.ErrorAddPlantedPlant -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         addPlantedPlantState.message?.let { message ->

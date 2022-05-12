@@ -9,6 +9,7 @@ import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.request.RegisterRequest
 import com.kebunby.kebunby.domain.use_case.user.RegisterUserUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.SaveUserCredentialUseCase
+import com.kebunby.kebunby.ui.common.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -20,7 +21,7 @@ class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
     private val saveUserCredentialUseCase: SaveUserCredentialUseCase
 ) : ViewModel() {
-    var registerState by mutableStateOf<RegisterState>(RegisterState.Idle)
+    var registerState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
     var username by mutableStateOf("")
     var email by mutableStateOf("")
     var name by mutableStateOf("")
@@ -56,11 +57,11 @@ class RegisterViewModel @Inject constructor(
     }
 
     private fun idle() {
-        registerState = RegisterState.Idle
+        registerState = UIState.Idle
     }
 
     private fun register() {
-        registerState = RegisterState.Registering
+        registerState = UIState.Loading
 
         viewModelScope.launch {
             val resource = registerUserUseCase.invoke(
@@ -73,15 +74,15 @@ class RegisterViewModel @Inject constructor(
             )
 
             resource.catch {
-                registerState = RegisterState.Error(it.localizedMessage)
+                registerState = UIState.Error(it.localizedMessage)
             }.collect {
                 registerState = when (it) {
                     is Resource.Success -> {
                         saveUserCredentialUseCase(it.data!!)
-                        RegisterState.Success
+                        UIState.Success(null)
                     }
 
-                    is Resource.Error -> RegisterState.Fail(it.message)
+                    is Resource.Error -> UIState.Fail(it.message)
                 }
             }
         }

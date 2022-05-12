@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -243,7 +244,7 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.fillMaxWidth(),
                             shape = MaterialTheme.shapes.medium,
-                            enabled = registerState != RegisterState.Registering,
+                            enabled = registerState != UIState.Loading,
                             onClick = {
                                 if (
                                     username.isNotEmpty() && email.isNotEmpty() &&
@@ -294,13 +295,13 @@ fun RegisterScreen(
 
         // Observe register state
         when (registerState) {
-            is RegisterState.Idle -> {}
+            is UIState.Idle -> {}
 
-            is RegisterState.Registering -> {
+            is UIState.Loading -> {
                 FullSizeProgressBar()
             }
 
-            is RegisterState.Success -> {
+            is UIState.Success -> {
                 navController.navigate(Screen.HomeScreen.route) {
                     launchSingleTop = true
 
@@ -310,7 +311,7 @@ fun RegisterScreen(
                 }
             }
 
-            is RegisterState.Fail -> {
+            is UIState.Fail -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         registerState.message?.let { message ->
@@ -322,7 +323,7 @@ fun RegisterScreen(
                 onEvent(RegisterEvent.Idle)
             }
 
-            is RegisterState.Error -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         registerState.message?.let { message ->
