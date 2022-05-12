@@ -4,9 +4,8 @@ import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.domain.use_case.user.RegisterUserUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.SaveUserCredentialUseCase
-import com.kebunby.kebunby.ui.common.BaseUIState
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.feature.register.RegisterEvent
-import com.kebunby.kebunby.ui.feature.register.RegisterState
 import com.kebunby.kebunby.ui.feature.register.RegisterViewModel
 import com.kebunby.kebunby.util.TestCoroutineRule
 import com.kebunby.kebunby.util.generateUserCredential
@@ -59,11 +58,11 @@ class RegisterViewModelTest {
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState) {
-                is BaseUIState.Success -> true
+                is UIState.Success -> true
 
-                is BaseUIState.Fail -> false
+                is UIState.Fail -> false
 
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> false
             }
@@ -90,11 +89,11 @@ class RegisterViewModelTest {
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState) {
-                is BaseUIState.Success -> true
+                is UIState.Success -> true
 
-                is BaseUIState.Fail -> false
+                is UIState.Fail -> false
 
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> false
             }

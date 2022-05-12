@@ -10,7 +10,7 @@ import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantsUseCase
 import com.kebunby.kebunby.domain.use_case.user.GetUserProfileUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
-import com.kebunby.kebunby.ui.common.BaseUIState
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.feature.home.HomeEvent
 import com.kebunby.kebunby.ui.feature.home.HomeViewModel
 import com.kebunby.kebunby.util.*
@@ -84,7 +84,7 @@ class HomeViewModelTest {
             )
 
             val userProfile: User? = when (val userProfileState = homeViewModel.userProfileState) {
-                is BaseUIState.Success -> userProfileState.data
+                is UIState.Success -> userProfileState.data
                 else -> null
             }
 
@@ -124,11 +124,11 @@ class HomeViewModelTest {
             )
 
             val isSuccess = when (homeViewModel.userProfileState) {
-                is BaseUIState.Success -> true
+                is UIState.Success -> true
 
-                is BaseUIState.Fail -> false
+                is UIState.Fail -> false
 
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> false
             }
@@ -175,7 +175,7 @@ class HomeViewModelTest {
 
             val trendingPlants =
                 when (val trendingPlantsState = homeViewModel.trendingPlantsState) {
-                    is BaseUIState.Success -> trendingPlantsState.data
+                    is UIState.Success -> trendingPlantsState.data
 
                     else -> listOf()
                 }
@@ -227,11 +227,11 @@ class HomeViewModelTest {
             )
 
             val isSuccess = when (homeViewModel.trendingPlantsState) {
-                is BaseUIState.Success -> true
+                is UIState.Success -> true
 
-                is BaseUIState.Fail -> false
+                is UIState.Fail -> false
 
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> false
             }
@@ -284,7 +284,7 @@ class HomeViewModelTest {
 
             val forBeginnerPlants =
                 when (val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState) {
-                    is BaseUIState.Success -> forBeginnerPlantsState.data
+                    is UIState.Success -> forBeginnerPlantsState.data
 
                     else -> listOf()
                 }
@@ -336,11 +336,11 @@ class HomeViewModelTest {
             )
 
             val isSuccess = when (homeViewModel.forBeginnerPlantsState) {
-                is BaseUIState.Success -> true
+                is UIState.Success -> true
 
-                is BaseUIState.Fail -> false
+                is UIState.Fail -> false
 
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> false
             }
@@ -387,7 +387,7 @@ class HomeViewModelTest {
 
             val plantCategoriesPlants =
                 when (val plantCategoriesState = homeViewModel.plantCategoriesState) {
-                    is BaseUIState.Success -> plantCategoriesState.data
+                    is UIState.Success -> plantCategoriesState.data
 
                     else -> listOf()
                 }
@@ -427,11 +427,11 @@ class HomeViewModelTest {
             )
 
             val isSuccess = when (homeViewModel.plantCategoriesState) {
-                is BaseUIState.Success -> true
+                is UIState.Success -> true
 
-                is BaseUIState.Fail -> false
+                is UIState.Fail -> false
 
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> false
             }
@@ -479,7 +479,7 @@ class HomeViewModelTest {
             homeViewModel.onEvent(HomeEvent.AddFavoritePlant)
 
             val isSuccess = when (homeViewModel.addFavPlantState) {
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> true
             }
@@ -533,7 +533,7 @@ class HomeViewModelTest {
             homeViewModel.onEvent(HomeEvent.DeleteFavoritePlant)
 
             val isSuccess = when (homeViewModel.deleteFavPlantState) {
-                is BaseUIState.Error -> false
+                is UIState.Error -> false
 
                 else -> true
             }

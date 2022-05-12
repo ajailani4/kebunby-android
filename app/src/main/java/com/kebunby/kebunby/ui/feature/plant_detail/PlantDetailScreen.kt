@@ -19,7 +19,7 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
-import com.kebunby.kebunby.ui.common.BaseUIState
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
 import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
@@ -58,7 +58,7 @@ fun PlantDetailScreen(
         Box {
             // Observe plant detail state
             when (plantDetailState) {
-                is BaseUIState.Loading -> {
+                is UIState.Loading -> {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
@@ -67,7 +67,7 @@ fun PlantDetailScreen(
                     }
                 }
 
-                is BaseUIState.Success -> {
+                is UIState.Success -> {
                     val plant = plantDetailState.data!!
 
                     if (isFavorited == null) onFavoritePlant(plant.isFavorited)
@@ -272,7 +272,7 @@ fun PlantDetailScreen(
                                     width = 1.dp,
                                     color = MaterialTheme.colors.primary
                                 ),
-                                enabled = plantDetailState != BaseUIState.Loading,
+                                enabled = plantDetailState != UIState.Loading,
                                 onClick = {
                                     onEvent(PlantDetailEvent.AddPlantedPlant)
                                 }
@@ -288,7 +288,7 @@ fun PlantDetailScreen(
                     }
                 }
 
-                is BaseUIState.Fail -> {
+                is UIState.Fail -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
                             plantDetailState.message?.let { message ->
@@ -298,7 +298,7 @@ fun PlantDetailScreen(
                     }
                 }
 
-                is BaseUIState.Error -> {
+                is UIState.Error -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
                             plantDetailState.message?.let { message ->
@@ -314,7 +314,7 @@ fun PlantDetailScreen(
 
         // Observe add favorite plant state
         when (addFavPlantState) {
-            is BaseUIState.Error -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         addFavPlantState.message?.let { message ->
@@ -329,7 +329,7 @@ fun PlantDetailScreen(
 
         // Observe delete favorite plant state
         when (deleteFavPlantState) {
-            is BaseUIState.Error -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         deleteFavPlantState.message?.let { message ->
@@ -344,17 +344,17 @@ fun PlantDetailScreen(
 
         // Observe add planting plant state
         when (addPlantingPlantState) {
-            is BaseUIState.Loading -> {
+            is UIState.Loading -> {
                 FullSizeProgressBar()
             }
 
-            is BaseUIState.Success -> {
+            is UIState.Success -> {
                 LaunchedEffect(Unit) {
                     onEvent(PlantDetailEvent.LoadPlantDetail)
                 }
             }
 
-            is BaseUIState.Error -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         addPlantingPlantState.message?.let { message ->
@@ -369,17 +369,17 @@ fun PlantDetailScreen(
 
         // Observe add planted plant state
         when (addPlantedPlantState) {
-            is BaseUIState.Loading -> {
+            is UIState.Loading -> {
                 FullSizeProgressBar()
             }
 
-            is BaseUIState.Success -> {
+            is UIState.Success -> {
                 LaunchedEffect(Unit) {
                     onEvent(PlantDetailEvent.LoadPlantDetail)
                 }
             }
 
-            is BaseUIState.Error -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         addPlantedPlantState.message?.let { message ->

@@ -30,7 +30,7 @@ import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.ui.Screen
-import com.kebunby.kebunby.ui.common.BaseUIState
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.feature.home.component.HomeUserProfileShimmer
 import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
@@ -96,7 +96,7 @@ fun HomeScreen(
 
             // Observe add favorite plant state
             when (addFavPlantState) {
-                is BaseUIState.Error -> {
+                is UIState.Error -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
                             addFavPlantState.message?.let { message ->
@@ -113,7 +113,7 @@ fun HomeScreen(
 
             // Observe delete favorite plant state
             when (deleteFavPlantState) {
-                is BaseUIState.Error -> {
+                is UIState.Error -> {
                     LaunchedEffect(Unit) {
                         coroutineScope.launch {
                             deleteFavPlantState.message?.let { message ->
@@ -135,7 +135,7 @@ fun HomeScreen(
 @Composable
 fun HomeHeader(
     onEvent: (HomeEvent) -> Unit,
-    userProfileState: BaseUIState<User>,
+    userProfileState: UIState<User>,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -147,11 +147,11 @@ fun HomeHeader(
     ) {
         // Observe user profile state
         when (userProfileState) {
-            is BaseUIState.Loading -> {
+            is UIState.Loading -> {
                 HomeUserProfileShimmer()
             }
 
-            is BaseUIState.Success -> {
+            is UIState.Success -> {
                 val user = userProfileState.data
 
                 Column {
@@ -184,7 +184,7 @@ fun HomeHeader(
                 )
             }
 
-            is BaseUIState.Fail -> {
+            is UIState.Fail -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         userProfileState.message?.let { message ->
@@ -196,7 +196,7 @@ fun HomeHeader(
                 onEvent(HomeEvent.Idle)
             }
 
-            is BaseUIState.Error -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         userProfileState.message?.let { message ->
@@ -218,9 +218,9 @@ fun HomeHeader(
 fun HomeContent(
     navController: NavController,
     onEvent: (HomeEvent) -> Unit,
-    trendingPlantsState: BaseUIState<List<PlantItem>>,
-    forBeginnerPlantsState: BaseUIState<List<PlantItem>>,
-    plantCategoriesState: BaseUIState<List<PlantCategory>>,
+    trendingPlantsState: UIState<List<PlantItem>>,
+    forBeginnerPlantsState: UIState<List<PlantItem>>,
+    plantCategoriesState: UIState<List<PlantCategory>>,
     onSelectedPlantChanged: (Int) -> Unit,
     trendingPlants: List<PlantItem>,
     setTrendingPlants: (List<PlantItem>) -> Unit,
@@ -277,7 +277,7 @@ fun HomeContent(
 fun TrendingSection(
     navController: NavController,
     onEvent: (HomeEvent) -> Unit,
-    trendingPlantsState: BaseUIState<List<PlantItem>>,
+    trendingPlantsState: UIState<List<PlantItem>>,
     onSelectedPlantChanged: (Int) -> Unit,
     trendingPlants: List<PlantItem>,
     setTrendingPlants: (List<PlantItem>) -> Unit,
@@ -299,7 +299,7 @@ fun TrendingSection(
 
     // Observe trending plants
     when (trendingPlantsState) {
-        is BaseUIState.Loading -> {
+        is UIState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -308,7 +308,7 @@ fun TrendingSection(
             }
         }
 
-        is BaseUIState.Success -> {
+        is UIState.Success -> {
             if (trendingPlantsState.data != null) {
                 if (trendingPlants.isEmpty()) {
                     setTrendingPlants(trendingPlantsState.data)
@@ -346,7 +346,7 @@ fun TrendingSection(
             }
         }
 
-        is BaseUIState.Fail -> {
+        is UIState.Fail -> {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     trendingPlantsState.message?.let { message ->
@@ -358,7 +358,7 @@ fun TrendingSection(
             onEvent(HomeEvent.Idle)
         }
 
-        is BaseUIState.Error -> {
+        is UIState.Error -> {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     trendingPlantsState.message?.let { message ->
@@ -379,7 +379,7 @@ fun TrendingSection(
 fun ForBeginnerSection(
     navController: NavController,
     onEvent: (HomeEvent) -> Unit,
-    forBeginnerPlantsState: BaseUIState<List<PlantItem>>,
+    forBeginnerPlantsState: UIState<List<PlantItem>>,
     onSelectedPlantChanged: (Int) -> Unit,
     forBeginnerPlants: List<PlantItem>,
     setForBeginnerPlants: (List<PlantItem>) -> Unit,
@@ -400,7 +400,7 @@ fun ForBeginnerSection(
 
     // Observe for beginner plants
     when (forBeginnerPlantsState) {
-        is BaseUIState.Loading -> {
+        is UIState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -409,7 +409,7 @@ fun ForBeginnerSection(
             }
         }
 
-        is BaseUIState.Success -> {
+        is UIState.Success -> {
             if (forBeginnerPlantsState.data != null) {
                 if (forBeginnerPlants.isEmpty()) {
                     setForBeginnerPlants(forBeginnerPlantsState.data)
@@ -447,7 +447,7 @@ fun ForBeginnerSection(
             }
         }
 
-        is BaseUIState.Fail -> {
+        is UIState.Fail -> {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     forBeginnerPlantsState.message?.let { message ->
@@ -459,7 +459,7 @@ fun ForBeginnerSection(
             onEvent(HomeEvent.Idle)
         }
 
-        is BaseUIState.Error -> {
+        is UIState.Error -> {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     forBeginnerPlantsState.message?.let { message ->
@@ -479,7 +479,7 @@ fun ForBeginnerSection(
 fun PlantCategorySection(
     navController: NavController,
     onEvent: (HomeEvent) -> Unit,
-    plantCategoriesState: BaseUIState<List<PlantCategory>>,
+    plantCategoriesState: UIState<List<PlantCategory>>,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -491,7 +491,7 @@ fun PlantCategorySection(
 
     // Observe plant categories state
     when (plantCategoriesState) {
-        is BaseUIState.Loading -> {
+        is UIState.Loading -> {
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center
@@ -500,7 +500,7 @@ fun PlantCategorySection(
             }
         }
 
-        is BaseUIState.Success -> {
+        is UIState.Success -> {
             val plantCategories = plantCategoriesState.data
 
             plantCategories?.forEach { plantCategory ->
@@ -517,7 +517,7 @@ fun PlantCategorySection(
             }
         }
 
-        is BaseUIState.Fail -> {
+        is UIState.Fail -> {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     plantCategoriesState.message?.let { message ->
@@ -529,7 +529,7 @@ fun PlantCategorySection(
             onEvent(HomeEvent.Idle)
         }
 
-        is BaseUIState.Error -> {
+        is UIState.Error -> {
             LaunchedEffect(Unit) {
                 coroutineScope.launch {
                     plantCategoriesState.message?.let { message ->

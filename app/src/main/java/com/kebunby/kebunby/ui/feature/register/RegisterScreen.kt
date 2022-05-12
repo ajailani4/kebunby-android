@@ -30,7 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
-import com.kebunby.kebunby.ui.common.BaseUIState
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -244,7 +244,7 @@ fun RegisterScreen(
                         Button(
                             modifier = Modifier.fillMaxWidth(),
                             shape = MaterialTheme.shapes.medium,
-                            enabled = registerState != BaseUIState.Loading,
+                            enabled = registerState != UIState.Loading,
                             onClick = {
                                 if (
                                     username.isNotEmpty() && email.isNotEmpty() &&
@@ -295,13 +295,13 @@ fun RegisterScreen(
 
         // Observe register state
         when (registerState) {
-            is BaseUIState.Idle -> {}
+            is UIState.Idle -> {}
 
-            is BaseUIState.Loading -> {
+            is UIState.Loading -> {
                 FullSizeProgressBar()
             }
 
-            is BaseUIState.Success -> {
+            is UIState.Success -> {
                 navController.navigate(Screen.HomeScreen.route) {
                     launchSingleTop = true
 
@@ -311,7 +311,7 @@ fun RegisterScreen(
                 }
             }
 
-            is BaseUIState.Fail -> {
+            is UIState.Fail -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         registerState.message?.let { message ->
@@ -323,7 +323,7 @@ fun RegisterScreen(
                 onEvent(RegisterEvent.Idle)
             }
 
-            is BaseUIState.Error -> {
+            is UIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         registerState.message?.let { message ->
