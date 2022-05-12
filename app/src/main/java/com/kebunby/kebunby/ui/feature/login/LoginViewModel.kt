@@ -9,6 +9,7 @@ import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.request.LoginRequest
 import com.kebunby.kebunby.domain.use_case.user.LoginUserUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.SaveUserCredentialUseCase
+import com.kebunby.kebunby.ui.common.BaseUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -20,7 +21,7 @@ class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
     private val saveUserCredentialUseCase: SaveUserCredentialUseCase
 ) : ViewModel() {
-    var loginState by mutableStateOf<LoginState>(LoginState.Idle)
+    var loginState by mutableStateOf<BaseUIState<Nothing>>(BaseUIState.Idle)
     var username by mutableStateOf("")
     var password by mutableStateOf("")
     var passwordVisibility by mutableStateOf(false)
@@ -46,11 +47,11 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun idle() {
-        loginState = LoginState.Idle
+        loginState = BaseUIState.Idle
     }
 
     private fun login() {
-        loginState = LoginState.LoggingIn
+        loginState = BaseUIState.Loading
 
         viewModelScope.launch {
             val resource = loginUserUseCase.invoke(
@@ -61,15 +62,15 @@ class LoginViewModel @Inject constructor(
             )
 
             resource.catch {
-                loginState = LoginState.Error(it.localizedMessage)
+                loginState = BaseUIState.Error(it.localizedMessage)
             }.collect {
                 loginState = when (it) {
                     is Resource.Success -> {
                         saveUserCredentialUseCase(it.data!!)
-                        LoginState.Success
+                        BaseUIState.Success(null)
                     }
 
-                    is Resource.Error -> LoginState.Fail(it.message)
+                    is Resource.Error -> BaseUIState.Fail(it.message)
                 }
             }
         }

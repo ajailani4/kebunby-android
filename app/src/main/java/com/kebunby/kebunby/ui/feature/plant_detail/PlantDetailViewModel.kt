@@ -7,11 +7,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
+import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.domain.use_case.plant.AddPlantActivityUseCase
 import com.kebunby.kebunby.domain.use_case.plant.DeletePlantActivityUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
+import com.kebunby.kebunby.ui.common.BaseUIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -27,11 +29,11 @@ class PlantDetailViewModel @Inject constructor(
     private val addPlantActivityUseCase: AddPlantActivityUseCase,
     private val deletePlantActivityUseCase: DeletePlantActivityUseCase
 ) : ViewModel() {
-    var plantDetailState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
-    var addFavPlantState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
-    var deleteFavPlantState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
-    var addPlantingPlantState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
-    var addPlantedPlantState by mutableStateOf<PlantDetailState>(PlantDetailState.Idle)
+    var plantDetailState by mutableStateOf<BaseUIState<Plant>>(BaseUIState.Idle)
+    var addFavPlantState by mutableStateOf<BaseUIState<Nothing>>(BaseUIState.Idle)
+    var deleteFavPlantState by mutableStateOf<BaseUIState<Nothing>>(BaseUIState.Idle)
+    var addPlantingPlantState by mutableStateOf<BaseUIState<Nothing>>(BaseUIState.Idle)
+    var addPlantedPlantState by mutableStateOf<BaseUIState<Nothing>>(BaseUIState.Idle)
     var isFavorited by mutableStateOf<Boolean?>(null)
 
     init {
@@ -57,21 +59,21 @@ class PlantDetailViewModel @Inject constructor(
     }
 
     private fun getPlantDetail() {
-        plantDetailState = PlantDetailState.LoadingPlantDetail
+        plantDetailState = BaseUIState.Loading
 
         viewModelScope.launch {
             val resource = getPlantDetailUseCase.invoke(savedStateHandle.get<Int>("plantId")!!)
 
             resource.catch {
-                plantDetailState = PlantDetailState.ErrorPlantDetail(it.localizedMessage)
+                plantDetailState = BaseUIState.Error(it.localizedMessage)
             }.collect {
                 plantDetailState = when (it) {
                     is Resource.Success -> {
-                        PlantDetailState.PlantDetail(it.data)
+                        BaseUIState.Success(it.data)
                     }
 
                     is Resource.Error -> {
-                        PlantDetailState.FailPlantDetail(it.message)
+                       BaseUIState.Fail(it.message)
                     }
                 }
             }
@@ -89,7 +91,7 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                addFavPlantState = PlantDetailState.ErrorAddFavoritePlant(it.localizedMessage)
+                addFavPlantState = BaseUIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
@@ -110,7 +112,7 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                deleteFavPlantState = PlantDetailState.ErrorDeleteFavoritePlant(it.localizedMessage)
+                deleteFavPlantState = BaseUIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
@@ -121,7 +123,7 @@ class PlantDetailViewModel @Inject constructor(
     }
 
     private fun addPlantingPlant() {
-        addPlantingPlantState = PlantDetailState.LoadingAddPlantingPlant
+        addPlantingPlantState = BaseUIState.Loading
 
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
@@ -133,11 +135,11 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                addPlantingPlantState = PlantDetailState.ErrorAddPlantingPlant(it.localizedMessage)
+                addPlantingPlantState = BaseUIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {
-                        addPlantingPlantState = PlantDetailState.SuccessAddPlantingPlant
+                        addPlantingPlantState = BaseUIState.Success(null)
                     }
 
                     is Resource.Error -> {}
@@ -147,7 +149,7 @@ class PlantDetailViewModel @Inject constructor(
     }
 
     private fun addPlantedPlant() {
-        addPlantedPlantState = PlantDetailState.LoadingAddPlantedPlant
+        addPlantedPlantState = BaseUIState.Loading
 
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
@@ -159,11 +161,11 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                addPlantedPlantState = PlantDetailState.ErrorAddPlantedPlant(it.localizedMessage)
+                addPlantedPlantState = BaseUIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {
-                        addPlantedPlantState = PlantDetailState.SuccessAddPlantedPlant
+                        addPlantedPlantState = BaseUIState.Success(null)
                     }
 
                     is Resource.Error -> {}

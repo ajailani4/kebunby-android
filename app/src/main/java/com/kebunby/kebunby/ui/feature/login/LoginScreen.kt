@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.BaseUIState
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -164,7 +165,7 @@ fun LoginScreen(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     shape = MaterialTheme.shapes.medium,
-                    enabled = loginState != LoginState.LoggingIn,
+                    enabled = loginState != BaseUIState.Loading,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
                             onEvent(LoginEvent.Submit)
@@ -216,13 +217,13 @@ fun LoginScreen(
 
         // Observe login state
         when (loginState) {
-            is LoginState.Idle -> {}
+            is BaseUIState.Idle -> {}
 
-            is LoginState.LoggingIn -> {
+            is BaseUIState.Loading -> {
                 FullSizeProgressBar()
             }
 
-            is LoginState.Success -> {
+            is BaseUIState.Success -> {
                 navController.navigate(Screen.HomeScreen.route) {
                     launchSingleTop = true
 
@@ -232,7 +233,7 @@ fun LoginScreen(
                 }
             }
 
-            is LoginState.Fail -> {
+            is BaseUIState.Fail -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         loginState.message?.let { message ->
@@ -244,7 +245,7 @@ fun LoginScreen(
                 onEvent(LoginEvent.Idle)
             }
 
-            is LoginState.Error -> {
+            is BaseUIState.Error -> {
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         loginState.message?.let { message ->
