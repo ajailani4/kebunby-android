@@ -21,14 +21,14 @@ fun InfoSurface(
 ) {
     Surface(
         shape = MaterialTheme.shapes.small,
-        color = Grey
+        color = MaterialTheme.colors.secondaryVariant
     ) {
         Row(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(18.dp),
                 imageVector = icon,
                 tint = Color.White,
                 contentDescription = "Info icon"
@@ -38,7 +38,7 @@ fun InfoSurface(
                 text = info,
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold,
-                style = MaterialTheme.typography.body1
+                style = MaterialTheme.typography.body2
             )
         }
     }

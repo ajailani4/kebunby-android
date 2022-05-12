@@ -165,7 +165,7 @@ fun PlantDetailScreen(
                                         tint = Red,
                                         contentDescription = "Heart icon"
                                     )
-                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Spacer(modifier = Modifier.width(5.dp))
                                     Text(
                                         text = "${plant.popularity}",
                                         color = MaterialTheme.colors.onBackground,
