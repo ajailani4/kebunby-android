@@ -4,6 +4,7 @@ import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.domain.use_case.user.LoginUserUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.SaveUserCredentialUseCase
+import com.kebunby.kebunby.ui.common.BaseUIState
 import com.kebunby.kebunby.ui.feature.login.LoginEvent
 import com.kebunby.kebunby.ui.feature.login.LoginState
 import com.kebunby.kebunby.ui.feature.login.LoginViewModel
@@ -58,11 +59,11 @@ class LoginViewModelTest {
             loginViewModel.onEvent(LoginEvent.Submit)
 
             val isSuccess = when (loginViewModel.loginState) {
-                is LoginState.Success -> true
+                is BaseUIState.Success -> true
 
-                is LoginState.Fail -> false
+                is BaseUIState.Fail -> false
 
-                is LoginState.Error -> false
+                is BaseUIState.Error -> false
 
                 else -> false
             }
@@ -89,11 +90,11 @@ class LoginViewModelTest {
             loginViewModel.onEvent(LoginEvent.Submit)
 
             val isSuccess = when (loginViewModel.loginState) {
-                is LoginState.Success -> true
+                is BaseUIState.Success -> true
 
-                is LoginState.Fail -> false
+                is BaseUIState.Fail -> false
 
-                is LoginState.Error -> false
+                is BaseUIState.Error -> false
 
                 else -> false
             }

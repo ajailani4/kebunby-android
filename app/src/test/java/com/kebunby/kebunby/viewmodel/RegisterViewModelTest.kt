@@ -4,6 +4,7 @@ import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.domain.use_case.user.RegisterUserUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.SaveUserCredentialUseCase
+import com.kebunby.kebunby.ui.common.BaseUIState
 import com.kebunby.kebunby.ui.feature.register.RegisterEvent
 import com.kebunby.kebunby.ui.feature.register.RegisterState
 import com.kebunby.kebunby.ui.feature.register.RegisterViewModel
@@ -58,11 +59,11 @@ class RegisterViewModelTest {
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState) {
-                is RegisterState.Success -> true
+                is BaseUIState.Success -> true
 
-                is RegisterState.Fail -> false
+                is BaseUIState.Fail -> false
 
-                is RegisterState.Error -> false
+                is BaseUIState.Error -> false
 
                 else -> false
             }
@@ -89,11 +90,11 @@ class RegisterViewModelTest {
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState) {
-                is RegisterState.Success -> true
+                is BaseUIState.Success -> true
 
-                is RegisterState.Fail -> false
+                is BaseUIState.Fail -> false
 
-                is RegisterState.Error -> false
+                is BaseUIState.Error -> false
 
                 else -> false
             }
