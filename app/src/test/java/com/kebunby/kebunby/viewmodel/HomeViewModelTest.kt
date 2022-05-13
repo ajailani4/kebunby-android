@@ -83,7 +83,7 @@ class HomeViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val userProfile: User? = when (val userProfileState = homeViewModel.userProfileState) {
+            val userProfile = when (val userProfileState = homeViewModel.userProfileState) {
                 is UIState.Success -> userProfileState.data
                 else -> null
             }
@@ -446,7 +446,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun addUserFavPlant_ShouldReturnSuccess() {
+    fun addFavoritePlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val resource = flow {
@@ -500,7 +500,7 @@ class HomeViewModelTest {
     }
 
     @Test
-    fun deleteUserFavPlant_ShouldReturnSuccess() {
+    fun deleteFavoritePlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val resource = flow {
