@@ -35,9 +35,6 @@ class PlantListViewModelTest {
 
     // Dependency
     @Mock
-    private lateinit var plantRemoteDataSource: PlantRemoteDataSource
-
-    @Mock
     private lateinit var getPagingPlantsUseCase: GetPagingPlantsUseCase
 
     @Mock
@@ -54,7 +51,7 @@ class PlantListViewModelTest {
             set("isTrending", true)
             set("forBeginner", false)
             set("searchQuery", null)
-            set("categoryId", 0)
+            set("categoryId", 1)
             set("category", "Tanaman Hias")
         }
 
