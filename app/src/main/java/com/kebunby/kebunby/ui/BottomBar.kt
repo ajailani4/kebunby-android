@@ -3,6 +3,7 @@ package com.kebunby.kebunby.ui
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -30,12 +31,12 @@ fun BottomBar(navController: NavController) {
                 icon = {
                     Icon(
                         imageVector = screen.icon!!,
-                        contentDescription = screen.title
+                        contentDescription = stringResource(screen.title!!)
                     )
                 },
                 label = {
                     Text(
-                        text = screen.title!!,
+                        text = stringResource(screen.title!!),
                         fontFamily = poppinsFamily
                     )
                 },

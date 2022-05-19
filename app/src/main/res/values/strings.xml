@@ -29,6 +29,12 @@
     <string name="something_wrong_happened">Sorry, something wrong happened</string>
     <string name="username_already_exists">Username already exists. Try another username</string>
 
+    <!-- Bottom Nav Menu Title -->
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="shop">Shop</string>
+    <string name="profile">Profile</string>
+
     <string name="hello">Hello</string>
     <string name="have_a_nice_day">Have a nice day</string>
     <string name="trending">Trending</string>
