@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.data.data_source.remote
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.kebunby.kebunby.data.model.response.BaseResponse
@@ -20,7 +21,7 @@ class PagingDataSource<T : Any>(
             LoadResult.Page(
                 data = data,
                 prevKey = prevKey,
-                nextKey = currentPage.plus(1)
+                nextKey = if (data.isNotEmpty()) currentPage.plus(1) else null
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

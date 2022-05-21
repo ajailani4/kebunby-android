@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.ui.feature.plant_list
 
+import android.util.Log
 import androidx.compose.foundation.background
 import com.kebunby.kebunby.R
 import androidx.compose.foundation.layout.*
