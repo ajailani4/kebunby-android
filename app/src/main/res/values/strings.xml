@@ -49,4 +49,9 @@
     <string name="plant">Plant Now</string>
     <string name="finish_planting">Finish Planting</string>
     <string name="already_planted">Already Planted</string>
+
+    <!-- Profile Tab Menu -->
+    <string name="uploaded">Uploaded</string>
+    <string name="planting">Planting</string>
+    <string name="planted">Planted</string>
 </resources>

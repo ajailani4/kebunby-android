@@ -3,9 +3,9 @@ package com.kebunby.kebunby.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
-import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
 import com.kebunby.kebunby.domain.use_case.plant.GetPagingPlantsByCategoryUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPagingPlantsUseCase
+import com.kebunby.kebunby.ui.feature.plant_list.PlantListEvent
 import com.kebunby.kebunby.ui.feature.plant_list.PlantListViewModel
 import com.kebunby.kebunby.util.DiffCallback
 import com.kebunby.kebunby.util.ListCallback
@@ -24,6 +24,7 @@ import org.mockito.ArgumentMatchers.*
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
 
 @ExperimentalCoroutinesApi
@@ -51,7 +52,7 @@ class PlantListViewModelTest {
             set("isTrending", true)
             set("forBeginner", false)
             set("searchQuery", null)
-            set("categoryId", 1)
+            set("categoryId", 0)
             set("category", "Tanaman Hias")
         }
 
@@ -75,7 +76,8 @@ class PlantListViewModelTest {
             )
 
             // Act
-            val pagingPlants = plantListViewModel.getPagingPlants().first()
+            plantListViewModel.onEvent(PlantListEvent.LoadPlants)
+            val pagingPlants = plantListViewModel.pagingPlantsState.value
             val differ = AsyncPagingDataDiffer(
                 diffCallback = DiffCallback(),
                 updateCallback = ListCallback(),
@@ -88,7 +90,7 @@ class PlantListViewModelTest {
             assertEquals(generatePlants(), differ.snapshot().items)
 
             // Verify
-            verify(getPagingPlantsUseCase).invoke(
+            verify(getPagingPlantsUseCase, times(2)).invoke(
                 isTrending = anyBoolean(),
                 forBeginner = anyBoolean(),
                 searchQuery = isNull()
@@ -105,7 +107,8 @@ class PlantListViewModelTest {
             ).`when`(getPagingPlantsByCategoryUseCase).invoke(anyInt())
 
             // Act
-            val pagingPlants = plantListViewModel.getPagingPlantsByCategory().first()
+            plantListViewModel.onEvent(PlantListEvent.LoadPlantsByCategory)
+            val pagingPlants = plantListViewModel.pagingPlantsState.value
             val differ = AsyncPagingDataDiffer(
                 diffCallback = DiffCallback(),
                 updateCallback = ListCallback(),

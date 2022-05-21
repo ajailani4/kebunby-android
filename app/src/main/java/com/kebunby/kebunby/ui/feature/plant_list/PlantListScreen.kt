@@ -7,7 +7,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,6 +24,7 @@ import coil.annotation.ExperimentalCoilApi
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.plant_list.component.PlantCard
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -31,15 +35,15 @@ fun PlantListScreen(
     val isTrending = plantListViewModel.isTrending
     val forBeginner = plantListViewModel.forBeginner
     val searchQuery = plantListViewModel.searchQuery
-    val categoryId = plantListViewModel.categoryId
     val category = plantListViewModel.category
-    val plantList = if (categoryId!! > 0) {
-        plantListViewModel.getPagingPlantsByCategory().collectAsLazyPagingItems()
-    } else {
-        plantListViewModel.getPagingPlants().collectAsLazyPagingItems()
-    }
+
+    val pagingPlantsState = plantListViewModel.pagingPlantsState.collectAsLazyPagingItems()
+
+    val coroutineScope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             CustomToolbar(
                 navController = navController,
@@ -70,20 +74,7 @@ fun PlantListScreen(
             modifier = Modifier.background(color = MaterialTheme.colors.background),
             contentPadding = PaddingValues(20.dp)
         ) {
-            if (plantList.loadState.refresh == LoadState.Loading) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(150.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
-
-            items(plantList) { plant ->
+            items(pagingPlantsState) { plant ->
                 PlantCard(
                     plantItem = plant,
                     onClick = {
@@ -95,13 +86,43 @@ fun PlantListScreen(
                 Spacer(modifier = Modifier.height(20.dp))
             }
 
-            if (plantList.loadState.append == LoadState.Loading) {
-                item {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.CenterHorizontally)
-                    )
+            // Handling paging state
+            pagingPlantsState.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(150.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
+                    }
+
+                    loadState.append is LoadState.Loading -> {
+                        item {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentWidth(Alignment.CenterHorizontally)
+                            )
+                        }
+                    }
+
+                    loadState.append is LoadState.Error -> {
+                        item {
+                            LaunchedEffect(Unit) {
+                                coroutineScope.launch {
+                                    (loadState.append as LoadState.Error).error.localizedMessage?.let { message ->
+                                        scaffoldState.snackbarHostState.showSnackbar(message)
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

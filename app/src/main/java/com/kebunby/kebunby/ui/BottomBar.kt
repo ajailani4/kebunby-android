@@ -12,7 +12,7 @@ import com.kebunby.kebunby.ui.theme.poppinsFamily
 
 @Composable
 fun BottomBar(navController: NavController) {
-    val items = listOf(
+    val menus = listOf(
         Screen.HomeScreen,
         Screen.ExploreScreen,
         Screen.ShopScreen,
@@ -26,7 +26,7 @@ fun BottomBar(navController: NavController) {
         val navBarStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBarStackEntry?.destination?.route
 
-        items.map { screen ->
+        menus.map { screen ->
             BottomNavigationItem(
                 icon = {
                     Icon(

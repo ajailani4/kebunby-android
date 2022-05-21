@@ -49,4 +49,9 @@
     <string name="plant">Tanam Sekarang</string>
     <string name="finish_planting">Selesaikan Penanaman</string>
     <string name="already_planted">Sudah Ditanam</string>
+
+    <!-- Profile Tab Menu -->
+    <string name="uploaded">Terupload</string>
+    <string name="planting">Sedang ditanam</string>
+    <string name="planted">Sudah ditanam</string>
 </resources>
