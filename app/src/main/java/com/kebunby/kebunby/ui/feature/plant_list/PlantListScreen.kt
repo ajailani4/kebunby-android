@@ -70,7 +70,9 @@ fun PlantListScreen(
         }
     ) {
         LazyColumn(
-            modifier = Modifier.background(color = MaterialTheme.colors.background),
+            modifier = Modifier
+                .background(color = MaterialTheme.colors.background)
+                .fillMaxSize(),
             contentPadding = PaddingValues(20.dp)
         ) {
             items(pagingPlants) { plant ->

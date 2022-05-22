@@ -1,6 +1,5 @@
 package com.kebunby.kebunby.ui.feature.profile
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -16,7 +15,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -89,40 +87,6 @@ fun ProfileScreen(navController: NavController) {
             )
         }
     ) {
-        /*LazyColumn(
-            modifier = Modifier
-                .background(color = MaterialTheme.colors.background)
-                .fillMaxSize()
-        ) {
-            item {
-                ProfileHeader()
-            }
-
-            stickyHeader {
-                ProfileTab(
-                    menus = profileTabMenus,
-                    selectedTabIndex = pagerState.currentPage,
-                    onTabSelected = { index ->
-                        coroutineScope.launch {
-                            pagerState.scrollToPage(index)
-                        }
-                    }
-                )
-            }
-
-            item {
-                HorizontalPager(
-                    count = profileTabMenus.size,
-                    state = pagerState
-                ) { index ->
-                    when (index) {
-                        0 -> PlantingScreen(navController)
-                        1 -> PlantedScreen(navController)
-                        2 -> {}
-                    }
-                }
-            }
-        }*/
         BoxWithConstraints {
             val screenHeight = maxHeight
 
