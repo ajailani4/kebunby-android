@@ -34,6 +34,7 @@ class PlantDetailViewModel @Inject constructor(
     var deleteFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
     var addPlantingPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
     var addPlantedPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
+
     var isFavorited by mutableStateOf<Boolean?>(null)
 
     init {

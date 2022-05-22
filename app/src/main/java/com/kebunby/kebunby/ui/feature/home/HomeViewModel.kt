@@ -40,6 +40,7 @@ class HomeViewModel @Inject constructor(
     var plantCategoriesState by mutableStateOf<UIState<List<PlantCategory>>>(UIState.Idle)
     var addFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
     var deleteFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
+
     private var selectedPlant by mutableStateOf(0)
     var trendingPlants = mutableStateListOf<PlantItem>()
     var forBeginnerPlants = mutableStateListOf<PlantItem>()

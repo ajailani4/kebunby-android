@@ -57,4 +57,7 @@
 
     <string name="yes">Iya</string>
     <string name="no">Tidak</string>
+
+    <string name="logout">Keluar</string>
+    <string name="logout_confirm_msg">Apakah kamu yakin ingin keluar?</string>
 </resources>

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.domain.use_case.user.GetUserProfileUseCase
+import com.kebunby.kebunby.domain.use_case.user_credential.DeleteUserCredentialUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import com.kebunby.kebunby.ui.common.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,9 +21,13 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
-    private val getUserProfileUseCase: GetUserProfileUseCase
+    private val getUserProfileUseCase: GetUserProfileUseCase,
+    private val deleteUserCredentialUseCase: DeleteUserCredentialUseCase
 ) : ViewModel() {
     var userProfileState by mutableStateOf<UIState<User>>(UIState.Idle)
+    var logoutState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
+
+    var logoutConfirmDlgVis by mutableStateOf(false)
 
     init {
         onEvent(ProfileEvent.LoadUserProfile)
@@ -33,7 +38,13 @@ class ProfileViewModel @Inject constructor(
             ProfileEvent.Idle -> idle()
 
             ProfileEvent.LoadUserProfile -> getUserProfile()
+
+            ProfileEvent.Logout -> logout()
         }
+    }
+
+    fun onLogoutConfirmDlgVisChanged(visibility: Boolean) {
+        logoutConfirmDlgVis = visibility
     }
 
     private fun idle() {
@@ -56,6 +67,15 @@ class ProfileViewModel @Inject constructor(
                     is Resource.Error -> UIState.Fail(it.message)
                 }
             }
+        }
+    }
+
+    private fun logout() {
+        logoutState = UIState.Loading
+
+        viewModelScope.launch {
+            deleteUserCredentialUseCase.invoke()
+            logoutState = UIState.Success(null)
         }
     }
 }

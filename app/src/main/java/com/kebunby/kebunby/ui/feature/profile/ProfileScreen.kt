@@ -30,8 +30,11 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.User
+import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.UIState
+import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
+import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
 import com.kebunby.kebunby.ui.feature.profile.component.ProfileHeaderShimmer
 import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen
@@ -52,6 +55,9 @@ fun ProfileScreen(
 ) {
     val onEvent = profileViewModel::onEvent
     val userProfileState = profileViewModel.userProfileState
+    val logoutState = profileViewModel.logoutState
+    val logoutConfirmDlgVis = profileViewModel.logoutConfirmDlgVis
+    val onLogoutConfirmDlgVisChanged = profileViewModel::onLogoutConfirmDlgVisChanged
 
     val profileTabMenus = listOf(
         stringResource(R.string.planting),
@@ -97,7 +103,7 @@ fun ProfileScreen(
                                 contentDescription = "Logout icon"
                             )
                         },
-                        {}
+                        { onLogoutConfirmDlgVisChanged(true) }
                     )
                 )
             )
@@ -142,6 +148,39 @@ fun ProfileScreen(
                     }
                 }
             }
+        }
+
+        // Logout confirmation dialog
+        if (logoutConfirmDlgVis) {
+            CustomAlertDialog(
+                onVisibilityChanged = onLogoutConfirmDlgVisChanged,
+                title = stringResource(R.string.logout),
+                message = stringResource(R.string.logout_confirm_msg),
+                onConfirmed = {
+                    onLogoutConfirmDlgVisChanged(true)
+                    onEvent(ProfileEvent.Logout)
+                },
+                onDismissed = { onLogoutConfirmDlgVisChanged(false) }
+            )
+        }
+
+        // Observe logout state
+        when (logoutState) {
+            is UIState.Loading -> {
+                FullSizeProgressBar()
+            }
+
+            is UIState.Success -> {
+                navController.navigate(Screen.OnboardingScreen.route) {
+                    launchSingleTop = true
+                    
+                    popUpTo(Screen.HomeScreen.route) {
+                        inclusive = true
+                    }
+                }
+            }
+
+            else -> {}
         }
     }
 }
