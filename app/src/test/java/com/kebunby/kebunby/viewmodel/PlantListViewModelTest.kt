@@ -54,12 +54,6 @@ class PlantListViewModelTest {
             set("categoryId", 0)
             set("category", "Tanaman Hias")
         }
-
-        plantListViewModel = PlantListViewModel(
-            savedStateHandle,
-            getPagingPlantsUseCase,
-            getPagingPlantsByCategoryUseCase
-        )
     }
 
     @Test
@@ -75,7 +69,12 @@ class PlantListViewModelTest {
             )
 
             // Act
-            plantListViewModel.onEvent(PlantListEvent.LoadPlants)
+            plantListViewModel = PlantListViewModel(
+                savedStateHandle,
+                getPagingPlantsUseCase,
+                getPagingPlantsByCategoryUseCase
+            )
+
             val pagingPlants = plantListViewModel.pagingPlants.value
             val differ = AsyncPagingDataDiffer(
                 diffCallback = DiffCallback(),
@@ -89,7 +88,7 @@ class PlantListViewModelTest {
             assertEquals(generatePlants(), differ.snapshot().items)
 
             // Verify
-            verify(getPagingPlantsUseCase, times(2)).invoke(
+            verify(getPagingPlantsUseCase).invoke(
                 isTrending = anyBoolean(),
                 forBeginner = anyBoolean(),
                 searchQuery = isNull()
@@ -106,7 +105,13 @@ class PlantListViewModelTest {
             ).`when`(getPagingPlantsByCategoryUseCase).invoke(anyInt())
 
             // Act
+            plantListViewModel = PlantListViewModel(
+                savedStateHandle,
+                getPagingPlantsUseCase,
+                getPagingPlantsByCategoryUseCase
+            )
             plantListViewModel.onEvent(PlantListEvent.LoadPlantsByCategory)
+
             val pagingPlants = plantListViewModel.pagingPlants.value
             val differ = AsyncPagingDataDiffer(
                 diffCallback = DiffCallback(),
