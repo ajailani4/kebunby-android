@@ -22,8 +22,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
+import com.kebunby.kebunby.ui.feature.profile.planting.PlantingScreen
 import com.kebunby.kebunby.ui.theme.Grey
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
@@ -92,7 +94,7 @@ fun ProfileScreen(navController: NavController) {
                     state = pagerState
                 ) { index ->
                     when (index) {
-                        0 -> {}
+                        0 -> PlantingScreen(navController)
                         1 -> {}
                         2 -> {}
                     }

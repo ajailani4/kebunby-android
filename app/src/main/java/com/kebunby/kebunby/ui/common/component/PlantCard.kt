@@ -1,4 +1,4 @@
-package com.kebunby.kebunby.ui.feature.plant_list.component
+package com.kebunby.kebunby.ui.common.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

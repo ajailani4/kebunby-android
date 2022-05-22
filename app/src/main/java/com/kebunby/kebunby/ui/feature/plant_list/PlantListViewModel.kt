@@ -16,6 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlantListViewModel @Inject constructor(
+
     savedStateHandle: SavedStateHandle,
     private val getPagingPlantsUseCase: GetPagingPlantsUseCase,
     private val getPagingPlantsByCategoryUseCase: GetPagingPlantsByCategoryUseCase
@@ -26,7 +27,7 @@ class PlantListViewModel @Inject constructor(
     val categoryId = savedStateHandle.get<Int>("categoryId")
     val category = savedStateHandle.get<String>("category")
 
-    val pagingPlantsState = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
+    val pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
 
     init {
         if (categoryId!! > 0) {
@@ -55,7 +56,7 @@ class PlantListViewModel @Inject constructor(
                 forBeginner = forBeginner,
                 searchQuery = searchQuery
             ).cachedIn(viewModelScope).collect {
-                pagingPlantsState.value = it
+                pagingPlants.value = it
             }
         }
     }
@@ -66,7 +67,7 @@ class PlantListViewModel @Inject constructor(
                 .invoke(categoryId!!)
                 .cachedIn(viewModelScope)
                 .collect {
-                    pagingPlantsState.value = it
+                    pagingPlants.value = it
                 }
         }
     }

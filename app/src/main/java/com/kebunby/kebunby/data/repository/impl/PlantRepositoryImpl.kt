@@ -3,11 +3,13 @@ package com.kebunby.kebunby.data.repository.impl
 import android.content.Context
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.data_source.remote.PagingDataSource
 import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
 import com.kebunby.kebunby.data.model.Plant
+import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -95,6 +97,25 @@ class PlantRepositoryImpl @Inject constructor(
                 else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
             }
         }
+
+    override fun getPlantActivities(
+        username: String,
+        isPlanting: Boolean?,
+        isPlanted: Boolean?
+    ) = Pager(
+        config = PagingConfig(enablePlaceholders = false, pageSize = 10),
+        pagingSourceFactory = {
+            PagingDataSource { page, size ->
+                plantRemoteDataSource.getPlantActivities(
+                    username = username,
+                    page = page,
+                    size = size,
+                    isPlanting = isPlanting,
+                    isPlanted = isPlanted
+                )
+            }
+        }
+    ).flow
 
     override fun addPlantActivity(
         username: String,
