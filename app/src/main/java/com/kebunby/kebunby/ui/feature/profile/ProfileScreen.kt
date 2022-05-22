@@ -171,7 +171,7 @@ fun ProfileHeader(
 
                 Image(
                     modifier = Modifier
-                        .size(110.dp)
+                        .size(100.dp)
                         .clip(CircleShape),
                     painter = if (user?.avatar != null) {
                         rememberImagePainter(user.avatar)

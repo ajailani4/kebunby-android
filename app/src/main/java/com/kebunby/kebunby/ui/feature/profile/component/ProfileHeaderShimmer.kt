@@ -27,7 +27,7 @@ fun ProfileHeaderShimmer() {
             modifier = Modifier
                 .clip(CircleShape)
                 .background(color = BackgroundShimmer)
-                .size(110.dp)
+                .size(100.dp)
                 .shimmer(shimmerInstance)
         )
         Spacer(modifier = Modifier.width(25.dp))
