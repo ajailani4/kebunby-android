@@ -25,6 +25,7 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
+import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen
 import com.kebunby.kebunby.ui.feature.profile.planting.PlantingScreen
 import com.kebunby.kebunby.ui.theme.Grey
 import compose.icons.EvaIcons
@@ -95,7 +96,7 @@ fun ProfileScreen(navController: NavController) {
                 ) { index ->
                     when (index) {
                         0 -> PlantingScreen(navController)
-                        1 -> {}
+                        1 -> PlantedScreen(navController)
                         2 -> {}
                     }
                 }
