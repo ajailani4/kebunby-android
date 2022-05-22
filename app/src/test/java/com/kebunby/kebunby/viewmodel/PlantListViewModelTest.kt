@@ -13,7 +13,6 @@ import com.kebunby.kebunby.util.TestCoroutineRule
 import com.kebunby.kebunby.util.generatePlants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -77,7 +76,7 @@ class PlantListViewModelTest {
 
             // Act
             plantListViewModel.onEvent(PlantListEvent.LoadPlants)
-            val pagingPlants = plantListViewModel.pagingPlantsState.value
+            val pagingPlants = plantListViewModel.pagingPlants.value
             val differ = AsyncPagingDataDiffer(
                 diffCallback = DiffCallback(),
                 updateCallback = ListCallback(),
@@ -108,7 +107,7 @@ class PlantListViewModelTest {
 
             // Act
             plantListViewModel.onEvent(PlantListEvent.LoadPlantsByCategory)
-            val pagingPlants = plantListViewModel.pagingPlantsState.value
+            val pagingPlants = plantListViewModel.pagingPlants.value
             val differ = AsyncPagingDataDiffer(
                 diffCallback = DiffCallback(),
                 updateCallback = ListCallback(),

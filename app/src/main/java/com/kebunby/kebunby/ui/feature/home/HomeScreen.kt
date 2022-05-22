@@ -248,7 +248,7 @@ fun HomeContent(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             ForBeginnerSection(
                 navController = navController,
                 onEvent = onEvent,
@@ -260,7 +260,7 @@ fun HomeContent(
                 coroutineScope = coroutineScope,
                 scaffoldState = scaffoldState
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             PlantCategorySection(
                 navController = navController,
                 onEvent = onEvent,

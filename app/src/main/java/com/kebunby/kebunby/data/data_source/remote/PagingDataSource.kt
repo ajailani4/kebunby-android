@@ -1,11 +1,9 @@
 package com.kebunby.kebunby.data.data_source.remote
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.kebunby.kebunby.data.model.response.BaseResponse
 import retrofit2.Response
-import java.lang.Exception
 
 class PagingDataSource<T : Any>(
     private inline val serviceMethod: suspend (page: Int, size: Int) -> Response<BaseResponse<List<T>>>

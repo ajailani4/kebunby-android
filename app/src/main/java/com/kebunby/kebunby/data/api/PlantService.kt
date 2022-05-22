@@ -33,6 +33,15 @@ interface PlantService {
         @Path("id") id: Int
     ): Response<BaseResponse<Plant>>
 
+    @GET("users/{username}/plants")
+    suspend fun getPlantActivities(
+        @Path("username") username: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("isPlanting") isPlanting: Boolean?,
+        @Query("isPlanted") isPlanted: Boolean?
+    ): Response<BaseResponse<List<PlantItem>>>
+
     @POST("users/{username}/plants")
     suspend fun addPlantActivity(
         @Path("username") username: String,
