@@ -31,7 +31,7 @@ import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.UIState
-import com.kebunby.kebunby.ui.feature.home.component.HomeUserProfileShimmer
+import com.kebunby.kebunby.ui.feature.home.component.HomeHeaderShimmer
 import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
 import com.kebunby.kebunby.ui.feature.home.component.PlantMiniCard
 import com.kebunby.kebunby.ui.feature.home.component.TitleSection
@@ -148,7 +148,7 @@ fun HomeHeader(
         // Observe user profile state
         when (userProfileState) {
             is UIState.Loading -> {
-                HomeUserProfileShimmer()
+                HomeHeaderShimmer()
             }
 
             is UIState.Success -> {

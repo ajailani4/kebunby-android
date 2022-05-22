@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -15,17 +16,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.data.model.User
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
+import com.kebunby.kebunby.ui.feature.profile.component.ProfileHeaderShimmer
 import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen
 import com.kebunby.kebunby.ui.feature.profile.planting.PlantingScreen
 import com.kebunby.kebunby.ui.feature.profile.uploaded.UploadedScreen
@@ -33,11 +41,18 @@ import com.kebunby.kebunby.ui.theme.Grey
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogOut
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(
+    navController: NavController,
+    profileViewModel: ProfileViewModel = hiltViewModel()
+) {
+    val onEvent = profileViewModel::onEvent
+    val userProfileState = profileViewModel.userProfileState
+
     val profileTabMenus = listOf(
         stringResource(R.string.planting),
         stringResource(R.string.planted),
@@ -96,7 +111,12 @@ fun ProfileScreen(navController: NavController) {
                     .fillMaxSize()
                     .verticalScroll(scrollState)
             ) {
-                ProfileHeader()
+                ProfileHeader(
+                    onEvent = onEvent,
+                    userProfileState = userProfileState,
+                    scaffoldState = scaffoldState,
+                    coroutineScope = coroutineScope
+                )
                 Column(modifier = Modifier.height(screenHeight)) {
                     ProfileTab(
                         menus = profileTabMenus,
@@ -126,8 +146,14 @@ fun ProfileScreen(navController: NavController) {
     }
 }
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
-fun ProfileHeader() {
+fun ProfileHeader(
+    onEvent: (ProfileEvent) -> Unit,
+    userProfileState: UIState<User>,
+    scaffoldState: ScaffoldState,
+    coroutineScope: CoroutineScope
+) {
     Row(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background)
@@ -135,36 +161,81 @@ fun ProfileHeader() {
             .height(IntrinsicSize.Max)
             .padding(20.dp)
     ) {
-        Image(
-            modifier = Modifier
-                .size(110.dp)
-                .clip(CircleShape),
-            painter = /*rememberImagePainter("")*/painterResource(id = R.drawable.img_default_ava),
-            contentDescription = "User avatar"
-        )
-        Spacer(modifier = Modifier.width(25.dp))
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(
-                    text = "George Zayvich",
-                    color = MaterialTheme.colors.onBackground,
-                    fontWeight = FontWeight.SemiBold,
-                    style = MaterialTheme.typography.h3
-                )
-                Text(
-                    text = "george_z",
-                    color = Grey,
-                    style = MaterialTheme.typography.body1
-                )
+        when (userProfileState) {
+            is UIState.Loading -> {
+                ProfileHeaderShimmer()
             }
-            Row {
-                CountingText(count = 10, text = stringResource(R.string.planting))
-                Spacer(modifier = Modifier.width(20.dp))
-                CountingText(count = 20, text = stringResource(R.string.planted))
+
+            is UIState.Success -> {
+                val user = userProfileState.data
+
+                Image(
+                    modifier = Modifier
+                        .size(110.dp)
+                        .clip(CircleShape),
+                    painter = if (user?.avatar != null) {
+                        rememberImagePainter(user.avatar)
+                    } else {
+                        painterResource(id = R.drawable.img_default_ava)
+                    },
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "User avatar"
+                )
+                Spacer(modifier = Modifier.width(25.dp))
+                Column(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    if (user != null) {
+                        Column {
+                            Text(
+                                text = user.name,
+                                color = MaterialTheme.colors.onBackground,
+                                fontWeight = FontWeight.SemiBold,
+                                style = MaterialTheme.typography.h3
+                            )
+                            Text(
+                                text = user.username,
+                                color = Grey,
+                                style = MaterialTheme.typography.body1
+                            )
+                        }
+                        Row {
+                            CountingText(count = user.planting, text = stringResource(R.string.planting))
+                            Spacer(modifier = Modifier.width(20.dp))
+                            CountingText(count = user.planted, text = stringResource(R.string.planted))
+                            Spacer(modifier = Modifier.width(20.dp))
+                            CountingText(count = user.uploaded, text = stringResource(R.string.uploaded))
+                        }
+                    }
+                }
             }
+
+            is UIState.Fail -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        userProfileState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(ProfileEvent.Idle)
+            }
+
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        userProfileState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(ProfileEvent.Idle)
+            }
+
+            else -> {}
         }
     }
 }

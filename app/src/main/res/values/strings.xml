@@ -51,7 +51,7 @@
     <string name="already_planted">Already Planted</string>
 
     <!-- Profile Tab Menu -->
-    <string name="uploaded">Uploaded</string>
     <string name="planting">Planting</string>
     <string name="planted">Planted</string>
+    <string name="uploaded">Uploaded</string>
 </resources>
