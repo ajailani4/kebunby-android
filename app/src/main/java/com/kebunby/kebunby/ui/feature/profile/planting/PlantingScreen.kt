@@ -33,7 +33,7 @@ fun PlantingScreen(
     LazyColumn(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background)
-            .height(screenHeight - 160.dp),
+            .fillMaxSize(),
         contentPadding = PaddingValues(20.dp)
     ) {
         items(pagingPlants) { plant ->
@@ -56,7 +56,7 @@ fun PlantingScreen(
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(150.dp),
+                                .padding(top = 150.dp),
                             contentAlignment = Alignment.Center
                         ) {
                             CircularProgressIndicator()

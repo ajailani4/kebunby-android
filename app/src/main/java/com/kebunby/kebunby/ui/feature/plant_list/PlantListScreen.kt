@@ -93,7 +93,7 @@ fun PlantListScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(170.dp),
+                                    .padding(top = 170.dp),
                                 contentAlignment = Alignment.Center
                             ) {
                                 CircularProgressIndicator()

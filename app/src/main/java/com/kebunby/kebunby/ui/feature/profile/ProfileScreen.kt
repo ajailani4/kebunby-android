@@ -1,18 +1,22 @@
 package com.kebunby.kebunby.ui.feature.profile
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.util.Log
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +26,6 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.kebunby.kebunby.R
-import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
 import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen
@@ -45,7 +48,25 @@ fun ProfileScreen(navController: NavController) {
     val pagerState = rememberPagerState(initialPage = 0)
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
-    
+    val scrollState = rememberScrollState()
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                return if (available.y > 0) {
+                    Offset.Zero
+                } else {
+                    Offset(
+                        x = 0f,
+                        y = -scrollState.dispatchRawDelta(-available.y)
+                    )
+                }
+            }
+        }
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
@@ -68,7 +89,7 @@ fun ProfileScreen(navController: NavController) {
             )
         }
     ) {
-        LazyColumn(
+        /*LazyColumn(
             modifier = Modifier
                 .background(color = MaterialTheme.colors.background)
                 .fillMaxSize()
@@ -101,6 +122,41 @@ fun ProfileScreen(navController: NavController) {
                     }
                 }
             }
+        }*/
+        BoxWithConstraints {
+            val screenHeight = maxHeight
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+            ) {
+                ProfileHeader()
+                Column(modifier = Modifier.height(screenHeight)) {
+                    ProfileTab(
+                        menus = profileTabMenus,
+                        selectedTabIndex = pagerState.currentPage,
+                        onTabSelected = { index ->
+                            coroutineScope.launch {
+                                pagerState.scrollToPage(index)
+                            }
+                        }
+                    )
+                    HorizontalPager(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .nestedScroll(nestedScrollConnection),
+                        count = profileTabMenus.size,
+                        state = pagerState
+                    ) { page ->
+                        when (page) {
+                            0 -> PlantingScreen(navController)
+                            1 -> PlantedScreen(navController)
+                            2 -> {}
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -109,6 +165,7 @@ fun ProfileScreen(navController: NavController) {
 fun ProfileHeader() {
     Row(
         modifier = Modifier
+            .background(color = MaterialTheme.colors.background)
             .fillMaxWidth()
             .height(IntrinsicSize.Max)
             .padding(20.dp)
@@ -127,7 +184,7 @@ fun ProfileHeader() {
         ) {
             Column {
                 Text(
-                    text =  "George Zayvich",
+                    text = "George Zayvich",
                     color = MaterialTheme.colors.onBackground,
                     fontWeight = FontWeight.SemiBold,
                     style = MaterialTheme.typography.h3
