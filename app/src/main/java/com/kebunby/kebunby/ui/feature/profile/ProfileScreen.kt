@@ -28,13 +28,14 @@ import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
 import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen
 import com.kebunby.kebunby.ui.feature.profile.planting.PlantingScreen
+import com.kebunby.kebunby.ui.feature.profile.uploaded.UploadedScreen
 import com.kebunby.kebunby.ui.theme.Grey
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.LogOut
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProfileScreen(navController: NavController) {
     val profileTabMenus = listOf(
@@ -116,7 +117,7 @@ fun ProfileScreen(navController: NavController) {
                         when (page) {
                             0 -> PlantingScreen(navController)
                             1 -> PlantedScreen(navController)
-                            2 -> {}
+                            2 -> UploadedScreen(navController)
                         }
                     }
                 }

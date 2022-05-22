@@ -1,4 +1,4 @@
-package com.kebunby.kebunby.ui.feature.profile.planting
+package com.kebunby.kebunby.ui.feature.profile.uploaded
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -21,11 +21,11 @@ import com.kebunby.kebunby.ui.common.component.PlantCard
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun PlantingScreen(
+fun UploadedScreen(
     navController: NavController,
-    plantingViewModel: PlantingViewModel = hiltViewModel()
+    uploadedViewModel: UploadedViewModel = hiltViewModel()
 ) {
-    val pagingPlants = plantingViewModel.pagingPlants.collectAsLazyPagingItems()
+    val pagingPlants = uploadedViewModel.pagingPlants.collectAsLazyPagingItems()
 
     LazyColumn(
         modifier = Modifier

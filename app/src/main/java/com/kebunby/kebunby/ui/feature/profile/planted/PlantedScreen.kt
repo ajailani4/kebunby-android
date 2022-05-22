@@ -27,9 +27,6 @@ fun PlantedScreen(
 ) {
     val pagingPlants = plantedViewModel.pagingPlants.collectAsLazyPagingItems()
 
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.dp
-
     LazyColumn(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background)
