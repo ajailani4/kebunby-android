@@ -54,4 +54,7 @@
     <string name="planting">Menanam</string>
     <string name="planted">Ditanam</string>
     <string name="uploaded">Terupload</string>
+
+    <string name="yes">Iya</string>
+    <string name="no">Tidak</string>
 </resources>

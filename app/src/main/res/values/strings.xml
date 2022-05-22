@@ -54,4 +54,7 @@
     <string name="planting">Planting</string>
     <string name="planted">Planted</string>
     <string name="uploaded">Uploaded</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
