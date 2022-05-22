@@ -14,7 +14,7 @@ import com.valentinilk.shimmer.rememberShimmer
 import com.valentinilk.shimmer.shimmer
 
 @Composable
-fun HomeUserProfileShimmer() {
+fun HomeHeaderShimmer() {
     val shimmerInstance = rememberShimmer(shimmerBounds = ShimmerBounds.View)
 
     Row(

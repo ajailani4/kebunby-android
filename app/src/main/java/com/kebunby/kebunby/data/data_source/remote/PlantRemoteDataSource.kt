@@ -35,6 +35,20 @@ class PlantRemoteDataSource @Inject constructor(
 
     suspend fun getPlantDetail(id: Int) = plantService.getPlantDetail(id)
 
+    suspend fun getPlantActivities(
+        username: String,
+        page: Int,
+        size: Int,
+        isPlanting: Boolean?,
+        isPlanted: Boolean?
+    ) = plantService.getPlantActivities(
+        username = username,
+        page = page,
+        size = size,
+        isPlanting = isPlanting,
+        isPlanted = isPlanted
+    )
+
     suspend fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,

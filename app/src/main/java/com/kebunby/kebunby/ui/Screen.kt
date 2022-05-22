@@ -1,6 +1,8 @@
 package com.kebunby.kebunby.ui
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.kebunby.kebunby.R
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.outline.Home
@@ -10,7 +12,7 @@ import compose.icons.evaicons.outline.ShoppingCart
 
 sealed class Screen(
     val route: String,
-    val title: String? = null,
+    @StringRes val title: Int? = null,
     val icon: ImageVector? = null
 ) {
     object OnboardingScreen : Screen("onboarding_screen")
@@ -26,25 +28,25 @@ sealed class Screen(
     // Bottom nav menu
     object HomeScreen : Screen(
         route = "home_screen",
-        title = "Home",
+        title = R.string.home,
         icon = EvaIcons.Outline.Home
     )
 
     object ExploreScreen : Screen(
         route = "explore_screen",
-        title = "Explore",
+        title = R.string.explore,
         icon = EvaIcons.Outline.Search
     )
 
     object ShopScreen : Screen(
         route = "shop_screen",
-        title = "Shop",
+        title = R.string.shop,
         icon = EvaIcons.Outline.ShoppingCart
     )
 
     object ProfileScreen : Screen(
         route = "profile_screen",
-        title = "Profile",
+        title = R.string.profile,
         icon = EvaIcons.Outline.Person
     )
 }

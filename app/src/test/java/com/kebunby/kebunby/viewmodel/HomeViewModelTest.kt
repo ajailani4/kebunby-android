@@ -89,8 +89,9 @@ class HomeViewModelTest {
             }
 
             // Assert
-            assertNotNull("Username should be 'george'", userProfile?.username)
-            assertNotNull("Email should be 'george@email.com'", userProfile?.email)
+            assertNotNull(userProfile)
+            assertEquals("Username should be 'george'", "george", userProfile?.username)
+            assertEquals("Email should be 'george@email.com'", "george@email.com", userProfile?.email)
 
             // Verify
             verify(getUserCredentialUseCase).invoke()

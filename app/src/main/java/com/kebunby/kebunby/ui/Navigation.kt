@@ -11,6 +11,7 @@ import com.kebunby.kebunby.ui.feature.login.LoginScreen
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingScreen
 import com.kebunby.kebunby.ui.feature.plant_detail.PlantDetailScreen
 import com.kebunby.kebunby.ui.feature.plant_list.PlantListScreen
+import com.kebunby.kebunby.ui.feature.profile.ProfileScreen
 import com.kebunby.kebunby.ui.feature.register.RegisterScreen
 
 @Composable
@@ -84,7 +85,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         }
 
         composable(route = Screen.ProfileScreen.route) {
-            // ProfileScreen()
+            ProfileScreen(navController)
         }
     }
 }

@@ -3,6 +3,7 @@ package com.kebunby.kebunby.ui
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -11,7 +12,7 @@ import com.kebunby.kebunby.ui.theme.poppinsFamily
 
 @Composable
 fun BottomBar(navController: NavController) {
-    val items = listOf(
+    val menus = listOf(
         Screen.HomeScreen,
         Screen.ExploreScreen,
         Screen.ShopScreen,
@@ -25,17 +26,17 @@ fun BottomBar(navController: NavController) {
         val navBarStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBarStackEntry?.destination?.route
 
-        items.map { screen ->
+        menus.map { screen ->
             BottomNavigationItem(
                 icon = {
                     Icon(
                         imageVector = screen.icon!!,
-                        contentDescription = screen.title
+                        contentDescription = stringResource(screen.title!!)
                     )
                 },
                 label = {
                     Text(
-                        text = screen.title!!,
+                        text = stringResource(screen.title!!),
                         fontFamily = poppinsFamily
                     )
                 },

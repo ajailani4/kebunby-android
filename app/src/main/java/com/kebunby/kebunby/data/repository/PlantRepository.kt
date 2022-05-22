@@ -29,6 +29,12 @@ interface PlantRepository {
 
     fun getPlantDetail(id: Int): Flow<Resource<Plant>>
 
+    fun getPlantActivities(
+        username: String,
+        isPlanting: Boolean?,
+        isPlanted: Boolean?
+    ): Flow<PagingData<PlantItem>>
+
     fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,

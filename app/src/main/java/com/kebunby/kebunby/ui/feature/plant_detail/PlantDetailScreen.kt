@@ -212,10 +212,10 @@ fun PlantDetailScreen(
                                     color = MaterialTheme.colors.onBackground,
                                     style = MaterialTheme.typography.body1
                                 )
-                                Spacer(modifier = Modifier.height(15.dp))
+                                Spacer(modifier = Modifier.height(5.dp))
                             }
 
-                            Spacer(modifier = Modifier.height(5.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
 
                             // Steps
                             Text(

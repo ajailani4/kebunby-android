@@ -29,6 +29,12 @@
     <string name="something_wrong_happened">Maaf, terjadi kesalahan</string>
     <string name="username_already_exists">Username sudah ada. Coba yang lain</string>
 
+    <!-- Bottom Nav Menu Title -->
+    <string name="home">Beranda</string>
+    <string name="explore">Eksplor</string>
+    <string name="shop">Toko</string>
+    <string name="profile">Profil</string>
+
     <string name="hello">Halo</string>
     <string name="have_a_nice_day">Semoga harimu menyenangkan</string>
     <string name="trending">Sedang Tren</string>
@@ -43,4 +49,15 @@
     <string name="plant">Tanam Sekarang</string>
     <string name="finish_planting">Selesaikan Penanaman</string>
     <string name="already_planted">Sudah Ditanam</string>
+
+    <!-- Profile Tab Menu -->
+    <string name="planting">Menanam</string>
+    <string name="planted">Ditanam</string>
+    <string name="uploaded">Diupload</string>
+
+    <string name="yes">Iya</string>
+    <string name="no">Tidak</string>
+
+    <string name="logout">Keluar</string>
+    <string name="logout_confirm_msg">Apakah kamu yakin ingin keluar?</string>
 </resources>

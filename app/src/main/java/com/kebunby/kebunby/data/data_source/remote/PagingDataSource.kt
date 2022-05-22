@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.kebunby.kebunby.data.model.response.BaseResponse
 import retrofit2.Response
-import java.lang.Exception
 
 class PagingDataSource<T : Any>(
     private inline val serviceMethod: suspend (page: Int, size: Int) -> Response<BaseResponse<List<T>>>
@@ -20,7 +19,7 @@ class PagingDataSource<T : Any>(
             LoadResult.Page(
                 data = data,
                 prevKey = prevKey,
-                nextKey = currentPage.plus(1)
+                nextKey = if (data.isNotEmpty()) currentPage.plus(1) else null
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

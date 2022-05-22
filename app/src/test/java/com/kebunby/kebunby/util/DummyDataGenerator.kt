@@ -30,7 +30,10 @@ fun generateUser() =
         username = "george",
         email = "george@email.com",
         name = "George",
-        avatar = "test"
+        avatar = "test",
+        planting = 10,
+        planted = 10,
+        uploaded = 10
     )
 
 fun generatePlantItem() =
