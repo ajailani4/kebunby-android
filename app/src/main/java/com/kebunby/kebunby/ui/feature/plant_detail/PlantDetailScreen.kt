@@ -12,8 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
@@ -25,6 +29,8 @@ import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
 import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Red
+import com.kebunby.kebunby.ui.theme.poppinsFamily
+import com.kebunby.kebunby.util.Formatter
 import compose.icons.EvaIcons
 import compose.icons.SimpleIcons
 import compose.icons.evaicons.Fill
@@ -145,20 +151,11 @@ fun PlantDetailScreen(
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Column {
-                                    Text(
-                                        text = plant.name,
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontWeight = FontWeight.Bold,
-                                        style = MaterialTheme.typography.h3
-                                    )
-                                    Text(
-                                        text = plant.category,
-                                        color = Grey,
-                                        fontWeight = FontWeight.SemiBold,
-                                        style = MaterialTheme.typography.body1
-                                    )
-                                }
+                                Text(
+                                    text = Formatter.formatDate(plant.publishedOn),
+                                    color = Grey,
+                                    style = MaterialTheme.typography.body2
+                                )
                                 Row {
                                     Icon(
                                         imageVector = EvaIcons.Fill.Heart,
@@ -175,6 +172,38 @@ fun PlantDetailScreen(
                                 }
                             }
                             Spacer(modifier = Modifier.height(15.dp))
+                            Text(
+                                text = plant.name,
+                                color = MaterialTheme.colors.onBackground,
+                                fontWeight = FontWeight.Bold,
+                                style = MaterialTheme.typography.h3
+                            )
+                            Text(
+                                text = plant.category,
+                                color = Grey,
+                                fontWeight = FontWeight.SemiBold,
+                                style = MaterialTheme.typography.body1
+                            )
+                            Spacer(modifier = Modifier.height(15.dp))
+                            Text(
+                                text = buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = Grey,
+                                            fontFamily = poppinsFamily,
+                                            fontSize = 13.sp
+                                        )
+                                    ) {
+                                        append(stringResource(id = R.string.by))
+                                        append(": ")
+                                    }
+
+                                    append(plant.author)
+                                },
+                                color = MaterialTheme.colors.onBackground,
+                                style = MaterialTheme.typography.body2
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
                             Row {
                                 InfoSurface(
                                     icon = EvaIcons.Outline.Clock,

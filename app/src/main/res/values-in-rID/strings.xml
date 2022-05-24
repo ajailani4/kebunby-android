@@ -36,7 +36,7 @@
     <string name="profile">Profil</string>
 
     <string name="hello">Halo</string>
-    <string name="have_a_nice_day">Semoga harimu menyenangkan</string>
+    <string name="have_a_nice_day">Semoga harimu indah</string>
     <string name="trending">Sedang Tren</string>
     <string name="for_beginner">Untuk Pemula</string>
     <string name="view_all">Lihat semua</string>
@@ -44,6 +44,7 @@
 
     <string name="plants">Tanaman-tanaman</string>
 
+    <string name="by">Oleh</string>
     <string name="tools_and_materials">Alat dan Bahan</string>
     <string name="steps">Langkah-langkah</string>
     <string name="plant">Tanam Sekarang</string>
