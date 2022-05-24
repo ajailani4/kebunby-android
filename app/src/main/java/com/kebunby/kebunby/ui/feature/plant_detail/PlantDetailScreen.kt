@@ -190,7 +190,7 @@ fun PlantDetailScreen(
                                 fontWeight = FontWeight.SemiBold,
                                 style = MaterialTheme.typography.body1
                             )
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(10.dp))
                             Text(
                                 text = buildAnnotatedString {
                                     withStyle(
