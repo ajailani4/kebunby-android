@@ -211,7 +211,7 @@ fun LoginScreen(
             Image(
                 modifier = Modifier.fillMaxWidth(),
                 painter = painterResource(id = R.drawable.img_login_footer),
-                contentDescription = "Wave illustration"
+                contentDescription = "Footer illustration"
             )
         }
 
