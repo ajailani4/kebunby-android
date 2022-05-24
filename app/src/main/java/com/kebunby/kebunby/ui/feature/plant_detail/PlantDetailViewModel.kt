@@ -36,6 +36,8 @@ class PlantDetailViewModel @Inject constructor(
     var addPlantedPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
 
     var isFavorited by mutableStateOf<Boolean?>(null)
+    var plantNowDialogVis by mutableStateOf(false)
+    var finishPlantingDlgVis by mutableStateOf(false)
 
     init {
         onEvent(PlantDetailEvent.LoadPlantDetail)
@@ -57,6 +59,14 @@ class PlantDetailViewModel @Inject constructor(
 
     fun onFavoritePlant(_isFavorited: Boolean) {
         isFavorited = _isFavorited
+    }
+
+    fun onPlantNowDialogVisChanged(visibility: Boolean) {
+        plantNowDialogVis = visibility
+    }
+
+    fun onFinishPlantingDlgVisChanged(visibility: Boolean) {
+        finishPlantingDlgVis = visibility
     }
 
     private fun getPlantDetail() {

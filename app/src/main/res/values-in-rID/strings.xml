@@ -47,9 +47,11 @@
     <string name="by">Oleh</string>
     <string name="tools_and_materials">Alat dan Bahan</string>
     <string name="steps">Langkah-langkah</string>
-    <string name="plant">Tanam Sekarang</string>
+    <string name="plant_now">Tanam Sekarang</string>
     <string name="finish_planting">Selesaikan Penanaman</string>
     <string name="already_planted">Sudah Ditanam</string>
+    <string name="plant_now_confirm_msg">Apakah kamu yakin ingin menanam ini?</string>
+    <string name="finish_planting_confirm_msg">Apakah kamu yakin ingin menyelesaikan penanaman?</string>
 
     <!-- Profile Tab Menu -->
     <string name="planting">Menanam</string>
