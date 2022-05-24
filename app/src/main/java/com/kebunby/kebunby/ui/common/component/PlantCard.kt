@@ -18,9 +18,12 @@ import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.ui.theme.Grey
+import com.kebunby.kebunby.ui.theme.Red
 import compose.icons.EvaIcons
 import compose.icons.SimpleIcons
+import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
+import compose.icons.evaicons.fill.Heart
 import compose.icons.evaicons.outline.Clock
 import compose.icons.simpleicons.Rainmeter
 
@@ -41,7 +44,7 @@ fun PlantCard(
         Row(modifier = Modifier.padding(15.dp)) {
             Image(
                 modifier = Modifier
-                    .size(110.dp)
+                    .size(130.dp)
                     .clip(MaterialTheme.shapes.small),
                 painter = rememberImagePainter(plantItem?.image),
                 contentScale = ContentScale.Crop,
@@ -55,7 +58,7 @@ fun PlantCard(
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.h4
                 )
                 Text(
                     text = plantItem?.category ?: "-",
@@ -65,7 +68,7 @@ fun PlantCard(
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.body1
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
                         modifier = Modifier.size(17.dp),
@@ -91,6 +94,21 @@ fun PlantCard(
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
                         text = plantItem?.wateringFreq ?: "-",
+                        color = Grey,
+                        style = MaterialTheme.typography.body2
+                    )
+                }
+                Spacer(modifier = Modifier.height(3.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        modifier = Modifier.size(17.dp),
+                        imageVector = EvaIcons.Fill.Heart,
+                        tint = Red,
+                        contentDescription = "Popularity icon"
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = "${plantItem?.popularity}" ?: "0",
                         color = Grey,
                         style = MaterialTheme.typography.body2
                     )

@@ -5,10 +5,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.kebunby.kebunby.R
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.outline.Home
-import compose.icons.evaicons.outline.Person
-import compose.icons.evaicons.outline.Search
-import compose.icons.evaicons.outline.ShoppingCart
+import compose.icons.evaicons.outline.*
 
 sealed class Screen(
     val route: String,
@@ -35,7 +32,7 @@ sealed class Screen(
     object ExploreScreen : Screen(
         route = "explore_screen",
         title = R.string.explore,
-        icon = EvaIcons.Outline.Search
+        icon = EvaIcons.Outline.Compass
     )
 
     object ShopScreen : Screen(
