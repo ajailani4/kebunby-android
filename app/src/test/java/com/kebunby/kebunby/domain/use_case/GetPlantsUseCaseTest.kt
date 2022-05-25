@@ -27,11 +27,9 @@ class GetPlantsUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var plantRepository: PlantRepository
 
-    // SUT
     private lateinit var getPlantsUseCase: GetPlantsUseCase
 
     @Before
@@ -42,7 +40,6 @@ class GetPlantsUseCaseTest {
     @Test
     fun getPlants_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generatePlants()))
             }
@@ -55,7 +52,6 @@ class GetPlantsUseCaseTest {
                 searchQuery = isNull()
             )
 
-            // Actual
             val actualResource = getPlantsUseCase.invoke(
                 page = anyInt(),
                 size = anyInt(),
@@ -64,14 +60,12 @@ class GetPlantsUseCaseTest {
                 searchQuery = isNull()
             ).first()
 
-            // Assert
             assertEquals(
                 "Resource should be success",
                 Resource.Success(generatePlants()),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).getPlants(
                 page = anyInt(),
                 size = anyInt(),
@@ -85,7 +79,6 @@ class GetPlantsUseCaseTest {
     @Test
     fun getPlants_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<List<PlantItem>>())
             }
@@ -98,7 +91,6 @@ class GetPlantsUseCaseTest {
                 searchQuery = isNull()
             )
 
-            // Actual
             val actualResource = getPlantsUseCase.invoke(
                 page = anyInt(),
                 size = anyInt(),
@@ -107,14 +99,12 @@ class GetPlantsUseCaseTest {
                 searchQuery = isNull()
             ).first()
 
-            // Assert
             assertEquals(
                 "Resource should be error",
                 Resource.Error<List<PlantItem>>(),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).getPlants(
                 page = anyInt(),
                 size = anyInt(),

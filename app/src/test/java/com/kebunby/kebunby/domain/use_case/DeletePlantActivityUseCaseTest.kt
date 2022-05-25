@@ -25,11 +25,9 @@ class DeletePlantActivityUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var plantRepository: PlantRepository
 
-    // SUT
     private lateinit var deletePlantActivityUseCase: DeletePlantActivityUseCase
 
     @Before
@@ -40,7 +38,6 @@ class DeletePlantActivityUseCaseTest {
     @Test
     fun deletePlantActivity_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success<Any>())
             }
@@ -53,7 +50,6 @@ class DeletePlantActivityUseCaseTest {
                 isFavorited = anyBoolean()
             )
 
-            // Act
             val actualResource = deletePlantActivityUseCase.invoke(
                 username = "george",
                 plantId = 1,
@@ -62,14 +58,12 @@ class DeletePlantActivityUseCaseTest {
                 isFavorited = true
             ).first()
 
-            // Assert
             assertEquals(
                 "Resource should be success",
                 Resource.Success<Any>(),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).deletePlantActivity(
                 username = anyString(),
                 plantId = anyInt(),
@@ -83,7 +77,6 @@ class DeletePlantActivityUseCaseTest {
     @Test
     fun deletePlantActivity_ShouldReturnError() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<Any>())
             }
@@ -96,7 +89,6 @@ class DeletePlantActivityUseCaseTest {
                 isFavorited = anyBoolean()
             )
 
-            // Act
             val actualResource = deletePlantActivityUseCase.invoke(
                 username = "george",
                 plantId = 1,
@@ -105,14 +97,12 @@ class DeletePlantActivityUseCaseTest {
                 isFavorited = true
             ).first()
 
-            // Assert
             assertEquals(
                 "Resource should be error",
                 Resource.Error<Any>(),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).deletePlantActivity(
                 username = anyString(),
                 plantId = anyInt(),

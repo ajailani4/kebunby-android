@@ -36,7 +36,6 @@ class HomeViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var getUserProfileUseCase: GetUserProfileUseCase
 
@@ -55,13 +54,11 @@ class HomeViewModelTest {
     @Mock
     private lateinit var deletePlantActivityUseCase: DeletePlantActivityUseCase
 
-    // SUT
     private lateinit var homeViewModel: HomeViewModel
 
     @Test
     fun getProfile_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generateUser()))
             }
@@ -73,7 +70,6 @@ class HomeViewModelTest {
             ).`when`(getUserCredentialUseCase).invoke()
             doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -88,12 +84,10 @@ class HomeViewModelTest {
                 else -> null
             }
 
-            // Assert
             assertNotNull(userProfile)
             assertEquals("Username should be 'george'", "george", userProfile?.username)
             assertEquals("Email should be 'george@email.com'", "george@email.com", userProfile?.email)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getUserProfileUseCase).invoke(anyString())
         }
@@ -102,7 +96,6 @@ class HomeViewModelTest {
     @Test
     fun getProfile_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<User>())
             }
@@ -114,7 +107,6 @@ class HomeViewModelTest {
             ).`when`(getUserCredentialUseCase).invoke()
             doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -134,10 +126,8 @@ class HomeViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should be fail", false, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getUserProfileUseCase).invoke(anyString())
         }
@@ -146,7 +136,6 @@ class HomeViewModelTest {
     @Test
     fun getTrendingPlants_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generatePlants()))
             }
@@ -164,7 +153,6 @@ class HomeViewModelTest {
                 searchQuery = isNull()
             )
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -181,10 +169,8 @@ class HomeViewModelTest {
                     else -> listOf()
                 }
 
-            // Assert
             assertEquals("Plants size should be 5", 5, trendingPlants?.size)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getPlantsUseCase).invoke(
                 page = anyInt(),
@@ -199,7 +185,6 @@ class HomeViewModelTest {
     @Test
     fun getTrendingPlants_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<List<PlantItem>>())
             }
@@ -217,7 +202,6 @@ class HomeViewModelTest {
                 searchQuery = isNull()
             )
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -237,10 +221,8 @@ class HomeViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should be fail", false, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getPlantsUseCase).invoke(
                 page = anyInt(),
@@ -255,7 +237,6 @@ class HomeViewModelTest {
     @Test
     fun getForBeginnerPlants_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generatePlants()))
             }
@@ -273,7 +254,6 @@ class HomeViewModelTest {
                 searchQuery = isNull()
             )
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -290,10 +270,8 @@ class HomeViewModelTest {
                     else -> listOf()
                 }
 
-            // Assert
             assertEquals("Plants size should be 5", 5, forBeginnerPlants?.size)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getPlantsUseCase).invoke(
                 page = anyInt(),
@@ -308,7 +286,6 @@ class HomeViewModelTest {
     @Test
     fun getForBeginnerPlants_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<List<PlantItem>>())
             }
@@ -326,7 +303,6 @@ class HomeViewModelTest {
                 searchQuery = isNull()
             )
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -346,10 +322,8 @@ class HomeViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should be fail", false, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getPlantsUseCase).invoke(
                 page = anyInt(),
@@ -364,7 +338,6 @@ class HomeViewModelTest {
     @Test
     fun getPlantCategories_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generatePlantCategories()))
             }
@@ -376,7 +349,6 @@ class HomeViewModelTest {
             ).`when`(getUserCredentialUseCase).invoke()
             doReturn(resource).`when`(getPlantCategoriesUseCase).invoke()
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -393,10 +365,8 @@ class HomeViewModelTest {
                     else -> listOf()
                 }
 
-            // Assert
             assertEquals("Plant categories size should be 5", 5, plantCategoriesPlants?.size)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getPlantCategoriesUseCase).invoke()
         }
@@ -405,7 +375,6 @@ class HomeViewModelTest {
     @Test
     fun getPlantCategories_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<List<PlantCategory>>())
             }
@@ -417,7 +386,6 @@ class HomeViewModelTest {
             ).`when`(getUserCredentialUseCase).invoke()
             doReturn(resource).`when`(getPlantCategoriesUseCase).invoke()
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -437,10 +405,8 @@ class HomeViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should be fail", false, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getPlantCategoriesUseCase).invoke()
         }
@@ -449,7 +415,6 @@ class HomeViewModelTest {
     @Test
     fun addFavoritePlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(Any()))
             }
@@ -467,7 +432,6 @@ class HomeViewModelTest {
                 plantActRequest = any()
             )
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -485,10 +449,8 @@ class HomeViewModelTest {
                 else -> true
             }
 
-            // Assert
             assertEquals("Should be success", true, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase, times(2)).invoke()
             verify(addPlantActivityUseCase).invoke(
                 username = anyString(),
@@ -503,7 +465,6 @@ class HomeViewModelTest {
     @Test
     fun deleteFavoritePlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(Any()))
             }
@@ -521,7 +482,6 @@ class HomeViewModelTest {
                 isFavorited = anyBoolean()
             )
 
-            // Act
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
                 getUserCredentialUseCase,
@@ -539,10 +499,8 @@ class HomeViewModelTest {
                 else -> true
             }
 
-            // Assert
             assertEquals("Should be success", true, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase, times(2)).invoke()
             verify(deletePlantActivityUseCase).invoke(
                 username = anyString(),

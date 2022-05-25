@@ -28,11 +28,9 @@ class GetPlantDetailUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var plantRepository: PlantRepository
 
-    // SUT
     private lateinit var getPlantDetailUseCase: GetPlantDetailUseCase
 
     @Before
@@ -43,24 +41,20 @@ class GetPlantDetailUseCaseTest {
     @Test
     fun getPlantDetail_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generatePlant()))
             }
 
             doReturn(resource).`when`(plantRepository).getPlantDetail(anyInt())
 
-            // Actual
             val actualResource = getPlantDetailUseCase.invoke(anyInt()).first()
 
-            // Assert
             assertEquals(
                 "Resource should be success",
                 Resource.Success(generatePlant()),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).getPlantDetail(anyInt())
         }
     }
@@ -68,24 +62,20 @@ class GetPlantDetailUseCaseTest {
     @Test
     fun getPlantDetail_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<Plant>())
             }
 
             doReturn(resource).`when`(plantRepository).getPlantDetail(anyInt())
 
-            // Actual
             val actualResource = getPlantDetailUseCase.invoke(anyInt()).first()
 
-            // Assert
             assertEquals(
                 "Resource should be error",
                 Resource.Error<Plant>(),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).getPlantDetail(anyInt())
         }
     }

@@ -30,20 +30,17 @@ class PlantedViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var getUserCredentialUseCase: GetUserCredentialUseCase
 
     @Mock
     private lateinit var getPlantActivitiesUseCase: GetPlantActivitiesUseCase
 
-    // SUT
     private lateinit var plantedViewModel: PlantedViewModel
 
     @Test
     fun getPlants_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             doReturn(
                 flow {
                     emit(generateUserCredential())
@@ -57,7 +54,6 @@ class PlantedViewModelTest {
                 isPlanted = anyBoolean()
             )
 
-            // Act
             plantedViewModel = PlantedViewModel(
                 getUserCredentialUseCase,
                 getPlantActivitiesUseCase
@@ -72,10 +68,8 @@ class PlantedViewModelTest {
 
             differ.submitData(pagingPlants)
 
-            // Assert
             assertEquals(generatePlants(), differ.snapshot().items)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getPlantActivitiesUseCase).invoke(
                 username = anyString(),

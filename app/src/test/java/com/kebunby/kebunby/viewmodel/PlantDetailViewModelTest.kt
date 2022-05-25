@@ -36,7 +36,6 @@ class PlantDetailViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var getUserCredentialUseCase: GetUserCredentialUseCase
 
@@ -51,7 +50,6 @@ class PlantDetailViewModelTest {
 
     private lateinit var savedStateHandle: SavedStateHandle
 
-    // SUT
     private lateinit var plantDetailViewModel: PlantDetailViewModel
 
     @Before
@@ -62,14 +60,12 @@ class PlantDetailViewModelTest {
     @Test
     fun getPlantDetail_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generatePlant()))
             }
 
             doReturn(resource).`when`(getPlantDetailUseCase).invoke(anyInt())
 
-            // Act
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
                 getUserCredentialUseCase,
@@ -83,10 +79,8 @@ class PlantDetailViewModelTest {
                 else -> null
             }
 
-            // Assert
             assertNotNull("Plant should not null", plant)
 
-            // Verify
             verify(getPlantDetailUseCase).invoke(anyInt())
         }
     }
@@ -94,14 +88,12 @@ class PlantDetailViewModelTest {
     @Test
     fun getPlantDetail_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<Plant>())
             }
 
             doReturn(resource).`when`(getPlantDetailUseCase).invoke(anyInt())
 
-            // Act
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
                 getUserCredentialUseCase,
@@ -120,10 +112,8 @@ class PlantDetailViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should be fail", false, isSuccess)
 
-            // Verify
             verify(getPlantDetailUseCase).invoke(anyInt())
         }
     }
@@ -131,7 +121,6 @@ class PlantDetailViewModelTest {
     @Test
     fun addFavoritePlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(Any()))
             }
@@ -149,7 +138,6 @@ class PlantDetailViewModelTest {
                 plantActRequest = any()
             )
 
-            // Act
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
                 getUserCredentialUseCase,
@@ -166,10 +154,8 @@ class PlantDetailViewModelTest {
                 else -> true
             }
 
-            // Assert
             assertEquals("Should be success", true, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase, times(1)).invoke()
             verify(addPlantActivityUseCase).invoke(
                 username = anyString(),
@@ -184,7 +170,6 @@ class PlantDetailViewModelTest {
     @Test
     fun deleteFavoritePlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(Any()))
             }
@@ -202,7 +187,6 @@ class PlantDetailViewModelTest {
                 isFavorited = anyBoolean()
             )
 
-            // Act
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
                 getUserCredentialUseCase,
@@ -219,10 +203,8 @@ class PlantDetailViewModelTest {
                 else -> true
             }
 
-            // Assert
             assertEquals("Should be success", true, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase, times(1)).invoke()
             verify(deletePlantActivityUseCase).invoke(
                 username = anyString(),
@@ -237,7 +219,6 @@ class PlantDetailViewModelTest {
     @Test
     fun addPlantingPlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(Any()))
             }
@@ -255,7 +236,6 @@ class PlantDetailViewModelTest {
                 plantActRequest = any()
             )
 
-            // Act
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
                 getUserCredentialUseCase,
@@ -272,10 +252,8 @@ class PlantDetailViewModelTest {
                 else -> true
             }
 
-            // Assert
             assertEquals("Should be success", true, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase, times(1)).invoke()
             verify(addPlantActivityUseCase).invoke(
                 username = anyString(),
@@ -290,7 +268,6 @@ class PlantDetailViewModelTest {
     @Test
     fun addPlantedPlant_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(Any()))
             }
@@ -308,7 +285,6 @@ class PlantDetailViewModelTest {
                 plantActRequest = any()
             )
 
-            // Act
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
                 getUserCredentialUseCase,
@@ -325,10 +301,8 @@ class PlantDetailViewModelTest {
                 else -> true
             }
 
-            // Assert
             assertEquals("Should be success", true, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase, times(1)).invoke()
             verify(addPlantActivityUseCase).invoke(
                 username = anyString(),

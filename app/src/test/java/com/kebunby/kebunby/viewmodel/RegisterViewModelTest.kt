@@ -29,14 +29,12 @@ class RegisterViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var registerUserUseCase: RegisterUserUseCase
 
     @Mock
     private lateinit var saveUserCredentialUseCase: SaveUserCredentialUseCase
 
-    // SUT
     private lateinit var registerViewModel: RegisterViewModel
 
     @Before
@@ -47,14 +45,12 @@ class RegisterViewModelTest {
     @Test
     fun register_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generateUserCredential()))
             }
 
             doReturn(resource).`when`(registerUserUseCase).invoke(any())
 
-            // Act
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState) {
@@ -67,10 +63,8 @@ class RegisterViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should return success", true, isSuccess)
 
-            // Verify
             verify(registerUserUseCase).invoke(any())
         }
     }
@@ -78,14 +72,12 @@ class RegisterViewModelTest {
     @Test
     fun register_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<UserCredential>())
             }
 
             doReturn(resource).`when`(registerUserUseCase).invoke(any())
 
-            // Act
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState) {
@@ -98,10 +90,8 @@ class RegisterViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should return fail", false, isSuccess)
 
-            // Verify
             verify(registerUserUseCase).invoke(any())
         }
     }

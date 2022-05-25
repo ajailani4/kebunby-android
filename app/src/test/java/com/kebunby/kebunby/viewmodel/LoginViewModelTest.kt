@@ -29,14 +29,12 @@ class LoginViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var loginUserUseCase: LoginUserUseCase
 
     @Mock
     private lateinit var saveUserCredentialUseCase: SaveUserCredentialUseCase
 
-    // SUT
     private lateinit var loginViewModel: LoginViewModel
 
     @Before
@@ -47,14 +45,12 @@ class LoginViewModelTest {
     @Test
     fun login_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generateUserCredential()))
             }
 
             doReturn(resource).`when`(loginUserUseCase).invoke(any())
 
-            // Act
             loginViewModel.onEvent(LoginEvent.Submit)
 
             val isSuccess = when (loginViewModel.loginState) {
@@ -67,10 +63,8 @@ class LoginViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should be success", true, isSuccess)
 
-            // Verify
             verify(loginUserUseCase).invoke(any())
         }
     }
@@ -78,14 +72,12 @@ class LoginViewModelTest {
     @Test
     fun login_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<UserCredential>())
             }
 
             doReturn(resource).`when`(loginUserUseCase).invoke(any())
 
-            // Act
             loginViewModel.onEvent(LoginEvent.Submit)
 
             val isSuccess = when (loginViewModel.loginState) {
@@ -98,10 +90,8 @@ class LoginViewModelTest {
                 else -> false
             }
 
-            // Assert
             assertEquals("Should be fail", false, isSuccess)
 
-            // Verify
             verify(loginUserUseCase).invoke(any())
         }
     }

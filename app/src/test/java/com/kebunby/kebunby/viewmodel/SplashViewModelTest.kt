@@ -25,11 +25,9 @@ class SplashViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var getUserCredentialUseCase: GetUserCredentialUseCase
 
-    // SUT
     private lateinit var splashViewModel: SplashViewModel
 
     @Before
@@ -40,21 +38,17 @@ class SplashViewModelTest {
     @Test
     fun getUserCredential_ShouldReturnUserCredentialIsNotEmpty() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val userCredential = flow {
                 emit(generateUserCredential())
             }
 
             doReturn(userCredential).`when`(getUserCredentialUseCase).invoke()
 
-            // Act
             val actUserCredential = splashViewModel.getUserCredential().first()
 
-            // Assert
             assertEquals("Username should be 'george'", "george", actUserCredential.username)
             assertEquals("Access token should be 'abc'", "abc", actUserCredential.accessToken)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
         }
     }
@@ -62,7 +56,6 @@ class SplashViewModelTest {
     @Test
     fun getUserCredential_ShouldReturnUserCredentialIsEmpty() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val userCredential = flow {
                 emit(
                     UserCredential(
@@ -74,14 +67,11 @@ class SplashViewModelTest {
 
             doReturn(userCredential).`when`(getUserCredentialUseCase).invoke()
 
-            // Act
             val actUserCredential = splashViewModel.getUserCredential().first()
 
-            // Assert
             assertEquals("Username should be empty", "", actUserCredential.username)
             assertEquals("Access token should be empty", "", actUserCredential.accessToken)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
         }
     }

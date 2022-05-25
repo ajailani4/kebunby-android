@@ -30,20 +30,17 @@ class ProfileViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var getUserCredentialUseCase: GetUserCredentialUseCase
 
     @Mock
     private lateinit var getUserProfileUseCase: GetUserProfileUseCase
 
-    // SUT
     private lateinit var profileViewModel: ProfileViewModel
 
     @Test
     fun getProfile_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generateUser()))
             }
@@ -55,7 +52,6 @@ class ProfileViewModelTest {
             ).`when`(getUserCredentialUseCase).invoke()
             doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
 
-            // Act
             profileViewModel = ProfileViewModel(
                 getUserCredentialUseCase,
                 getUserProfileUseCase
@@ -66,12 +62,10 @@ class ProfileViewModelTest {
                 else -> null
             }
 
-            // Assert
             assertNotNull(userProfile)
             assertEquals("Username should be 'george'", "george", userProfile?.username)
             assertEquals("Email should be 'george@email.com'", "george@email.com", userProfile?.email)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getUserProfileUseCase).invoke(anyString())
         }
@@ -80,7 +74,6 @@ class ProfileViewModelTest {
     @Test
     fun getProfile_ShouldReturnFail() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<User>())
             }
@@ -92,7 +85,6 @@ class ProfileViewModelTest {
             ).`when`(getUserCredentialUseCase).invoke()
             doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
 
-            // Act
             profileViewModel = ProfileViewModel(
                 getUserCredentialUseCase,
                 getUserProfileUseCase
@@ -108,10 +100,8 @@ class ProfileViewModelTest {
                 else -> null
             }
 
-            // Assert
             assertEquals("Should be fail", false, isSuccess)
 
-            // Verify
             verify(getUserCredentialUseCase).invoke()
             verify(getUserProfileUseCase).invoke(anyString())
         }

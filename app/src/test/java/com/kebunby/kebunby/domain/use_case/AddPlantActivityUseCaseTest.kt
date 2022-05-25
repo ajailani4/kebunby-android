@@ -27,11 +27,9 @@ class AddPlantActivityUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var plantRepository: PlantRepository
 
-    // SUT
     private lateinit var addPlantActivityUseCase: AddPlantActivityUseCase
 
     @Before
@@ -42,7 +40,6 @@ class AddPlantActivityUseCaseTest {
     @Test
     fun addPlantActivity_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success<Any>())
             }
@@ -55,7 +52,6 @@ class AddPlantActivityUseCaseTest {
                 plantActRequest = any()
             )
 
-            // Act
             val actualResource = addPlantActivityUseCase.invoke(
                 username = "george",
                 isPlanting = null,
@@ -64,14 +60,12 @@ class AddPlantActivityUseCaseTest {
                 plantActRequest = generatePlantActRequest()
             ).first()
 
-            // Assert
             assertEquals(
                 "Resource should be success",
                 Resource.Success<Any>(),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).addPlantActivity(
                 username = anyString(),
                 isPlanting = isNull(),
@@ -85,7 +79,6 @@ class AddPlantActivityUseCaseTest {
     @Test
     fun addPlantActivity_ShouldReturnError() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<Any>())
             }
@@ -98,7 +91,6 @@ class AddPlantActivityUseCaseTest {
                 plantActRequest = any()
             )
 
-            // Act
             val actualResource = addPlantActivityUseCase.invoke(
                 username = "george",
                 isPlanting = null,
@@ -107,14 +99,12 @@ class AddPlantActivityUseCaseTest {
                 plantActRequest = generatePlantActRequest()
             ).first()
 
-            // Assert
             assertEquals(
                 "Resource should be error",
                 Resource.Error<Any>(),
                 actualResource
             )
 
-            // Verify
             verify(plantRepository).addPlantActivity(
                 username = anyString(),
                 isPlanting = isNull(),

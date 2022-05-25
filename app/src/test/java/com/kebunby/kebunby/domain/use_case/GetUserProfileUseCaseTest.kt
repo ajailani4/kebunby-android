@@ -27,11 +27,9 @@ class GetUserProfileUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var userRepository: UserRepository
 
-    // SUT
     private lateinit var getUserProfileUseCase: GetUserProfileUseCase
 
     @Before
@@ -42,22 +40,18 @@ class GetUserProfileUseCaseTest {
     @Test
     fun getUserProfile_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Success(generateUser()))
             }
 
             doReturn(resource).`when`(userRepository).getUserProfile(anyString())
 
-            // Act
             val actualResource = getUserProfileUseCase.invoke(anyString()).first()
 
-            // Assert
             assertEquals(
                 "Resource should be success", Resource.Success(generateUser()), actualResource
             )
 
-            // Verify
             verify(userRepository).getUserProfile(anyString())
         }
     }
@@ -65,22 +59,18 @@ class GetUserProfileUseCaseTest {
     @Test
     fun getUserProfile_ShouldReturnSuccessError() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<User>())
             }
 
             doReturn(resource).`when`(userRepository).getUserProfile(anyString())
 
-            // Act
             val actualResource = getUserProfileUseCase.invoke(anyString()).first()
 
-            // Assert
             assertEquals(
                 "Resource should be error", Resource.Error<User>(), actualResource
             )
 
-            // Verify
             verify(userRepository).getUserProfile(anyString())
         }
     }
