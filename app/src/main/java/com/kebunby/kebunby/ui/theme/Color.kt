@@ -18,6 +18,6 @@ val OnErrorLight = Color.White
 
 // Common
 val Grey = Color(0xFFBDBDBD)
-val SearchTextFieldGrey = Color(0xFFE7EEF3)
+val SearchTextFieldGrey = Color(0xFFECECEC)
 val Red = Color(0xFFEB5757)
 val BackgroundShimmer = Color(0xFFA3A3A3)
