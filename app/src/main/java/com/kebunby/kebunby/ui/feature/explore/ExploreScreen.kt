@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
 import com.kebunby.kebunby.R
@@ -47,41 +48,10 @@ fun ExploreScreen(
     navController: NavController,
     exploreViewModel: ExploreViewModel = hiltViewModel()
 ) {
+    val onEvent = exploreViewModel::onEvent
+    val pagingPlants = exploreViewModel.pagingPlants.collectAsLazyPagingItems()
     val searchQuery = exploreViewModel.searchQuery
     val onSearchQueryChanged = exploreViewModel::onSearchQueryChanged
-
-    val pagingPlants = listOf(
-        PlantItem(
-            id = 1,
-            name = "Tanaman",
-            image = "test",
-            category = "Tanaman Hias",
-            growthEst = "2-3 Tahun",
-            wateringFreq = "3x Sehari",
-            popularity = 10,
-            isFavorited = true
-        ),
-        PlantItem(
-            id = 1,
-            name = "Tanaman",
-            image = "test",
-            category = "Tanaman Hias",
-            growthEst = "2-3 Tahun",
-            wateringFreq = "3x Sehari",
-            popularity = 10,
-            isFavorited = true
-        ),
-        PlantItem(
-            id = 1,
-            name = "Tanaman",
-            image = "test",
-            category = "Tanaman Hias",
-            growthEst = "2-3 Tahun",
-            wateringFreq = "3x Sehari",
-            popularity = 10,
-            isFavorited = true
-        )
-    )
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -107,6 +77,7 @@ fun ExploreScreen(
         ) {
             item {
                 SearchTextField(
+                    onEvent = onEvent,
                     searchQuery = searchQuery,
                     onSearchQueryChanged = onSearchQueryChanged,
                     localFocusManager = localFocusManager,
@@ -128,7 +99,7 @@ fun ExploreScreen(
             }
 
             // Handle paging plants state
-            /*pagingPlants.apply {
+            pagingPlants.apply {
                 when {
                     loadState.refresh is LoadState.Loading -> {
                         item {
@@ -163,7 +134,7 @@ fun ExploreScreen(
                         }
                     }
                 }
-            }*/
+            }
         }
     }
 }
@@ -171,6 +142,7 @@ fun ExploreScreen(
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchTextField(
+    onEvent: (ExploreEvent) -> Unit,
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
     localFocusManager: FocusManager,
@@ -195,7 +167,9 @@ fun SearchTextField(
         },
         placeholder = {
             Text(
-                text = stringResource(id = R.string.search_plant)
+                text = stringResource(id = R.string.search_plant),
+                color = Grey,
+                style = MaterialTheme.typography.body1
             )
         },
         singleLine = true,
@@ -208,6 +182,7 @@ fun SearchTextField(
         keyboardActions = KeyboardActions(onSearch = {
             localFocusManager.clearFocus()
             keyboardController?.hide()
+            onEvent(ExploreEvent.LoadPlants)
         })
     )
 }
