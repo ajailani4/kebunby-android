@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.kebunby.kebunby.ui.feature.explore.ExploreScreen
 import com.kebunby.kebunby.ui.feature.home.HomeScreen
 import com.kebunby.kebunby.ui.feature.login.LoginScreen
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingScreen
@@ -77,7 +78,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         }
 
         composable(route = Screen.ExploreScreen.route) {
-            // ExploreScreen()
+            ExploreScreen(navController)
         }
 
         composable(route = Screen.ShopScreen.route) {

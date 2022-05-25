@@ -1,6 +1,8 @@
 package com.kebunby.kebunby
 
+import android.app.Activity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -12,6 +14,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -77,6 +80,9 @@ fun Content(startDestination: String) {
         bottomBar = {
             if (hasBottomMenuRoutes.contains(currentRoute)) {
                 BottomBar(navController)
+
+                (LocalContext.current as Activity).window
+                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
             }
         }
     ) { innerPadding ->
