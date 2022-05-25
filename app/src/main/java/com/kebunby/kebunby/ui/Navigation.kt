@@ -32,7 +32,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
 
         composable(
             route = Screen.PlantListScreen.route +
-                "?isTrending={isTrending}&forBeginner={forBeginner}&searchQuery={searchQuery}&categoryId={categoryId}&category={category}",
+                "?isTrending={isTrending}&forBeginner={forBeginner}&categoryId={categoryId}&category={category}",
             arguments = listOf(
                 navArgument("isTrending") {
                     type = NavType.BoolType
@@ -41,11 +41,6 @@ fun Navigation(navController: NavHostController, startDestination: String) {
                 navArgument("forBeginner") {
                     type = NavType.BoolType
                     defaultValue = false
-                },
-                navArgument("searchQuery") {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
                 },
                 navArgument("categoryId") {
                     type = NavType.IntType
