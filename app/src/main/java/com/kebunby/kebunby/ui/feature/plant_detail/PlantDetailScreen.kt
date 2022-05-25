@@ -151,7 +151,7 @@ fun PlantDetailScreen(
                         Column(
                             modifier = Modifier
                                 .padding(horizontal = 20.dp)
-                                .padding(top = 20.dp, bottom = 80.dp)
+                                .padding(top = 15.dp, bottom = 80.dp)
                         ) {
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
