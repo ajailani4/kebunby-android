@@ -23,6 +23,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.items
@@ -42,7 +43,13 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalCoilApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun ExploreScreen(navController: NavController) {
+fun ExploreScreen(
+    navController: NavController,
+    exploreViewModel: ExploreViewModel = hiltViewModel()
+) {
+    val searchQuery = exploreViewModel.searchQuery
+    val onSearchQueryChanged = exploreViewModel::onSearchQueryChanged
+
     val pagingPlants = listOf(
         PlantItem(
             id = 1,
@@ -100,6 +107,8 @@ fun ExploreScreen(navController: NavController) {
         ) {
             item {
                 SearchTextField(
+                    searchQuery = searchQuery,
+                    onSearchQueryChanged = onSearchQueryChanged,
                     localFocusManager = localFocusManager,
                     keyboardController = keyboardController
                 )
@@ -162,13 +171,15 @@ fun ExploreScreen(navController: NavController) {
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchTextField(
+    searchQuery: String,
+    onSearchQueryChanged: (String) -> Unit,
     localFocusManager: FocusManager,
     keyboardController: SoftwareKeyboardController?
 ) {
     TextField(
         modifier = Modifier.fillMaxWidth(),
-        value = "",
-        onValueChange = {},
+        value = searchQuery,
+        onValueChange = onSearchQueryChanged,
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = SearchTextFieldGrey,

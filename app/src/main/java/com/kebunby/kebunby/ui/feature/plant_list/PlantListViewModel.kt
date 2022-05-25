@@ -16,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlantListViewModel @Inject constructor(
-
     savedStateHandle: SavedStateHandle,
     private val getPagingPlantsUseCase: GetPagingPlantsUseCase,
     private val getPagingPlantsByCategoryUseCase: GetPagingPlantsByCategoryUseCase
