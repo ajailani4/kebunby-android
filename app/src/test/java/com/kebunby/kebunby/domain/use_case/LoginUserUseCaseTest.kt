@@ -39,7 +39,7 @@ class LoginUserUseCaseTest {
     }
 
     @Test
-    fun login_ShouldReturnSuccess() {
+    fun `Login should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(
@@ -71,7 +71,7 @@ class LoginUserUseCaseTest {
     }
 
     @Test
-    fun login_ShouldReturnError() {
+    fun `Login should return error`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Error<UserCredential>())

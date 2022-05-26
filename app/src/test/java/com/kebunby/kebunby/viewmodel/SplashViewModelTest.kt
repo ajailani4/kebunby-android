@@ -36,7 +36,7 @@ class SplashViewModelTest {
     }
 
     @Test
-    fun getUserCredential_ShouldReturnUserCredentialIsNotEmpty() {
+    fun `Get user credential should return user credential is not empty`() {
         testCoroutineRule.runBlockingTest {
             val userCredential = flow {
                 emit(generateUserCredential())
@@ -54,7 +54,7 @@ class SplashViewModelTest {
     }
 
     @Test
-    fun getUserCredential_ShouldReturnUserCredentialIsEmpty() {
+    fun `Get user credential should return user credential is empty`() {
         testCoroutineRule.runBlockingTest {
             val userCredential = flow {
                 emit(

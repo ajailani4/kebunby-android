@@ -55,7 +55,7 @@ class PlantListViewModelTest {
     }
 
     @Test
-    fun getPagingPlants_ShouldReturnSuccess() {
+    fun `Get plants should return success`() {
         testCoroutineRule.runBlockingTest {
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }

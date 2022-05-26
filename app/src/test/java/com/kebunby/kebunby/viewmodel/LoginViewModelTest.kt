@@ -43,7 +43,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun login_ShouldReturnSuccess() {
+    fun `Login should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Success(generateUserCredential()))
@@ -70,7 +70,7 @@ class LoginViewModelTest {
     }
 
     @Test
-    fun login_ShouldReturnFail() {
+    fun `Login should return fail`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Error<UserCredential>())

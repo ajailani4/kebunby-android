@@ -39,7 +39,7 @@ class PlantedViewModelTest {
     private lateinit var plantedViewModel: PlantedViewModel
 
     @Test
-    fun getPlants_ShouldReturnSuccess() {
+    fun `Get plants should return success`() {
         testCoroutineRule.runBlockingTest {
             doReturn(
                 flow {

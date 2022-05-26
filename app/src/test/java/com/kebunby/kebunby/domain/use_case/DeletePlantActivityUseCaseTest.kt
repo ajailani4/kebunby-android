@@ -36,7 +36,7 @@ class DeletePlantActivityUseCaseTest {
     }
 
     @Test
-    fun deletePlantActivity_ShouldReturnSuccess() {
+    fun `Delete plant activity should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Success<Any>())
@@ -75,7 +75,7 @@ class DeletePlantActivityUseCaseTest {
     }
 
     @Test
-    fun deletePlantActivity_ShouldReturnError() {
+    fun `Delete plant activity should return error`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Error<Any>())

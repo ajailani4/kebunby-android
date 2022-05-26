@@ -40,7 +40,7 @@ class PlantingViewModelTest {
     private lateinit var plantingViewModel: PlantingViewModel
 
     @Test
-    fun getPlants_ShouldReturnSuccess() {
+    fun `Get plants should return success`() {
         testCoroutineRule.runBlockingTest {
             doReturn(
                 flow {

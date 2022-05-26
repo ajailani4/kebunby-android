@@ -43,7 +43,7 @@ class RegisterViewModelTest {
     }
 
     @Test
-    fun register_ShouldReturnSuccess() {
+    fun `Register should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Success(generateUserCredential()))
@@ -70,7 +70,7 @@ class RegisterViewModelTest {
     }
 
     @Test
-    fun register_ShouldReturnFail() {
+    fun `Register should return fail`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Error<UserCredential>())

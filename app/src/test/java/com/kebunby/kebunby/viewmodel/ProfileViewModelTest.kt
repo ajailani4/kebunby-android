@@ -42,7 +42,7 @@ class ProfileViewModelTest {
     private lateinit var profileViewModel: ProfileViewModel
 
     @Test
-    fun getProfile_ShouldReturnSuccess() {
+    fun `Get profile should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Success(generateUser()))
@@ -80,7 +80,7 @@ class ProfileViewModelTest {
     }
 
     @Test
-    fun getProfile_ShouldReturnFail() {
+    fun `Get profile should return fail`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
                 emit(Resource.Error<User>())

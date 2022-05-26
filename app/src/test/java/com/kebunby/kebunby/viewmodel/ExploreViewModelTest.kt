@@ -42,7 +42,7 @@ class ExploreViewModelTest {
     }
 
     @Test
-    fun getPagingPlantsBySearchQuery_ShouldReturnSuccess() {
+    fun `Get paging plants by search query should return success`() {
         testCoroutineRule.runBlockingTest {
             exploreViewModel.onSearchQueryChanged("plant")
             doReturn(

@@ -39,7 +39,7 @@ class UploadedViewModelTest {
     private lateinit var uploadedViewModel: UploadedViewModel
 
     @Test
-    fun getPlants_ShouldReturnSuccess() {
+    fun `Get plants should return success`() {
         testCoroutineRule.runBlockingTest {
             doReturn(
                 flow {
