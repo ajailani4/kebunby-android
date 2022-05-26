@@ -16,14 +16,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlantListViewModel @Inject constructor(
-
     savedStateHandle: SavedStateHandle,
     private val getPagingPlantsUseCase: GetPagingPlantsUseCase,
     private val getPagingPlantsByCategoryUseCase: GetPagingPlantsByCategoryUseCase
 ) : ViewModel() {
     val isTrending = savedStateHandle.get<Boolean>("isTrending")
     val forBeginner = savedStateHandle.get<Boolean>("forBeginner")
-    val searchQuery = savedStateHandle.get<String>("searchQuery")
     val categoryId = savedStateHandle.get<Int>("categoryId")
     val category = savedStateHandle.get<String>("category")
 
@@ -39,13 +37,9 @@ class PlantListViewModel @Inject constructor(
 
     fun onEvent(event: PlantListEvent) {
         when (event) {
-            PlantListEvent.LoadPlants -> {
-                getPlants()
-            }
+            PlantListEvent.LoadPlants -> getPlants()
 
-            PlantListEvent.LoadPlantsByCategory -> {
-                getPlantsByCategory()
-            }
+            PlantListEvent.LoadPlantsByCategory -> getPlantsByCategory()
         }
     }
 
@@ -54,7 +48,7 @@ class PlantListViewModel @Inject constructor(
             getPagingPlantsUseCase.invoke(
                 isTrending = isTrending,
                 forBeginner = forBeginner,
-                searchQuery = searchQuery
+                searchQuery = null
             ).cachedIn(viewModelScope).collect {
                 pagingPlants.value = it
             }

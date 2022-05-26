@@ -33,7 +33,6 @@ class PlantListViewModelTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var getPagingPlantsUseCase: GetPagingPlantsUseCase
 
@@ -42,7 +41,6 @@ class PlantListViewModelTest {
 
     private lateinit var savedStateHandle: SavedStateHandle
 
-    // SUT
     private lateinit var plantListViewModel: PlantListViewModel
 
     @Before
@@ -57,9 +55,8 @@ class PlantListViewModelTest {
     }
 
     @Test
-    fun getPagingPlants_ShouldReturnSuccess() {
+    fun `Get plants should return success`() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
             ).`when`(getPagingPlantsUseCase).invoke(
@@ -68,7 +65,6 @@ class PlantListViewModelTest {
                 searchQuery = isNull()
             )
 
-            // Act
             plantListViewModel = PlantListViewModel(
                 savedStateHandle,
                 getPagingPlantsUseCase,
@@ -84,10 +80,8 @@ class PlantListViewModelTest {
 
             differ.submitData(pagingPlants)
 
-            // Assert
             assertEquals(generatePlants(), differ.snapshot().items)
 
-            // Verify
             verify(getPagingPlantsUseCase).invoke(
                 isTrending = anyBoolean(),
                 forBeginner = anyBoolean(),
@@ -99,12 +93,10 @@ class PlantListViewModelTest {
     @Test
     fun getPagingPlantsByCategory_ShouldReturnSuccess() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
             ).`when`(getPagingPlantsByCategoryUseCase).invoke(anyInt())
 
-            // Act
             plantListViewModel = PlantListViewModel(
                 savedStateHandle,
                 getPagingPlantsUseCase,
@@ -121,10 +113,8 @@ class PlantListViewModelTest {
 
             differ.submitData(pagingPlants)
 
-            // Assert
             assertEquals(generatePlants(), differ.snapshot().items)
 
-            // Verify
             verify(getPagingPlantsByCategoryUseCase).invoke(anyInt())
         }
     }

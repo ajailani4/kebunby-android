@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.kebunby.kebunby.ui.feature.explore.ExploreScreen
 import com.kebunby.kebunby.ui.feature.home.HomeScreen
 import com.kebunby.kebunby.ui.feature.login.LoginScreen
 import com.kebunby.kebunby.ui.feature.onboarding.OnboardingScreen
@@ -31,7 +32,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
 
         composable(
             route = Screen.PlantListScreen.route +
-                "?isTrending={isTrending}&forBeginner={forBeginner}&searchQuery={searchQuery}&categoryId={categoryId}&category={category}",
+                "?isTrending={isTrending}&forBeginner={forBeginner}&categoryId={categoryId}&category={category}",
             arguments = listOf(
                 navArgument("isTrending") {
                     type = NavType.BoolType
@@ -40,11 +41,6 @@ fun Navigation(navController: NavHostController, startDestination: String) {
                 navArgument("forBeginner") {
                     type = NavType.BoolType
                     defaultValue = false
-                },
-                navArgument("searchQuery") {
-                    type = NavType.StringType
-                    nullable = true
-                    defaultValue = null
                 },
                 navArgument("categoryId") {
                     type = NavType.IntType
@@ -77,7 +73,7 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         }
 
         composable(route = Screen.ExploreScreen.route) {
-            // ExploreScreen()
+            ExploreScreen(navController)
         }
 
         composable(route = Screen.ShopScreen.route) {

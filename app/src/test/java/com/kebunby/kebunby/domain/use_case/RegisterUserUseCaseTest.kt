@@ -28,11 +28,9 @@ class RegisterUserUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var userRepository: UserRepository
 
-    // SUT
     private lateinit var registerUserUseCase: RegisterUserUseCase
 
     @Before
@@ -41,9 +39,8 @@ class RegisterUserUseCaseTest {
     }
 
     @Test
-    fun login_ShouldReturnSuccess() {
+    fun `Register should return success`() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(
                     Resource.Success<UserCredential>(
@@ -54,7 +51,6 @@ class RegisterUserUseCaseTest {
 
             doReturn(resource).`when`(userRepository).register(any())
 
-            // Act
             val actResource = registerUserUseCase.invoke(generateRegisterRequest()).first()
             var userCredential = UserCredential()
 
@@ -66,36 +62,30 @@ class RegisterUserUseCaseTest {
                 is Resource.Error -> {}
             }
 
-            // Assert
             Assert.assertEquals("Username should be 'george'", "george", userCredential.username)
             Assert.assertEquals("Access token should be 'abc'", "abc", userCredential.accessToken)
 
-            // Verify
             verify(userRepository).register(any())
         }
     }
 
     @Test
-    fun login_ShouldReturnError() {
+    fun `Register should return error`() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<UserCredential>())
             }
 
             doReturn(resource).`when`(userRepository).register(any())
 
-            // Act
             val actResource = registerUserUseCase.invoke(generateRegisterRequest()).first()
 
-            // Assert
             Assert.assertEquals(
                 "Resource should be error",
                 Resource.Error<UserCredential>(),
                 actResource
             )
 
-            // Verify
             verify(userRepository).register(any())
         }
     }

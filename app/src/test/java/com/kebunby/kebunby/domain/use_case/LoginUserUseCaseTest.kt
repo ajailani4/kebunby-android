@@ -28,11 +28,9 @@ class LoginUserUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var userRepository: UserRepository
 
-    // SUT
     private lateinit var loginUserUseCase: LoginUserUseCase
 
     @Before
@@ -41,9 +39,8 @@ class LoginUserUseCaseTest {
     }
 
     @Test
-    fun login_ShouldReturnSuccess() {
+    fun `Login should return success`() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(
                     Resource.Success<UserCredential>(
@@ -54,7 +51,6 @@ class LoginUserUseCaseTest {
 
             doReturn(resource).`when`(userRepository).login(any())
 
-            // Act
             val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
             var userCredential = UserCredential()
 
@@ -66,7 +62,6 @@ class LoginUserUseCaseTest {
                 is Resource.Error -> {}
             }
 
-            // Assert
             assertEquals("Username should be 'george'", "george", userCredential.username)
             assertEquals("Access token should be 'abc'", "abc", userCredential.accessToken)
 
@@ -76,22 +71,18 @@ class LoginUserUseCaseTest {
     }
 
     @Test
-    fun login_ShouldReturnError() {
+    fun `Login should return error`() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val resource = flow {
                 emit(Resource.Error<UserCredential>())
             }
 
             doReturn(resource).`when`(userRepository).login(any())
 
-            // Act
             val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
 
-            // Assert
             assertEquals("Resource should be error", Resource.Error<UserCredential>(), actResource)
 
-            // Verify
             verify(userRepository).login(any())
         }
     }

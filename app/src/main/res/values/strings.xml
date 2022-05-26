@@ -53,6 +53,8 @@
     <string name="plant_now_confirm_msg">Are you sure to plant this?</string>
     <string name="finish_planting_confirm_msg">Are you sure to finish the planting?</string>
 
+    <string name="search_plant">Search plant</string>
+
     <!-- Profile Tab Menu -->
     <string name="planting">Planting</string>
     <string name="planted">Planted</string>

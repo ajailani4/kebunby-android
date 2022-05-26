@@ -33,7 +33,6 @@ fun PlantListScreen(
 ) {
     val isTrending = plantListViewModel.isTrending
     val forBeginner = plantListViewModel.forBeginner
-    val searchQuery = plantListViewModel.searchQuery
     val category = plantListViewModel.category
 
     val pagingPlants = plantListViewModel.pagingPlants.collectAsLazyPagingItems()
@@ -57,10 +56,6 @@ fun PlantListScreen(
 
                     category != null -> {
                         category
-                    }
-
-                    searchQuery != null -> {
-                        searchQuery
                     }
 
                     else -> "Plants"

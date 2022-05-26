@@ -25,11 +25,9 @@ class GetUserCredentialUseCaseTest {
     @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
-    // Dependency
     @Mock
     private lateinit var userCredentialRepository: UserCredentialRepository
 
-    // SUT
     private lateinit var getUserCredentialUseCase: GetUserCredentialUseCase
 
     @Before
@@ -38,29 +36,25 @@ class GetUserCredentialUseCaseTest {
     }
 
     @Test
-    fun getUserCredential_ShouldReturnUserCredentialIsNotEmpty() {
+    fun `Get user credential should return user credential is not empty`() {
         testCoroutineRule.runBlockingTest {
-            // Arrange
             val userCredential = flow {
                 emit(generateUserCredential())
             }
 
             doReturn(userCredential).`when`(userCredentialRepository).getUserCredential()
 
-            // Act
             val actUserCredential = getUserCredentialUseCase.invoke().first()
 
-            // Assert
             assertEquals("Username should be 'george'", "george", actUserCredential.username)
             assertEquals("Access token should be 'abc'", "abc", actUserCredential.accessToken)
 
-            // Verify
             verify(userCredentialRepository).getUserCredential()
         }
     }
 
     @Test
-    fun getUserCredential_ShouldReturnUserCredentialIsEmpty() {
+    fun `Get user credential should return user credential is empty`() {
         testCoroutineRule.runBlockingTest {
             // Arrange
             val userCredential = flow {
