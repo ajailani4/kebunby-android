@@ -1,5 +1,7 @@
 package com.kebunby.kebunby.ui.feature.explore
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,6 +39,7 @@ import com.kebunby.kebunby.ui.theme.SearchTextFieldGrey
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
+import compose.icons.evaicons.fill.ArrowBack
 import compose.icons.evaicons.fill.Search
 import kotlinx.coroutines.launch
 
@@ -50,6 +53,8 @@ fun ExploreScreen(
     val pagingPlants = exploreViewModel.pagingPlants.collectAsLazyPagingItems()
     val searchQuery = exploreViewModel.searchQuery
     val onSearchQueryChanged = exploreViewModel::onSearchQueryChanged
+    val isSearched = exploreViewModel.isSearched
+    val onSearchPlant = exploreViewModel::onSearchPlant
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -60,10 +65,14 @@ fun ExploreScreen(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomToolbar(
-                navController = navController,
-                title = stringResource(id = R.string.explore),
-                hasBackButton = true
+            SearchTextField(
+                onEvent = onEvent,
+                searchQuery = searchQuery,
+                onSearchQueryChanged = onSearchQueryChanged,
+                isSearched = isSearched,
+                onSearchPlant = onSearchPlant,
+                localFocusManager = localFocusManager,
+                keyboardController = keyboardController
             )
         }
     ) {
@@ -73,17 +82,6 @@ fun ExploreScreen(
                 .fillMaxSize(),
             contentPadding = PaddingValues(20.dp)
         ) {
-            item {
-                SearchTextField(
-                    onEvent = onEvent,
-                    searchQuery = searchQuery,
-                    onSearchQueryChanged = onSearchQueryChanged,
-                    localFocusManager = localFocusManager,
-                    keyboardController = keyboardController
-                )
-                Spacer(modifier = Modifier.height(30.dp))
-            }
-
             items(pagingPlants) { plant ->
                 PlantCard(
                     plantItem = plant,
@@ -135,6 +133,14 @@ fun ExploreScreen(
             }
         }
     }
+
+    if (isSearched) {
+        BackHandler {
+            onSearchPlant(false)
+            onSearchQueryChanged("")
+            onEvent(ExploreEvent.LoadPlants)
+        }
+    }
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -143,44 +149,71 @@ fun SearchTextField(
     onEvent: (ExploreEvent) -> Unit,
     searchQuery: String,
     onSearchQueryChanged: (String) -> Unit,
+    isSearched: Boolean,
+    onSearchPlant: (Boolean) -> Unit,
     localFocusManager: FocusManager,
     keyboardController: SoftwareKeyboardController?
 ) {
-    TextField(
-        modifier = Modifier.fillMaxWidth(),
-        value = searchQuery,
-        onValueChange = onSearchQueryChanged,
-        shape = RoundedCornerShape(8.dp),
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = SearchTextFieldGrey,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent
-        ),
-        trailingIcon = {
-            Icon(
-                imageVector = EvaIcons.Fill.Search,
-                tint = Grey,
-                contentDescription = "Search icon"
-            )
-        },
-        placeholder = {
-            Text(
-                text = stringResource(id = R.string.search_plant),
-                color = Grey,
-                style = MaterialTheme.typography.body1
-            )
-        },
-        singleLine = true,
-        textStyle = TextStyle(
-            color = MaterialTheme.colors.onBackground,
-            fontFamily = poppinsFamily,
-            fontSize = 14.sp
-        ),
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = {
-            localFocusManager.clearFocus()
-            keyboardController?.hide()
-            onEvent(ExploreEvent.LoadPlants)
-        })
-    )
+    Row(
+        modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        AnimatedVisibility(visible = isSearched) {
+            IconButton(
+                modifier = Modifier.size(24.dp),
+                onClick = {
+                    onSearchPlant(false)
+                    onSearchQueryChanged("")
+                    onEvent(ExploreEvent.LoadPlants)
+                }
+            ) {
+                Icon(
+                    imageVector = EvaIcons.Fill.ArrowBack,
+                    tint = Grey,
+                    contentDescription = "Back button"
+                )
+            }
+        }
+
+        if (isSearched) Spacer(modifier = Modifier.width(10.dp))
+
+        TextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = searchQuery,
+            onValueChange = onSearchQueryChanged,
+            shape = RoundedCornerShape(8.dp),
+            colors = TextFieldDefaults.textFieldColors(
+                backgroundColor = SearchTextFieldGrey,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            ),
+            trailingIcon = {
+                Icon(
+                    imageVector = EvaIcons.Fill.Search,
+                    tint = Grey,
+                    contentDescription = "Search icon"
+                )
+            },
+            placeholder = {
+                Text(
+                    text = stringResource(id = R.string.search_plant),
+                    color = Grey,
+                    style = MaterialTheme.typography.body1
+                )
+            },
+            singleLine = true,
+            textStyle = TextStyle(
+                color = MaterialTheme.colors.onBackground,
+                fontFamily = poppinsFamily,
+                fontSize = 14.sp
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = {
+                localFocusManager.clearFocus()
+                keyboardController?.hide()
+                onSearchPlant(true)
+                onEvent(ExploreEvent.LoadPlants)
+            })
+        )
+    }
 }

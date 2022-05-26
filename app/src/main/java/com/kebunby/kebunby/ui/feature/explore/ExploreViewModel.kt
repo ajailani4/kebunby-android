@@ -21,6 +21,7 @@ class ExploreViewModel @Inject constructor(
 ) : ViewModel() {
     var pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
     var searchQuery by mutableStateOf("")
+    var isSearched by mutableStateOf(false)
 
     init {
         onEvent(ExploreEvent.LoadPlants)
@@ -34,6 +35,10 @@ class ExploreViewModel @Inject constructor(
 
     fun onSearchQueryChanged(query: String) {
         searchQuery = query
+    }
+
+    fun onSearchPlant(_isSearched: Boolean) {
+        isSearched = _isSearched
     }
 
     private fun getPlants() {
