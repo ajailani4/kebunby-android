@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -16,8 +17,10 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
+import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.PlantCard
+import com.kebunby.kebunby.ui.feature.profile.component.EmptyPlantActivityImage
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
@@ -58,6 +61,18 @@ fun UploadedScreen(
                         ) {
                             CircularProgressIndicator()
                         }
+                    }
+                }
+
+                loadState.source.refresh is LoadState.NotLoading &&
+                    loadState.append.endOfPaginationReached && itemCount < 1 -> {
+                    item {
+                        EmptyPlantActivityImage(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 80.dp),
+                            message = stringResource(id = R.string.no_uploaded_plants_yet)
+                        )
                     }
                 }
 

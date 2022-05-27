@@ -54,11 +54,17 @@
     <string name="finish_planting_confirm_msg">Apakah kamu yakin ingin menyelesaikan penanaman?</string>
 
     <string name="search_plant">Cari tanaman</string>
+    <string name="no_plants_yet">Belum ada tanaman</string>
+    <string name="searched_plant_is_empty">Tanaman yang kamu cari tidak ditemukan</string>
 
     <!-- Profile Tab Menu -->
     <string name="planting">Menanam</string>
     <string name="planted">Ditanam</string>
-    <string name="uploaded">Diupload</string>
+    <string name="uploaded">Upload</string>
+
+    <string name="no_planting_plants_yet">Belum ada tanaman yang sedang ditanam</string>
+    <string name="no_planted_plants_yet">Belum ada tanaman yang sudah ditanam</string>
+    <string name="no_uploaded_plants_yet">Belum ada tanaman yang diupload</string>
 
     <string name="yes">Iya</string>
     <string name="no">Tidak</string>
