@@ -117,7 +117,7 @@ fun PlantListScreen(
                                     text = stringResource(id = R.string.no_plants_yet),
                                     color = Grey,
                                     fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.h2
+                                    style = MaterialTheme.typography.h3
                                 )
                             }
                         }
