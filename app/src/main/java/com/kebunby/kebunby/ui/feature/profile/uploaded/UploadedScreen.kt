@@ -71,7 +71,7 @@ fun UploadedScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 80.dp),
-                            message = stringResource(id = R.string.no_planted_plants_yet)
+                            message = stringResource(id = R.string.no_uploaded_plants_yet)
                         )
                     }
                 }
