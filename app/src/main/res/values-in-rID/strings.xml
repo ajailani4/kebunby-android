@@ -54,6 +54,8 @@
     <string name="finish_planting_confirm_msg">Apakah kamu yakin ingin menyelesaikan penanaman?</string>
 
     <string name="search_plant">Cari tanaman</string>
+    <string name="no_plants_yet">Belum ada tanaman</string>
+    <string name="searched_plant_is_empty">Tanaman yang dicari tidak ditemukan</string>
 
     <!-- Profile Tab Menu -->
     <string name="planting">Menanam</string>

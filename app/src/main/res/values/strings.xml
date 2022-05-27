@@ -54,6 +54,8 @@
     <string name="finish_planting_confirm_msg">Are you sure to finish the planting?</string>
 
     <string name="search_plant">Search plant</string>
+    <string name="no_plants_yet">No plants yet</string>
+    <string name="searched_plant_is_empty">The plant you are looking for is not found</string>
 
     <!-- Profile Tab Menu -->
     <string name="planting">Planting</string>
