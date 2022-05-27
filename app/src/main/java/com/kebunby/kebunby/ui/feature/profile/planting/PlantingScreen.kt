@@ -4,12 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -75,11 +77,11 @@ fun PlantingScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(top = 30.dp),
+                                .padding(top = 50.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
                             Image(
-                                modifier = Modifier.size(200.dp),
+                                modifier = Modifier.size(190.dp),
                                 painter = painterResource(id = R.drawable.img_empty_plant_profile),
                                 contentDescription = "Empty plant illustration"
                             )
@@ -91,6 +93,24 @@ fun PlantingScreen(
                                 textAlign = TextAlign.Center,
                                 style = MaterialTheme.typography.h3
                             )
+                            Spacer(modifier = Modifier.height(25.dp))
+                            Button(
+                                shape = MaterialTheme.shapes.small,
+                                onClick = {
+                                    navController.navigate(Screen.ExploreScreen.route) {
+                                        popUpTo(Screen.ProfileScreen.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.search_plant),
+                                    color = MaterialTheme.colors.onPrimary,
+                                    fontWeight = FontWeight.SemiBold,
+                                    style = MaterialTheme.typography.subtitle1
+                                )
+                            }
                         }
                     }
                 }
