@@ -133,7 +133,7 @@ fun ExploreScreen(
                                     color = Grey,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center,
-                                    style = MaterialTheme.typography.h3
+                                    style = MaterialTheme.typography.h4
                                 )
                             }
                         }

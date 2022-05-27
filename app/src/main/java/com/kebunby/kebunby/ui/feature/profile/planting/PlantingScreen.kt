@@ -27,6 +27,7 @@ import coil.annotation.ExperimentalCoilApi
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.PlantCard
+import com.kebunby.kebunby.ui.feature.profile.component.EmptyPlantActivityImage
 import com.kebunby.kebunby.ui.theme.Grey
 
 @OptIn(ExperimentalCoilApi::class)
@@ -75,23 +76,12 @@ fun PlantingScreen(
                     loadState.append.endOfPaginationReached && itemCount < 1 -> {
                     item {
                         Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(top = 50.dp),
+                            modifier = Modifier.fillMaxWidth(),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Image(
-                                modifier = Modifier.size(190.dp),
-                                painter = painterResource(id = R.drawable.img_empty_plant_profile),
-                                contentDescription = "Empty plant illustration"
-                            )
-                            Spacer(modifier = Modifier.height(20.dp))
-                            Text(
-                                text = stringResource(id = R.string.no_planting_plants_yet),
-                                color = Grey,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
-                                style = MaterialTheme.typography.h3
+                            EmptyPlantActivityImage(
+                                modifier = Modifier.padding(top = 50.dp),
+                                message = stringResource(id = R.string.no_planting_plants_yet)
                             )
                             Spacer(modifier = Modifier.height(25.dp))
                             Button(
