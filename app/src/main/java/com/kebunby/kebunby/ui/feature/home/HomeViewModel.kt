@@ -41,6 +41,7 @@ class HomeViewModel @Inject constructor(
     var addFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
     var deleteFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
 
+    var swipeRefreshing by mutableStateOf(false)
     private var selectedPlant by mutableStateOf(0)
     var trendingPlants = mutableStateListOf<PlantItem>()
     var forBeginnerPlants = mutableStateListOf<PlantItem>()
@@ -68,6 +69,10 @@ class HomeViewModel @Inject constructor(
 
             HomeEvent.DeleteFavoritePlant -> deleteFavPlant()
         }
+    }
+
+    fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
+        swipeRefreshing = isRefreshing
     }
 
     fun onSelectedPlantChanged(plantId: Int) {
