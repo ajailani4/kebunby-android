@@ -1,9 +1,7 @@
 package com.kebunby.kebunby.ui.feature.plant_list
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import com.kebunby.kebunby.R
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -24,10 +22,10 @@ import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.PlantCard
-import com.kebunby.kebunby.ui.feature.home.HomeEvent
 import com.kebunby.kebunby.ui.theme.Grey
 import kotlinx.coroutines.launch
 

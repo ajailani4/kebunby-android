@@ -31,7 +31,6 @@ import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
 import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
-import com.kebunby.kebunby.ui.feature.plant_list.PlantListEvent
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -397,7 +396,7 @@ fun PlantDetailScreen(
                 onDismissed = { onFinishPlantingDlgVisChanged(false) }
             )
         }
-        
+
         // Observe add favorite plant state
         when (addFavPlantState) {
             is UIState.Error -> {

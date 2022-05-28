@@ -8,7 +8,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,7 +20,6 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.PlantCard
 import com.kebunby.kebunby.ui.feature.profile.component.EmptyPlantActivityImage
-import com.kebunby.kebunby.ui.feature.profile.planted.PlantedEvent
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable

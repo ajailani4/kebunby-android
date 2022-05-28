@@ -39,9 +39,7 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
-import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.PlantCard
-import com.kebunby.kebunby.ui.feature.plant_list.PlantListEvent
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.SearchTextFieldGrey
 import com.kebunby.kebunby.ui.theme.poppinsFamily

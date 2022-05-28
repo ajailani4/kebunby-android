@@ -89,7 +89,7 @@ class PlantDetailViewModel @Inject constructor(
                     }
 
                     is Resource.Error -> {
-                       UIState.Fail(it.message)
+                        UIState.Fail(it.message)
                     }
                 }
             }

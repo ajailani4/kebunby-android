@@ -20,7 +20,6 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.PlantCard
 import com.kebunby.kebunby.ui.feature.profile.component.EmptyPlantActivityImage
-import com.kebunby.kebunby.ui.feature.profile.planting.PlantingEvent
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable

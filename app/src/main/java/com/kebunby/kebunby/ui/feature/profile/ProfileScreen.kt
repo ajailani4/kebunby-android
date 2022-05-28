@@ -1,8 +1,11 @@
 package com.kebunby.kebunby.ui.feature.profile
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
@@ -38,7 +41,6 @@ import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
-import com.kebunby.kebunby.ui.feature.explore.ExploreEvent
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
 import com.kebunby.kebunby.ui.feature.profile.component.ProfileHeaderShimmer
 import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen
@@ -212,7 +214,7 @@ fun ProfileScreen(
             is UIState.Success -> {
                 navController.navigate(Screen.OnboardingScreen.route) {
                     launchSingleTop = true
-                    
+
                     popUpTo(Screen.HomeScreen.route) {
                         inclusive = true
                     }
@@ -282,11 +284,20 @@ fun ProfileHeader(
                             )
                         }
                         Row {
-                            CountingText(count = user.planting, text = stringResource(R.string.planting))
+                            CountingText(
+                                count = user.planting,
+                                text = stringResource(R.string.planting)
+                            )
                             Spacer(modifier = Modifier.width(20.dp))
-                            CountingText(count = user.planted, text = stringResource(R.string.planted))
+                            CountingText(
+                                count = user.planted,
+                                text = stringResource(R.string.planted)
+                            )
                             Spacer(modifier = Modifier.width(20.dp))
-                            CountingText(count = user.uploaded, text = stringResource(R.string.uploaded))
+                            CountingText(
+                                count = user.uploaded,
+                                text = stringResource(R.string.uploaded)
+                            )
                         }
                     }
                 }
