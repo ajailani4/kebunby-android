@@ -20,14 +20,19 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.component.PlantCard
 import com.kebunby.kebunby.ui.feature.profile.component.EmptyPlantActivityImage
+import com.kebunby.kebunby.ui.feature.profile.planting.PlantingEvent
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PlantedScreen(
     navController: NavController,
+    isRefreshing: Boolean,
     plantedViewModel: PlantedViewModel = hiltViewModel()
 ) {
+    val onEvent = plantedViewModel::onEvent
     val pagingPlants = plantedViewModel.pagingPlants.collectAsLazyPagingItems()
+
+    if (isRefreshing) onEvent(PlantedEvent.LoadPlants)
 
     LazyColumn(
         modifier = Modifier
