@@ -25,6 +25,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
@@ -52,6 +55,8 @@ fun HomeScreen(
     val addFavPlantState = homeViewModel.addFavPlantState
     val deleteFavPlantState = homeViewModel.deleteFavPlantState
 
+    val swipeRefreshing = homeViewModel.swipeRefreshing
+    val onSwipeRefreshingChanged = homeViewModel::onSwipeRefreshingChanged
     val onSelectedPlantChanged = homeViewModel::onSelectedPlantChanged
     val trendingPlants = homeViewModel.trendingPlants
     val setTrendingPlants = homeViewModel::setTrendingPlants
@@ -64,68 +69,87 @@ fun HomeScreen(
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(scaffoldState = scaffoldState) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
+            onRefresh = {
+                onSwipeRefreshingChanged(true)
+                onEvent(HomeEvent.LoadUserProfile)
+                onEvent(HomeEvent.LoadTrendingPlants)
+                onEvent(HomeEvent.LoadForBeginnerPlants)
+                onEvent(HomeEvent.LoadPlantCategories)
+            },
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    contentColor = MaterialTheme.colors.primary
+                )
+            }
         ) {
-            Column(modifier = Modifier.background(color = MaterialTheme.colors.primary)) {
-                HomeHeader(
-                    onEvent = onEvent,
-                    userProfileState = userProfileState,
-                    coroutineScope = coroutineScope,
-                    scaffoldState = scaffoldState
-                )
-                HomeContent(
-                    navController = navController,
-                    onEvent = onEvent,
-                    trendingPlantsState = trendingPlantsState,
-                    forBeginnerPlantsState = forBeginnerPlantsState,
-                    plantCategoriesState = plantCategoriesState,
-                    onSelectedPlantChanged = onSelectedPlantChanged,
-                    trendingPlants = trendingPlants,
-                    setTrendingPlants = setTrendingPlants,
-                    updateTrendingPlants = updateTrendingPlants,
-                    forBeginnerPlants = forBeginnerPlants,
-                    setForBeginnerPlants = setForBeginnerPlants,
-                    updateForBeginnerPlants = updateForBeginnerPlants,
-                    coroutineScope = coroutineScope,
-                    scaffoldState = scaffoldState
-                )
-            }
-
-            // Observe add favorite plant state
-            when (addFavPlantState) {
-                is UIState.Error -> {
-                    LaunchedEffect(Unit) {
-                        coroutineScope.launch {
-                            addFavPlantState.message?.let { message ->
-                                scaffoldState.snackbarHostState.showSnackbar(message)
-                            }
-                        }
-                    }
-
-                    onEvent(HomeEvent.Idle)
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Column(modifier = Modifier.background(color = MaterialTheme.colors.primary)) {
+                    HomeHeader(
+                        onEvent = onEvent,
+                        userProfileState = userProfileState,
+                        onSwipeRefreshingChanged = onSwipeRefreshingChanged,
+                        coroutineScope = coroutineScope,
+                        scaffoldState = scaffoldState
+                    )
+                    HomeContent(
+                        navController = navController,
+                        onEvent = onEvent,
+                        trendingPlantsState = trendingPlantsState,
+                        forBeginnerPlantsState = forBeginnerPlantsState,
+                        plantCategoriesState = plantCategoriesState,
+                        onSelectedPlantChanged = onSelectedPlantChanged,
+                        trendingPlants = trendingPlants,
+                        setTrendingPlants = setTrendingPlants,
+                        updateTrendingPlants = updateTrendingPlants,
+                        forBeginnerPlants = forBeginnerPlants,
+                        setForBeginnerPlants = setForBeginnerPlants,
+                        updateForBeginnerPlants = updateForBeginnerPlants,
+                        coroutineScope = coroutineScope,
+                        scaffoldState = scaffoldState
+                    )
                 }
 
-                else -> {}
-            }
-
-            // Observe delete favorite plant state
-            when (deleteFavPlantState) {
-                is UIState.Error -> {
-                    LaunchedEffect(Unit) {
-                        coroutineScope.launch {
-                            deleteFavPlantState.message?.let { message ->
-                                scaffoldState.snackbarHostState.showSnackbar(message)
+                // Observe add favorite plant state
+                when (addFavPlantState) {
+                    is UIState.Error -> {
+                        LaunchedEffect(Unit) {
+                            coroutineScope.launch {
+                                addFavPlantState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
                             }
                         }
+
+                        onEvent(HomeEvent.Idle)
                     }
 
-                    onEvent(HomeEvent.Idle)
+                    else -> {}
                 }
 
-                else -> {}
+                // Observe delete favorite plant state
+                when (deleteFavPlantState) {
+                    is UIState.Error -> {
+                        LaunchedEffect(Unit) {
+                            coroutineScope.launch {
+                                deleteFavPlantState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+
+                        onEvent(HomeEvent.Idle)
+                    }
+
+                    else -> {}
+                }
             }
         }
     }
@@ -136,6 +160,7 @@ fun HomeScreen(
 fun HomeHeader(
     onEvent: (HomeEvent) -> Unit,
     userProfileState: UIState<User>,
+    onSwipeRefreshingChanged: (Boolean) -> Unit,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -152,6 +177,8 @@ fun HomeHeader(
             }
 
             is UIState.Success -> {
+                onSwipeRefreshingChanged(false)
+
                 val user = userProfileState.data
 
                 Column {
@@ -185,6 +212,8 @@ fun HomeHeader(
             }
 
             is UIState.Fail -> {
+                onSwipeRefreshingChanged(false)
+
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         userProfileState.message?.let { message ->
@@ -197,6 +226,8 @@ fun HomeHeader(
             }
 
             is UIState.Error -> {
+                onSwipeRefreshingChanged(false)
+
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         userProfileState.message?.let { message ->

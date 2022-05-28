@@ -1,8 +1,11 @@
 package com.kebunby.kebunby.ui.feature.profile
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.Composable
@@ -28,6 +31,9 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.ui.Screen
@@ -56,6 +62,8 @@ fun ProfileScreen(
     val onEvent = profileViewModel::onEvent
     val userProfileState = profileViewModel.userProfileState
     val logoutState = profileViewModel.logoutState
+    val swipeRefreshing = profileViewModel.swipeRefreshing
+    val onSwipeRefreshingChanged = profileViewModel::onSwipeRefreshingChanged
     val logoutConfirmDlgVis = profileViewModel.logoutConfirmDlgVis
     val onLogoutConfirmDlgVisChanged = profileViewModel::onLogoutConfirmDlgVisChanged
 
@@ -109,41 +117,74 @@ fun ProfileScreen(
             )
         }
     ) {
-        BoxWithConstraints {
-            val screenHeight = maxHeight
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-            ) {
-                ProfileHeader(
-                    onEvent = onEvent,
-                    userProfileState = userProfileState,
-                    scaffoldState = scaffoldState,
-                    coroutineScope = coroutineScope
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
+            onRefresh = {
+                onSwipeRefreshingChanged(true)
+                onEvent(ProfileEvent.LoadUserProfile)
+            },
+            indicator = { state, trigger ->
+                SwipeRefreshIndicator(
+                    state = state,
+                    refreshTriggerDistance = trigger,
+                    contentColor = MaterialTheme.colors.primary
                 )
-                Column(modifier = Modifier.height(screenHeight)) {
-                    ProfileTab(
-                        menus = profileTabMenus,
-                        selectedTabIndex = pagerState.currentPage,
-                        onTabSelected = { index ->
-                            coroutineScope.launch {
-                                pagerState.scrollToPage(index)
-                            }
-                        }
+            }
+        ) {
+            BoxWithConstraints {
+                val screenHeight = maxHeight
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState)
+                ) {
+                    ProfileHeader(
+                        onEvent = onEvent,
+                        userProfileState = userProfileState,
+                        onSwipeRefreshingChanged = onSwipeRefreshingChanged,
+                        scaffoldState = scaffoldState,
+                        coroutineScope = coroutineScope
                     )
-                    HorizontalPager(
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .nestedScroll(nestedScrollConnection),
-                        count = profileTabMenus.size,
-                        state = pagerState
-                    ) { page ->
-                        when (page) {
-                            0 -> PlantingScreen(navController)
-                            1 -> PlantedScreen(navController)
-                            2 -> UploadedScreen(navController)
+                    Column(modifier = Modifier.height(screenHeight)) {
+                        ProfileTab(
+                            menus = profileTabMenus,
+                            selectedTabIndex = pagerState.currentPage,
+                            onTabSelected = { index ->
+                                coroutineScope.launch {
+                                    pagerState.scrollToPage(index)
+                                }
+                            }
+                        )
+                        HorizontalPager(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .nestedScroll(nestedScrollConnection),
+                            count = profileTabMenus.size,
+                            state = pagerState
+                        ) { page ->
+                            when (page) {
+                                0 -> {
+                                    PlantingScreen(
+                                        navController = navController,
+                                        isRefreshing = swipeRefreshing
+                                    )
+                                }
+
+                                1 -> {
+                                    PlantedScreen(
+                                        navController = navController,
+                                        isRefreshing = swipeRefreshing
+                                    )
+                                }
+
+                                2 -> {
+                                    UploadedScreen(
+                                        navController = navController,
+                                        isRefreshing = swipeRefreshing
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -173,7 +214,7 @@ fun ProfileScreen(
             is UIState.Success -> {
                 navController.navigate(Screen.OnboardingScreen.route) {
                     launchSingleTop = true
-                    
+
                     popUpTo(Screen.HomeScreen.route) {
                         inclusive = true
                     }
@@ -190,6 +231,7 @@ fun ProfileScreen(
 fun ProfileHeader(
     onEvent: (ProfileEvent) -> Unit,
     userProfileState: UIState<User>,
+    onSwipeRefreshingChanged: (Boolean) -> Unit,
     scaffoldState: ScaffoldState,
     coroutineScope: CoroutineScope
 ) {
@@ -206,6 +248,8 @@ fun ProfileHeader(
             }
 
             is UIState.Success -> {
+                onSwipeRefreshingChanged(false)
+
                 val user = userProfileState.data
 
                 Image(
@@ -240,17 +284,28 @@ fun ProfileHeader(
                             )
                         }
                         Row {
-                            CountingText(count = user.planting, text = stringResource(R.string.planting))
+                            CountingText(
+                                count = user.planting,
+                                text = stringResource(R.string.planting)
+                            )
                             Spacer(modifier = Modifier.width(20.dp))
-                            CountingText(count = user.planted, text = stringResource(R.string.planted))
+                            CountingText(
+                                count = user.planted,
+                                text = stringResource(R.string.planted)
+                            )
                             Spacer(modifier = Modifier.width(20.dp))
-                            CountingText(count = user.uploaded, text = stringResource(R.string.uploaded))
+                            CountingText(
+                                count = user.uploaded,
+                                text = stringResource(R.string.uploaded)
+                            )
                         }
                     }
                 }
             }
 
             is UIState.Fail -> {
+                onSwipeRefreshingChanged(false)
+
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         userProfileState.message?.let { message ->
@@ -263,6 +318,8 @@ fun ProfileHeader(
             }
 
             is UIState.Error -> {
+                onSwipeRefreshingChanged(false)
+
                 LaunchedEffect(Unit) {
                     coroutineScope.launch {
                         userProfileState.message?.let { message ->

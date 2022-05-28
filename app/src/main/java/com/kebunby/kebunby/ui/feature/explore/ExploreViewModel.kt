@@ -20,6 +20,7 @@ class ExploreViewModel @Inject constructor(
     private val getPagingPlantsUseCase: GetPagingPlantsUseCase
 ) : ViewModel() {
     var pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
+    var swipeRefreshing by mutableStateOf(false)
     var searchQuery by mutableStateOf("")
     var isSearched by mutableStateOf(false)
 
@@ -31,6 +32,10 @@ class ExploreViewModel @Inject constructor(
         when (event) {
             ExploreEvent.LoadPlants -> getPlants()
         }
+    }
+
+    fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
+        swipeRefreshing = isRefreshing
     }
 
     fun onSearchQueryChanged(query: String) {

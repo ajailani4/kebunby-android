@@ -8,14 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
-import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Red
@@ -108,7 +105,7 @@ fun PlantCard(
                     )
                     Spacer(modifier = Modifier.width(5.dp))
                     Text(
-                        text = "${plantItem?.popularity}" ?: "0",
+                        text = "${plantItem?.popularity}",
                         color = Grey,
                         style = MaterialTheme.typography.body2
                     )

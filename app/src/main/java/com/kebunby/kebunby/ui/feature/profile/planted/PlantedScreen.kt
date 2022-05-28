@@ -25,9 +25,13 @@ import com.kebunby.kebunby.ui.feature.profile.component.EmptyPlantActivityImage
 @Composable
 fun PlantedScreen(
     navController: NavController,
+    isRefreshing: Boolean,
     plantedViewModel: PlantedViewModel = hiltViewModel()
 ) {
+    val onEvent = plantedViewModel::onEvent
     val pagingPlants = plantedViewModel.pagingPlants.collectAsLazyPagingItems()
+
+    if (isRefreshing) onEvent(PlantedEvent.LoadPlants)
 
     LazyColumn(
         modifier = Modifier

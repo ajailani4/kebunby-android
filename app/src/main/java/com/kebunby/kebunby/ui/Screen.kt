@@ -5,7 +5,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.kebunby.kebunby.R
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.outline.*
+import compose.icons.evaicons.outline.Compass
+import compose.icons.evaicons.outline.Home
+import compose.icons.evaicons.outline.Person
+import compose.icons.evaicons.outline.ShoppingCart
 
 sealed class Screen(
     val route: String,

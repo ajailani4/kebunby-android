@@ -26,7 +26,7 @@ class ProfileViewModel @Inject constructor(
 ) : ViewModel() {
     var userProfileState by mutableStateOf<UIState<User>>(UIState.Idle)
     var logoutState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-
+    var swipeRefreshing by mutableStateOf(false)
     var logoutConfirmDlgVis by mutableStateOf(false)
 
     init {
@@ -41,6 +41,10 @@ class ProfileViewModel @Inject constructor(
 
             ProfileEvent.Logout -> logout()
         }
+    }
+
+    fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
+        swipeRefreshing = isRefreshing
     }
 
     fun onLogoutConfirmDlgVisChanged(visibility: Boolean) {

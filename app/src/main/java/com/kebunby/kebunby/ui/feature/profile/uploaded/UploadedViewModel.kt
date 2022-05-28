@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.kebunby.kebunby.data.model.PlantItem
-import com.kebunby.kebunby.domain.use_case.plant.GetPagingPlantsUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantActivitiesUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

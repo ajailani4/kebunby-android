@@ -2,14 +2,14 @@ package com.kebunby.kebunby.ui.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -79,14 +79,14 @@ fun CustomToolbar(
                 contentAlignment = Alignment.CenterEnd
             ) {
                 Row {
-                   menuIcons?.forEach { icon ->
-                       IconButton(
-                           modifier = Modifier.size(24.dp),
-                           onClick = icon.second
-                       ) {
-                           icon.first()
-                       }
-                   }
+                    menuIcons?.forEach { icon ->
+                        IconButton(
+                            modifier = Modifier.size(24.dp),
+                            onClick = icon.second
+                        ) {
+                            icon.first()
+                        }
+                    }
                 }
             }
         }

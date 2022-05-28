@@ -1,5 +1,8 @@
 package com.kebunby.kebunby.ui.feature.plant_list
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,6 +29,7 @@ class PlantListViewModel @Inject constructor(
     val category = savedStateHandle.get<String>("category")
 
     val pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
+    var swipeRefreshing by mutableStateOf(false)
 
     init {
         if (categoryId!! > 0) {
@@ -41,6 +45,10 @@ class PlantListViewModel @Inject constructor(
 
             PlantListEvent.LoadPlantsByCategory -> getPlantsByCategory()
         }
+    }
+
+    fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
+        swipeRefreshing = isRefreshing
     }
 
     private fun getPlants() {
