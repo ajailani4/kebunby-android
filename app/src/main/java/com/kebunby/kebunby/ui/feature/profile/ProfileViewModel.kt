@@ -1,8 +1,7 @@
 package com.kebunby.kebunby.ui.feature.profile
 
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
@@ -24,10 +23,17 @@ class ProfileViewModel @Inject constructor(
     private val getUserProfileUseCase: GetUserProfileUseCase,
     private val deleteUserCredentialUseCase: DeleteUserCredentialUseCase
 ) : ViewModel() {
-    var userProfileState by mutableStateOf<UIState<User>>(UIState.Idle)
-    var logoutState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-    var swipeRefreshing by mutableStateOf(false)
-    var logoutConfirmDlgVis by mutableStateOf(false)
+    private var _userProfileState = mutableStateOf<UIState<User>>(UIState.Idle)
+    val userProfileState: State<UIState<User>> = _userProfileState
+
+    private var _logoutState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val logoutState: State<UIState<Nothing>> = _logoutState
+
+    private var _swipeRefreshing = mutableStateOf(false)
+    val swipeRefreshing: State<Boolean> = _swipeRefreshing
+
+    private var _logoutConfirmDlgVis = mutableStateOf(false)
+    val logoutConfirmDlgVis: State<Boolean> = _logoutConfirmDlgVis
 
     init {
         onEvent(ProfileEvent.LoadUserProfile)
@@ -44,28 +50,28 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
-        swipeRefreshing = isRefreshing
+        _swipeRefreshing.value = isRefreshing
     }
 
     fun onLogoutConfirmDlgVisChanged(visibility: Boolean) {
-        logoutConfirmDlgVis = visibility
+        _logoutConfirmDlgVis.value = visibility
     }
 
     private fun idle() {
-        userProfileState = UIState.Idle
+        _userProfileState.value = UIState.Idle
     }
 
     private fun getUserProfile() {
-        userProfileState = UIState.Loading
+        _userProfileState.value = UIState.Loading
 
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
             val resource = getUserProfileUseCase.invoke(userCredential.username!!)
 
             resource.catch {
-                userProfileState = UIState.Error(it.localizedMessage)
+                _userProfileState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                userProfileState = when (it) {
+                _userProfileState.value = when (it) {
                     is Resource.Success -> UIState.Success(it.data)
 
                     is Resource.Error -> UIState.Fail(it.message)
@@ -75,11 +81,11 @@ class ProfileViewModel @Inject constructor(
     }
 
     private fun logout() {
-        logoutState = UIState.Loading
+        _logoutState.value = UIState.Loading
 
         viewModelScope.launch {
             deleteUserCredentialUseCase.invoke()
-            logoutState = UIState.Success(null)
+            _logoutState.value = UIState.Success(null)
         }
     }
 }

@@ -1,9 +1,7 @@
 package com.kebunby.kebunby.ui.feature.home
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
@@ -34,17 +32,34 @@ class HomeViewModel @Inject constructor(
     private val addPlantActivityUseCase: AddPlantActivityUseCase,
     private val deletePlantActivityUseCase: DeletePlantActivityUseCase
 ) : ViewModel() {
-    var userProfileState by mutableStateOf<UIState<User>>(UIState.Idle)
-    var trendingPlantsState by mutableStateOf<UIState<List<PlantItem>>>(UIState.Idle)
-    var forBeginnerPlantsState by mutableStateOf<UIState<List<PlantItem>>>(UIState.Idle)
-    var plantCategoriesState by mutableStateOf<UIState<List<PlantCategory>>>(UIState.Idle)
-    var addFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-    var deleteFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    private var _userProfileState = mutableStateOf<UIState<User>>(UIState.Idle)
+    val userProfileState: State<UIState<User>> = _userProfileState
 
-    var swipeRefreshing by mutableStateOf(false)
+    private var _trendingPlantsState = mutableStateOf<UIState<List<PlantItem>>>(UIState.Idle)
+    val trendingPlantsState: State<UIState<List<PlantItem>>> = _trendingPlantsState
+
+    private var _forBeginnerPlantsState = mutableStateOf<UIState<List<PlantItem>>>(UIState.Idle)
+    val forBeginnerPlantsState: State<UIState<List<PlantItem>>> = _forBeginnerPlantsState
+
+    private var _plantCategoriesState = mutableStateOf<UIState<List<PlantCategory>>>(UIState.Idle)
+    val plantCategoriesState: State<UIState<List<PlantCategory>>> = _plantCategoriesState
+
+    private var _addFavPlantState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val addFavPlantState: State<UIState<Nothing>> = _addFavPlantState
+
+    private var _deleteFavPlantState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val deleteFavPlantState: State<UIState<Nothing>> = _deleteFavPlantState
+
+    private var _swipeRefreshing = mutableStateOf(false)
+    val swipeRefreshing: State<Boolean> = _swipeRefreshing
+
     private var selectedPlant by mutableStateOf(0)
-    var trendingPlants = mutableStateListOf<PlantItem>()
-    var forBeginnerPlants = mutableStateListOf<PlantItem>()
+
+    private var _trendingPlants = mutableStateListOf<PlantItem>()
+    val trendingPlants: SnapshotStateList<PlantItem> = _trendingPlants
+
+    private var _forBeginnerPlants = mutableStateListOf<PlantItem>()
+    val forBeginnerPlants: SnapshotStateList<PlantItem> = _forBeginnerPlants
 
     init {
         onEvent(HomeEvent.LoadUserProfile)
@@ -72,7 +87,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
-        swipeRefreshing = isRefreshing
+        _swipeRefreshing.value = isRefreshing
     }
 
     fun onSelectedPlantChanged(plantId: Int) {
@@ -80,32 +95,32 @@ class HomeViewModel @Inject constructor(
     }
 
     fun setTrendingPlants(plants: List<PlantItem>) {
-        trendingPlants.addAll(plants)
+        _trendingPlants.addAll(plants)
     }
 
     fun updateTrendingPlants(index: Int, plant: PlantItem) {
-        trendingPlants[index] = plant
+        _trendingPlants[index] = plant
     }
 
     fun setForBeginnerPlants(plants: List<PlantItem>) {
-        forBeginnerPlants.addAll(plants)
+        _forBeginnerPlants.addAll(plants)
     }
 
     fun updateForBeginnerPlants(index: Int, plant: PlantItem) {
-        forBeginnerPlants[index] = plant
+        _forBeginnerPlants[index] = plant
     }
 
     private fun idle() {
-        userProfileState = UIState.Idle
-        trendingPlantsState = UIState.Idle
-        forBeginnerPlantsState = UIState.Idle
-        plantCategoriesState = UIState.Idle
-        addFavPlantState = UIState.Idle
-        deleteFavPlantState = UIState.Idle
+        _userProfileState.value = UIState.Idle
+        _trendingPlantsState.value = UIState.Idle
+        _forBeginnerPlantsState.value = UIState.Idle
+        _plantCategoriesState.value = UIState.Idle
+        _addFavPlantState.value = UIState.Idle
+        _deleteFavPlantState.value = UIState.Idle
     }
 
     private fun getUserProfile() {
-        userProfileState = UIState.Loading
+        _userProfileState.value = UIState.Loading
 
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
@@ -113,9 +128,9 @@ class HomeViewModel @Inject constructor(
             val resource = getUserProfileUseCase.invoke(userCredential.username!!)
 
             resource.catch {
-                userProfileState = UIState.Error(it.localizedMessage)
+                _userProfileState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                userProfileState = when (it) {
+                _userProfileState.value = when (it) {
                     is Resource.Success -> UIState.Success(it.data)
 
                     is Resource.Error -> UIState.Fail(it.message)
@@ -125,7 +140,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getTrendingPlants() {
-        trendingPlantsState = UIState.Loading
+        _trendingPlantsState.value = UIState.Loading
 
         viewModelScope.launch {
             val resource = getPlantsUseCase.invoke(
@@ -135,9 +150,9 @@ class HomeViewModel @Inject constructor(
             )
 
             resource.catch {
-                trendingPlantsState = UIState.Error(it.localizedMessage)
+                _trendingPlantsState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                trendingPlantsState = when (it) {
+                _trendingPlantsState.value = when (it) {
                     is Resource.Success -> UIState.Success(it.data)
 
                     is Resource.Error -> UIState.Fail(it.message)
@@ -147,7 +162,7 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getForBeginnerPlants() {
-        forBeginnerPlantsState = UIState.Loading
+        _forBeginnerPlantsState.value = UIState.Loading
 
         viewModelScope.launch {
             val resource = getPlantsUseCase.invoke(
@@ -157,9 +172,9 @@ class HomeViewModel @Inject constructor(
             )
 
             resource.catch {
-                forBeginnerPlantsState = UIState.Error(it.localizedMessage)
+                _forBeginnerPlantsState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                forBeginnerPlantsState = when (it) {
+                _forBeginnerPlantsState.value = when (it) {
                     is Resource.Success -> UIState.Success(it.data)
 
                     is Resource.Error -> UIState.Fail(it.message)
@@ -169,15 +184,15 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun getPlantCategories() {
-        plantCategoriesState = UIState.Loading
+        _plantCategoriesState.value = UIState.Loading
 
         viewModelScope.launch {
             val resource = getPlantCategoriesUseCase.invoke()
 
             resource.catch {
-                plantCategoriesState = UIState.Error(it.localizedMessage)
+                _plantCategoriesState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                plantCategoriesState = when (it) {
+                _plantCategoriesState.value = when (it) {
                     is Resource.Success -> UIState.Success(it.data)
 
                     is Resource.Error -> UIState.Fail(it.message)
@@ -197,7 +212,7 @@ class HomeViewModel @Inject constructor(
             )
 
             resource.catch {
-                addFavPlantState = UIState.Error(it.localizedMessage)
+                _addFavPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
@@ -218,7 +233,7 @@ class HomeViewModel @Inject constructor(
             )
 
             resource.catch {
-                deleteFavPlantState = UIState.Error(it.localizedMessage)
+                _deleteFavPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}

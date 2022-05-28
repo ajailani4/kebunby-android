@@ -57,11 +57,11 @@ fun ExploreScreen(
 ) {
     val onEvent = exploreViewModel::onEvent
     val pagingPlants = exploreViewModel.pagingPlants.collectAsLazyPagingItems()
-    val swipeRefreshing = exploreViewModel.swipeRefreshing
+    val swipeRefreshing = exploreViewModel.swipeRefreshing.value
     val onSwipeRefreshingChanged = exploreViewModel::onSwipeRefreshingChanged
-    val searchQuery = exploreViewModel.searchQuery
+    val searchQuery = exploreViewModel.searchQuery.value
     val onSearchQueryChanged = exploreViewModel::onSearchQueryChanged
-    val isSearched = exploreViewModel.isSearched
+    val isSearched = exploreViewModel.isSearched.value
     val onSearchPlant = exploreViewModel::onSearchPlant
 
     val coroutineScope = rememberCoroutineScope()

@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.ui.feature.login
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,10 +22,17 @@ class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
     private val saveUserCredentialUseCase: SaveUserCredentialUseCase
 ) : ViewModel() {
-    var loginState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-    var username by mutableStateOf("")
-    var password by mutableStateOf("")
-    var passwordVisibility by mutableStateOf(false)
+    private var _loginState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val loginState: State<UIState<Nothing>> = _loginState
+
+    private var _username = mutableStateOf("")
+    val username: State<String> = _username
+
+    private var _password = mutableStateOf("")
+    val password: State<String> = _password
+
+    private var _passwordVisibility = mutableStateOf(false)
+    val passwordVisibility: State<Boolean> = _passwordVisibility
 
     fun onEvent(event: LoginEvent) {
         when (event) {
@@ -35,36 +43,36 @@ class LoginViewModel @Inject constructor(
     }
 
     fun onUsernameChanged(text: String) {
-        username = text
+        _username.value = text
     }
 
     fun onPasswordChanged(text: String) {
-        password = text
+        _password.value = text
     }
 
     fun onPasswordVisibilityChanged() {
-        passwordVisibility = !passwordVisibility
+        _passwordVisibility.value = !_passwordVisibility.value
     }
 
     private fun idle() {
-        loginState = UIState.Idle
+        _loginState.value = UIState.Idle
     }
 
     private fun login() {
-        loginState = UIState.Loading
+        _loginState.value = UIState.Loading
 
         viewModelScope.launch {
             val resource = loginUserUseCase.invoke(
                 LoginRequest(
-                    username = username,
-                    password = password
+                    username = _username.value,
+                    password = _password.value
                 )
             )
 
             resource.catch {
-                loginState = UIState.Error(it.localizedMessage)
+                _loginState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                loginState = when (it) {
+                _loginState.value = when (it) {
                     is Resource.Success -> {
                         saveUserCredentialUseCase(it.data!!)
                         UIState.Success(null)

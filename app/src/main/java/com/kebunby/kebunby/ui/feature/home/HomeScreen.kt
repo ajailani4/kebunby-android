@@ -48,14 +48,14 @@ fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel()
 ) {
     val onEvent = homeViewModel::onEvent
-    val userProfileState = homeViewModel.userProfileState
-    val trendingPlantsState = homeViewModel.trendingPlantsState
-    val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState
-    val plantCategoriesState = homeViewModel.plantCategoriesState
-    val addFavPlantState = homeViewModel.addFavPlantState
-    val deleteFavPlantState = homeViewModel.deleteFavPlantState
+    val userProfileState = homeViewModel.userProfileState.value
+    val trendingPlantsState = homeViewModel.trendingPlantsState.value
+    val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState.value
+    val plantCategoriesState = homeViewModel.plantCategoriesState.value
+    val addFavPlantState = homeViewModel.addFavPlantState.value
+    val deleteFavPlantState = homeViewModel.deleteFavPlantState.value
 
-    val swipeRefreshing = homeViewModel.swipeRefreshing
+    val swipeRefreshing = homeViewModel.swipeRefreshing.value
     val onSwipeRefreshingChanged = homeViewModel::onSwipeRefreshingChanged
     val onSelectedPlantChanged = homeViewModel::onSelectedPlantChanged
     val trendingPlants = homeViewModel.trendingPlants

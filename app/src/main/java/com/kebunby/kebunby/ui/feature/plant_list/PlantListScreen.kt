@@ -42,7 +42,7 @@ fun PlantListScreen(
 
     val onEvent = plantListViewModel::onEvent
     val pagingPlants = plantListViewModel.pagingPlants.collectAsLazyPagingItems()
-    val swipeRefreshing = plantListViewModel.swipeRefreshing
+    val swipeRefreshing = plantListViewModel.swipeRefreshing.value
     val onSwipeRefreshingChanged = plantListViewModel::onSwipeRefreshingChanged
 
     val coroutineScope = rememberCoroutineScope()

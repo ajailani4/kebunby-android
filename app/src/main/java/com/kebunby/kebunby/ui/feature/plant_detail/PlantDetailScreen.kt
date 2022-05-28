@@ -53,19 +53,19 @@ fun PlantDetailScreen(
     plantDetailViewModel: PlantDetailViewModel = hiltViewModel()
 ) {
     val onEvent = plantDetailViewModel::onEvent
-    val plantDetailState = plantDetailViewModel.plantDetailState
-    val addFavPlantState = plantDetailViewModel.addFavPlantState
-    val deleteFavPlantState = plantDetailViewModel.deleteFavPlantState
-    val addPlantingPlantState = plantDetailViewModel.addPlantingPlantState
-    val addPlantedPlantState = plantDetailViewModel.addPlantedPlantState
+    val plantDetailState = plantDetailViewModel.plantDetailState.value
+    val addFavPlantState = plantDetailViewModel.addFavPlantState.value
+    val deleteFavPlantState = plantDetailViewModel.deleteFavPlantState.value
+    val addPlantingPlantState = plantDetailViewModel.addPlantingPlantState.value
+    val addPlantedPlantState = plantDetailViewModel.addPlantedPlantState.value
 
-    val swipeRefreshing = plantDetailViewModel.swipeRefreshing
+    val swipeRefreshing = plantDetailViewModel.swipeRefreshing.value
     val onSwipeRefreshingChanged = plantDetailViewModel::onSwipeRefreshingChanged
-    val isFavorited = plantDetailViewModel.isFavorited
+    val isFavorited = plantDetailViewModel.isFavorited.value
     val onFavoritePlant = plantDetailViewModel::onFavoritePlant
-    val plantNowDialogVis = plantDetailViewModel.plantNowDialogVis
+    val plantNowDialogVis = plantDetailViewModel.plantNowDialogVis.value
     val onPlantNowDialogVisChanged = plantDetailViewModel::onPlantNowDialogVisChanged
-    val finishPlantingDlgVis = plantDetailViewModel.finishPlantingDlgVis
+    val finishPlantingDlgVis = plantDetailViewModel.finishPlantingDlgVis.value
     val onFinishPlantingDlgVisChanged = plantDetailViewModel::onFinishPlantingDlgVisChanged
 
     val scaffoldState = rememberScaffoldState()
