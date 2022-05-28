@@ -61,7 +61,7 @@ class ProfileViewModelTest {
                 deleteUserCredentialUseCase
             )
 
-            val userProfile = when (val userProfileState = profileViewModel.userProfileState) {
+            val userProfile = when (val userProfileState = profileViewModel.userProfileState.value) {
                 is UIState.Success -> userProfileState.data
                 else -> null
             }
@@ -99,7 +99,7 @@ class ProfileViewModelTest {
                 deleteUserCredentialUseCase
             )
 
-            val isSuccess = when (val userProfileState = profileViewModel.userProfileState) {
+            val isSuccess = when (val userProfileState = profileViewModel.userProfileState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false

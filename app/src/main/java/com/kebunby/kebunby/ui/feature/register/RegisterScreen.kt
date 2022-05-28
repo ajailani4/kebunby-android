@@ -47,16 +47,16 @@ fun RegisterScreen(
     registerViewModel: RegisterViewModel = hiltViewModel()
 ) {
     val onEvent = registerViewModel::onEvent
-    val registerState = registerViewModel.registerState
-    val username = registerViewModel.username
+    val registerState = registerViewModel.registerState.value
+    val username = registerViewModel.username.value
     val onUsernameChanged = registerViewModel::onUsernameChanged
-    val email = registerViewModel.email
+    val email = registerViewModel.email.value
     val onEmailChanged = registerViewModel::onEmailChanged
-    val name = registerViewModel.name
+    val name = registerViewModel.name.value
     val onNameChanged = registerViewModel::onNameChanged
-    val password = registerViewModel.password
+    val password = registerViewModel.password.value
     val onPasswordChanged = registerViewModel::onPasswordChanged
-    val passwordVisibility = registerViewModel.passwordVisibility
+    val passwordVisibility = registerViewModel.passwordVisibility.value
     val onPasswordVisibilityChanged = registerViewModel::onPasswordVisibilityChanged
 
     val context = LocalContext.current

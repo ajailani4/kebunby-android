@@ -9,6 +9,7 @@ import com.kebunby.kebunby.domain.use_case.plant.GetPlantActivitiesUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -19,7 +20,8 @@ class PlantingViewModel @Inject constructor(
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantActivitiesUseCase: GetPlantActivitiesUseCase
 ) : ViewModel() {
-    val pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
+    private var _pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
+    val pagingPlants: StateFlow<PagingData<PlantItem>> = _pagingPlants
 
     init {
         onEvent(PlantingEvent.LoadPlants)
@@ -40,7 +42,7 @@ class PlantingViewModel @Inject constructor(
                 isPlanting = true,
                 isPlanted = null
             ).cachedIn(viewModelScope).collect {
-                pagingPlants.value = it
+                _pagingPlants.value = it
             }
         }
     }

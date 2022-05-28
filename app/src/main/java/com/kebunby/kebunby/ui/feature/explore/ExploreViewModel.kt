@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.ui.feature.explore
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -11,6 +12,7 @@ import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.domain.use_case.plant.GetPagingPlantsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,10 +21,17 @@ import javax.inject.Inject
 class ExploreViewModel @Inject constructor(
     private val getPagingPlantsUseCase: GetPagingPlantsUseCase
 ) : ViewModel() {
-    var pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
-    var swipeRefreshing by mutableStateOf(false)
-    var searchQuery by mutableStateOf("")
-    var isSearched by mutableStateOf(false)
+    private var _pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
+    val pagingPlants: StateFlow<PagingData<PlantItem>> = _pagingPlants
+
+    private var _swipeRefreshing = mutableStateOf(false)
+    val swipeRefreshing: State<Boolean> = _swipeRefreshing
+
+    private var _searchQuery = mutableStateOf("")
+    val searchQuery: State<String> = _searchQuery
+
+    private var _isSearched = mutableStateOf(false)
+    val isSearched: State<Boolean> = _isSearched
 
     init {
         onEvent(ExploreEvent.LoadPlants)
@@ -35,15 +44,15 @@ class ExploreViewModel @Inject constructor(
     }
 
     fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
-        swipeRefreshing = isRefreshing
+        _swipeRefreshing.value = isRefreshing
     }
 
     fun onSearchQueryChanged(query: String) {
-        searchQuery = query
+        _searchQuery.value = query
     }
 
-    fun onSearchPlant(_isSearched: Boolean) {
-        isSearched = _isSearched
+    fun onSearchPlant(isSearched: Boolean) {
+        _isSearched.value = isSearched
     }
 
     private fun getPlants() {
@@ -51,9 +60,9 @@ class ExploreViewModel @Inject constructor(
             getPagingPlantsUseCase.invoke(
                 isTrending = null,
                 forBeginner = null,
-                searchQuery = searchQuery
+                searchQuery = _searchQuery.value
             ).cachedIn(viewModelScope).collect {
-                pagingPlants.value = it
+                _pagingPlants.value = it
             }
         }
     }

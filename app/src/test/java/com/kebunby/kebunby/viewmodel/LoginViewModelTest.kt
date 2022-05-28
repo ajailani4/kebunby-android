@@ -53,7 +53,7 @@ class LoginViewModelTest {
 
             loginViewModel.onEvent(LoginEvent.Submit)
 
-            val isSuccess = when (loginViewModel.loginState) {
+            val isSuccess = when (loginViewModel.loginState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false
@@ -80,7 +80,7 @@ class LoginViewModelTest {
 
             loginViewModel.onEvent(LoginEvent.Submit)
 
-            val isSuccess = when (loginViewModel.loginState) {
+            val isSuccess = when (loginViewModel.loginState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false

@@ -48,12 +48,12 @@ fun LoginScreen(
     loginViewModel: LoginViewModel = hiltViewModel()
 ) {
     val onEvent = loginViewModel::onEvent
-    val loginState = loginViewModel.loginState
-    val username = loginViewModel.username
+    val loginState = loginViewModel.loginState.value
+    val username = loginViewModel.username.value
     val onUsernameChanged = loginViewModel::onUsernameChanged
-    val password = loginViewModel.password
+    val password = loginViewModel.password.value
     val onPasswordChanged = loginViewModel::onPasswordChanged
-    val passwordVisibility = loginViewModel.passwordVisibility
+    val passwordVisibility = loginViewModel.passwordVisibility.value
     val onPasswordVisibilityChanged = loginViewModel::onPasswordVisibilityChanged
 
     val context = LocalContext.current

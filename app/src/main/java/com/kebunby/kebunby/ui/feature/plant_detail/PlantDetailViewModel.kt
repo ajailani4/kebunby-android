@@ -1,8 +1,7 @@
 package com.kebunby.kebunby.ui.feature.plant_detail
 
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -29,16 +28,32 @@ class PlantDetailViewModel @Inject constructor(
     private val addPlantActivityUseCase: AddPlantActivityUseCase,
     private val deletePlantActivityUseCase: DeletePlantActivityUseCase
 ) : ViewModel() {
-    var plantDetailState by mutableStateOf<UIState<Plant>>(UIState.Idle)
-    var addFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-    var deleteFavPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-    var addPlantingPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-    var addPlantedPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    private var _plantDetailState = mutableStateOf<UIState<Plant>>(UIState.Idle)
+    val plantDetailState: State<UIState<Plant>> = _plantDetailState
 
-    var swipeRefreshing by mutableStateOf(false)
-    var isFavorited by mutableStateOf<Boolean?>(null)
-    var plantNowDialogVis by mutableStateOf(false)
-    var finishPlantingDlgVis by mutableStateOf(false)
+    private var _addFavPlantState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val addFavPlantState: State<UIState<Nothing>> = _addFavPlantState
+
+    private var _deleteFavPlantState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val deleteFavPlantState: State<UIState<Nothing>> = _deleteFavPlantState
+
+    private var _addPlantingPlantState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val addPlantingPlantState: State<UIState<Nothing>> = _addPlantingPlantState
+
+    private var _addPlantedPlantState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val addPlantedPlantState: State<UIState<Nothing>> = _addPlantedPlantState
+
+    private var _swipeRefreshing = mutableStateOf(false)
+    val swipeRefreshing: State<Boolean> = _swipeRefreshing
+
+    private var _isFavorited = mutableStateOf<Boolean?>(null)
+    val isFavorited: State<Boolean?> = _isFavorited
+
+    private var _plantNowDialogVis = mutableStateOf(false)
+    val plantNowDialogVis: State<Boolean> = _plantNowDialogVis
+
+    private var _finishPlantingDlgVis = mutableStateOf(false)
+    val finishPlantingDlgVis: State<Boolean> = _finishPlantingDlgVis
 
     init {
         onEvent(PlantDetailEvent.LoadPlantDetail)
@@ -59,31 +74,31 @@ class PlantDetailViewModel @Inject constructor(
     }
 
     fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
-        swipeRefreshing = isRefreshing
+        _swipeRefreshing.value = isRefreshing
     }
 
-    fun onFavoritePlant(_isFavorited: Boolean) {
-        isFavorited = _isFavorited
+    fun onFavoritePlant(isFavorited: Boolean) {
+        _isFavorited.value = isFavorited
     }
 
     fun onPlantNowDialogVisChanged(visibility: Boolean) {
-        plantNowDialogVis = visibility
+        _plantNowDialogVis.value = visibility
     }
 
     fun onFinishPlantingDlgVisChanged(visibility: Boolean) {
-        finishPlantingDlgVis = visibility
+        _finishPlantingDlgVis.value = visibility
     }
 
     private fun getPlantDetail() {
-        plantDetailState = UIState.Loading
+        _plantDetailState.value = UIState.Loading
 
         viewModelScope.launch {
             val resource = getPlantDetailUseCase.invoke(savedStateHandle.get<Int>("plantId")!!)
 
             resource.catch {
-                plantDetailState = UIState.Error(it.localizedMessage)
+                _plantDetailState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                plantDetailState = when (it) {
+                _plantDetailState.value = when (it) {
                     is Resource.Success -> {
                         UIState.Success(it.data)
                     }
@@ -107,7 +122,7 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                addFavPlantState = UIState.Error(it.localizedMessage)
+                _addFavPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
@@ -128,7 +143,7 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                deleteFavPlantState = UIState.Error(it.localizedMessage)
+                _deleteFavPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {}
@@ -139,7 +154,7 @@ class PlantDetailViewModel @Inject constructor(
     }
 
     private fun addPlantingPlant() {
-        addPlantingPlantState = UIState.Loading
+        _addPlantingPlantState.value = UIState.Loading
 
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
@@ -151,11 +166,11 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                addPlantingPlantState = UIState.Error(it.localizedMessage)
+                _addPlantingPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {
-                        addPlantingPlantState = UIState.Success(null)
+                        _addPlantingPlantState.value = UIState.Success(null)
                     }
 
                     is Resource.Error -> {}
@@ -165,7 +180,7 @@ class PlantDetailViewModel @Inject constructor(
     }
 
     private fun addPlantedPlant() {
-        addPlantedPlantState = UIState.Loading
+        _addPlantedPlantState.value = UIState.Loading
 
         viewModelScope.launch {
             val userCredential = getUserCredentialUseCase.invoke().first()
@@ -177,11 +192,11 @@ class PlantDetailViewModel @Inject constructor(
             )
 
             resource.catch {
-                addPlantedPlantState = UIState.Error(it.localizedMessage)
+                _addPlantedPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 when (it) {
                     is Resource.Success -> {
-                        addPlantedPlantState = UIState.Success(null)
+                        _addPlantedPlantState.value = UIState.Success(null)
                     }
 
                     is Resource.Error -> {}

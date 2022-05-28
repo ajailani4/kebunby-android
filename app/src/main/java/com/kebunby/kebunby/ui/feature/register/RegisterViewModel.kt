@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.ui.feature.register
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,12 +22,23 @@ class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
     private val saveUserCredentialUseCase: SaveUserCredentialUseCase
 ) : ViewModel() {
-    var registerState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
-    var username by mutableStateOf("")
-    var email by mutableStateOf("")
-    var name by mutableStateOf("")
-    var password by mutableStateOf("")
-    var passwordVisibility by mutableStateOf(false)
+    private var _registerState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
+    val registerState: State<UIState<Nothing>> = _registerState
+
+    private var _username = mutableStateOf("")
+    val username: State<String> = _username
+
+    private var _email = mutableStateOf("")
+    val email: State<String> = _email
+
+    private var _name = mutableStateOf("")
+    val name: State<String> = _name
+
+    private var _password = mutableStateOf("")
+    val password: State<String> = _password
+
+    private var _passwordVisibility = mutableStateOf(false)
+    val passwordVisibility: State<Boolean> = _passwordVisibility
 
     fun onEvent(event: RegisterEvent) {
         when (event) {
@@ -37,46 +49,46 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun onUsernameChanged(text: String) {
-        username = text
+        _username.value = text
     }
 
     fun onEmailChanged(text: String) {
-        email = text
+        _email.value = text
     }
 
     fun onNameChanged(text: String) {
-        name = text
+        _name.value = text
     }
 
     fun onPasswordChanged(text: String) {
-        password = text
+        _password.value = text
     }
 
     fun onPasswordVisibilityChanged() {
-        passwordVisibility = !passwordVisibility
+        _passwordVisibility.value = !passwordVisibility.value
     }
 
     private fun idle() {
-        registerState = UIState.Idle
+        _registerState.value = UIState.Idle
     }
 
     private fun register() {
-        registerState = UIState.Loading
+        _registerState.value = UIState.Loading
 
         viewModelScope.launch {
             val resource = registerUserUseCase.invoke(
                 RegisterRequest(
-                    username = username,
-                    email = email,
-                    password = password,
-                    name = name
+                    username = _username.value,
+                    email = _email.value,
+                    password = password.value,
+                    name = name.value
                 )
             )
 
             resource.catch {
-                registerState = UIState.Error(it.localizedMessage)
+                _registerState.value = UIState.Error(it.localizedMessage)
             }.collect {
-                registerState = when (it) {
+                _registerState.value = when (it) {
                     is Resource.Success -> {
                         saveUserCredentialUseCase(it.data!!)
                         UIState.Success(null)

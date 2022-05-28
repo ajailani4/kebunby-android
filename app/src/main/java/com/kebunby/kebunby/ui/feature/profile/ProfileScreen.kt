@@ -60,11 +60,11 @@ fun ProfileScreen(
     profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     val onEvent = profileViewModel::onEvent
-    val userProfileState = profileViewModel.userProfileState
-    val logoutState = profileViewModel.logoutState
-    val swipeRefreshing = profileViewModel.swipeRefreshing
+    val userProfileState = profileViewModel.userProfileState.value
+    val logoutState = profileViewModel.logoutState.value
+    val swipeRefreshing = profileViewModel.swipeRefreshing.value
     val onSwipeRefreshingChanged = profileViewModel::onSwipeRefreshingChanged
-    val logoutConfirmDlgVis = profileViewModel.logoutConfirmDlgVis
+    val logoutConfirmDlgVis = profileViewModel.logoutConfirmDlgVis.value
     val onLogoutConfirmDlgVisChanged = profileViewModel::onLogoutConfirmDlgVisChanged
 
     val profileTabMenus = listOf(

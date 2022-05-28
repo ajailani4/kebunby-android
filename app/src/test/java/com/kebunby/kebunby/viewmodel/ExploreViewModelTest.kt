@@ -50,7 +50,7 @@ class ExploreViewModelTest {
             ).`when`(getPagingPlantsUseCase).invoke(
                 isTrending = null,
                 forBeginner = null,
-                searchQuery = exploreViewModel.searchQuery
+                searchQuery = exploreViewModel.searchQuery.value
             )
 
             exploreViewModel.onEvent(ExploreEvent.LoadPlants)
@@ -69,7 +69,7 @@ class ExploreViewModelTest {
             verify(getPagingPlantsUseCase).invoke(
                 isTrending = null,
                 forBeginner = null,
-                searchQuery = exploreViewModel.searchQuery
+                searchQuery = exploreViewModel.searchQuery.value
             )
         }
     }

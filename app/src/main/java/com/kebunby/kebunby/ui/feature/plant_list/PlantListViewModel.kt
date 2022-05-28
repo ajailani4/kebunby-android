@@ -1,5 +1,6 @@
 package com.kebunby.kebunby.ui.feature.plant_list
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -13,6 +14,7 @@ import com.kebunby.kebunby.domain.use_case.plant.GetPagingPlantsByCategoryUseCas
 import com.kebunby.kebunby.domain.use_case.plant.GetPagingPlantsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,8 +30,11 @@ class PlantListViewModel @Inject constructor(
     val categoryId = savedStateHandle.get<Int>("categoryId")
     val category = savedStateHandle.get<String>("category")
 
-    val pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
-    var swipeRefreshing by mutableStateOf(false)
+    private var _pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
+    val pagingPlants: StateFlow<PagingData<PlantItem>> = _pagingPlants
+
+    private var _swipeRefreshing = mutableStateOf(false)
+    val swipeRefreshing: State<Boolean> = _swipeRefreshing
 
     init {
         if (categoryId!! > 0) {
@@ -48,7 +53,7 @@ class PlantListViewModel @Inject constructor(
     }
 
     fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
-        swipeRefreshing = isRefreshing
+        _swipeRefreshing.value = isRefreshing
     }
 
     private fun getPlants() {
@@ -58,7 +63,7 @@ class PlantListViewModel @Inject constructor(
                 forBeginner = forBeginner,
                 searchQuery = null
             ).cachedIn(viewModelScope).collect {
-                pagingPlants.value = it
+                _pagingPlants.value = it
             }
         }
     }
@@ -69,7 +74,7 @@ class PlantListViewModel @Inject constructor(
                 .invoke(categoryId!!)
                 .cachedIn(viewModelScope)
                 .collect {
-                    pagingPlants.value = it
+                    _pagingPlants.value = it
                 }
         }
     }
