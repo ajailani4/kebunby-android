@@ -79,7 +79,7 @@ class HomeViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val userProfile = when (val userProfileState = homeViewModel.userProfileState) {
+            val userProfile = when (val userProfileState = homeViewModel.userProfileState.value) {
                 is UIState.Success -> userProfileState.data
                 else -> null
             }
@@ -116,7 +116,7 @@ class HomeViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val isSuccess = when (homeViewModel.userProfileState) {
+            val isSuccess = when (homeViewModel.userProfileState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false
@@ -163,7 +163,7 @@ class HomeViewModelTest {
             )
 
             val trendingPlants =
-                when (val trendingPlantsState = homeViewModel.trendingPlantsState) {
+                when (val trendingPlantsState = homeViewModel.trendingPlantsState.value) {
                     is UIState.Success -> trendingPlantsState.data
 
                     else -> listOf()
@@ -211,7 +211,7 @@ class HomeViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val isSuccess = when (homeViewModel.trendingPlantsState) {
+            val isSuccess = when (homeViewModel.trendingPlantsState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false
@@ -264,7 +264,7 @@ class HomeViewModelTest {
             )
 
             val forBeginnerPlants =
-                when (val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState) {
+                when (val forBeginnerPlantsState = homeViewModel.forBeginnerPlantsState.value) {
                     is UIState.Success -> forBeginnerPlantsState.data
 
                     else -> listOf()
@@ -312,7 +312,7 @@ class HomeViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val isSuccess = when (homeViewModel.forBeginnerPlantsState) {
+            val isSuccess = when (homeViewModel.forBeginnerPlantsState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false
@@ -359,7 +359,7 @@ class HomeViewModelTest {
             )
 
             val plantCategoriesPlants =
-                when (val plantCategoriesState = homeViewModel.plantCategoriesState) {
+                when (val plantCategoriesState = homeViewModel.plantCategoriesState.value) {
                     is UIState.Success -> plantCategoriesState.data
 
                     else -> listOf()
@@ -395,7 +395,7 @@ class HomeViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val isSuccess = when (homeViewModel.plantCategoriesState) {
+            val isSuccess = when (homeViewModel.plantCategoriesState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false
@@ -443,7 +443,7 @@ class HomeViewModelTest {
 
             homeViewModel.onEvent(HomeEvent.AddFavoritePlant)
 
-            val isSuccess = when (homeViewModel.addFavPlantState) {
+            val isSuccess = when (homeViewModel.addFavPlantState.value) {
                 is UIState.Error -> false
 
                 else -> true
@@ -493,7 +493,7 @@ class HomeViewModelTest {
 
             homeViewModel.onEvent(HomeEvent.DeleteFavoritePlant)
 
-            val isSuccess = when (homeViewModel.deleteFavPlantState) {
+            val isSuccess = when (homeViewModel.deleteFavPlantState.value) {
                 is UIState.Error -> false
 
                 else -> true

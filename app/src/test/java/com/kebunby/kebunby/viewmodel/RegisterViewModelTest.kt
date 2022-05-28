@@ -53,7 +53,7 @@ class RegisterViewModelTest {
 
             registerViewModel.onEvent(RegisterEvent.Submit)
 
-            val isSuccess = when (registerViewModel.registerState) {
+            val isSuccess = when (registerViewModel.registerState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false
@@ -80,7 +80,7 @@ class RegisterViewModelTest {
 
             registerViewModel.onEvent(RegisterEvent.Submit)
 
-            val isSuccess = when (registerViewModel.registerState) {
+            val isSuccess = when (registerViewModel.registerState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false

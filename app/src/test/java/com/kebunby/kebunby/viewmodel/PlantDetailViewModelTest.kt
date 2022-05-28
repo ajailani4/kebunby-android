@@ -74,7 +74,7 @@ class PlantDetailViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val plant = when (val plantDetailState = plantDetailViewModel.plantDetailState) {
+            val plant = when (val plantDetailState = plantDetailViewModel.plantDetailState.value) {
                 is UIState.Success -> plantDetailState.data
                 else -> null
             }
@@ -102,7 +102,7 @@ class PlantDetailViewModelTest {
                 deletePlantActivityUseCase
             )
 
-            val isSuccess = when (plantDetailViewModel.plantDetailState) {
+            val isSuccess = when (plantDetailViewModel.plantDetailState.value) {
                 is UIState.Success -> true
 
                 is UIState.Fail -> false
@@ -148,7 +148,7 @@ class PlantDetailViewModelTest {
 
             plantDetailViewModel.onEvent(PlantDetailEvent.AddFavoritePlant)
 
-            val isSuccess = when (plantDetailViewModel.addFavPlantState) {
+            val isSuccess = when (plantDetailViewModel.addFavPlantState.value) {
                 is UIState.Error -> false
 
                 else -> true
@@ -197,7 +197,7 @@ class PlantDetailViewModelTest {
 
             plantDetailViewModel.onEvent(PlantDetailEvent.DeleteFavoritePlant)
 
-            val isSuccess = when (plantDetailViewModel.deleteFavPlantState) {
+            val isSuccess = when (plantDetailViewModel.deleteFavPlantState.value) {
                 is UIState.Error -> false
 
                 else -> true
@@ -246,7 +246,7 @@ class PlantDetailViewModelTest {
 
             plantDetailViewModel.onEvent(PlantDetailEvent.AddPlantingPlant)
 
-            val isSuccess = when (plantDetailViewModel.addPlantingPlantState) {
+            val isSuccess = when (plantDetailViewModel.addPlantingPlantState.value) {
                 is UIState.Error -> false
 
                 else -> true
@@ -295,7 +295,7 @@ class PlantDetailViewModelTest {
 
             plantDetailViewModel.onEvent(PlantDetailEvent.AddPlantedPlant)
 
-            val isSuccess = when (plantDetailViewModel.addPlantedPlantState) {
+            val isSuccess = when (plantDetailViewModel.addPlantedPlantState.value) {
                 is UIState.Error -> false
 
                 else -> true
