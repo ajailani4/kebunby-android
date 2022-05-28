@@ -35,6 +35,7 @@ class PlantDetailViewModel @Inject constructor(
     var addPlantingPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
     var addPlantedPlantState by mutableStateOf<UIState<Nothing>>(UIState.Idle)
 
+    var swipeRefreshing by mutableStateOf(false)
     var isFavorited by mutableStateOf<Boolean?>(null)
     var plantNowDialogVis by mutableStateOf(false)
     var finishPlantingDlgVis by mutableStateOf(false)
@@ -55,6 +56,10 @@ class PlantDetailViewModel @Inject constructor(
 
             PlantDetailEvent.AddPlantedPlant -> addPlantedPlant()
         }
+    }
+
+    fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
+        swipeRefreshing = isRefreshing
     }
 
     fun onFavoritePlant(_isFavorited: Boolean) {
