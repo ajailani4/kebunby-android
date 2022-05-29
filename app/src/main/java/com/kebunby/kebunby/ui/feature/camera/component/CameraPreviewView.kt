@@ -54,7 +54,9 @@ fun CameraPreviewView(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -64,10 +66,12 @@ fun CameraPreviewView(
                 .weight(9f),
             factory = { previewView }
         )
+        Spacer(modifier = Modifier.height(20.dp))
         CameraMenu(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f),
+                .weight(1f)
+                .padding(horizontal = 20.dp),
             onCameraEvent = onCameraEvent
         )
     }
@@ -80,7 +84,8 @@ fun CameraMenu(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
             modifier = Modifier.size(60.dp),

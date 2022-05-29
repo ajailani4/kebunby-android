@@ -78,6 +78,10 @@ fun CustomToolbar(
                         ) {
                             icon.first()
                         }
+
+                        if (icon != menuIcons.last()) {
+                            Spacer(modifier = Modifier.width(20.dp))
+                        }
                     }
                 }
             }
