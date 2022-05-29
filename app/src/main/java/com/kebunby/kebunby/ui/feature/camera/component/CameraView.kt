@@ -8,7 +8,9 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.compose.runtime.*
+import com.kebunby.kebunby.ui.feature.camera.CameraEvent
 import com.kebunby.kebunby.util.convertInputStreamToFile
+import com.kebunby.kebunby.util.takePicture
 import java.io.File
 
 @Composable
@@ -30,4 +32,33 @@ fun CameraView(
             }
         }
     }
+
+    CameraPreviewView(
+        context = context,
+        imageCapture = imageCapture,
+        lensFacing = lensFacing,
+        onCameraEvent = { cameraEvent ->
+            when (cameraEvent) {
+                CameraEvent.SwitchLens -> {
+                    lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) {
+                        CameraSelector.LENS_FACING_FRONT
+                    } else {
+                        CameraSelector.LENS_FACING_BACK
+                    }
+                }
+
+                CameraEvent.Capture -> {
+                    imageCapture.takePicture(
+                        context = context,
+                        onImageCaptured = onImageCaptured,
+                        onError = onError
+                    )
+                }
+
+                CameraEvent.ViewGallery -> {
+                    galleryLauncher.launch("image/*")
+                }
+            }
+        }
+    )
 }
