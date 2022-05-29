@@ -99,9 +99,9 @@ fun ProfileScreen(
         scaffoldState = scaffoldState,
         topBar = {
             CustomToolbar(
-                navController = navController,
                 title = stringResource(id = R.string.profile),
                 hasMenuIcon = true,
+                onBackButtonClicked = { navController.navigateUp() },
                 menuIcons = listOf(
                     Pair(
                         {
