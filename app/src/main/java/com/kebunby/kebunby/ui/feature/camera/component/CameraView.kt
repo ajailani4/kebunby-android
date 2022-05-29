@@ -8,6 +8,7 @@ import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.compose.runtime.*
+import com.kebunby.kebunby.util.convertInputStreamToFile
 import java.io.File
 
 @Composable
@@ -25,7 +26,7 @@ fun CameraView(
             val inputStream = context.contentResolver.openInputStream(uri)
 
             if (inputStream != null) {
-
+                onImageCaptured(context.convertInputStreamToFile(inputStream))
             }
         }
     }
