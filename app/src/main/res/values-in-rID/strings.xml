@@ -71,4 +71,6 @@
 
     <string name="logout">Keluar</string>
     <string name="logout_confirm_msg">Apakah kamu yakin ingin keluar?</string>
+
+    <string name="take_plant_photo">Ambil foto tanaman</string>
 </resources>

@@ -71,4 +71,6 @@
 
     <string name="logout">Logout</string>
     <string name="logout_confirm_msg">Are you sure to logout?</string>
+
+    <string name="take_plant_photo">Take a plant photo</string>
 </resources>
