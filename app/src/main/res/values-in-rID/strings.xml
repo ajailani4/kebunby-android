@@ -78,5 +78,7 @@
     <string name="plant_name">Nama Tanaman</string>
     <string name="growth_estimation">Estimasi Tumbuh</string>
     <string name="watering_frequency">Jumlah Penyiraman</string>
+    <string name="tools">Alat</string>
+    <string name="materials">Bahan</string>
     <string name="upload">Unggah</string>
 </resources>

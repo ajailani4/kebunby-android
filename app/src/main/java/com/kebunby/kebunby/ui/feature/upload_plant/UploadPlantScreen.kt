@@ -29,10 +29,14 @@ import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.feature.camera.CameraScreen
+import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
+import com.kebunby.kebunby.util.ListAction
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
+import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.PlusCircle
+import compose.icons.evaicons.outline.Close
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.launch
 import java.io.File
@@ -42,10 +46,22 @@ fun UploadPlantScreen(
     navController: NavController,
     uploadPlantViewModel: UploadPlantViewModel = hiltViewModel()
 ) {
-    val photo = uploadPlantViewModel.photo.value
-    val onPhotoChanged = uploadPlantViewModel::onPhotoChanged
     val cameraScreenVis = uploadPlantViewModel.cameraScreenVis.value
     val onCameraScreenVisChanged = uploadPlantViewModel::onCameraScreenVisChanged
+    val photo = uploadPlantViewModel.photo.value
+    val onPhotoChanged = uploadPlantViewModel::onPhotoChanged
+    val plantName = uploadPlantViewModel.plantName.value
+    val onPlantNameChanged = uploadPlantViewModel::onPlantNameChanged
+    val growthEst = uploadPlantViewModel.growthEst.value
+    val onGrowEstChanged = uploadPlantViewModel::onGrowthEstChanged
+    val wateringFreq = uploadPlantViewModel.wateringFreq.value
+    val onWateringFreqChanged = uploadPlantViewModel::onWateringFreqChanged
+    val tools = uploadPlantViewModel.tools
+    val onToolsChanged = uploadPlantViewModel::onToolsChanged
+    val materials = uploadPlantViewModel.materials
+    val onMaterialsChanged = uploadPlantViewModel::onMaterialsChanged
+    val steps = uploadPlantViewModel.steps
+    val onStepsChanged = uploadPlantViewModel::onStepsChanged
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -66,7 +82,21 @@ fun UploadPlantScreen(
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            UploadPlantForm(photo = photo)
+            UploadPlantForm(
+                photo = photo,
+                plantName = plantName,
+                onPlantNameChanged = onPlantNameChanged,
+                growthEst = growthEst,
+                onGrowEstChanged = onGrowEstChanged,
+                wateringFreq = wateringFreq,
+                onWateringFreqChanged = onWateringFreqChanged,
+                tools = tools,
+                onToolsChanged = onToolsChanged,
+                materials = materials,
+                onMaterialsChanged = onMaterialsChanged,
+                steps = steps,
+                onStepsChanged = onStepsChanged
+            )
             AnimatedVisibility(
                 visible = cameraScreenVis,
                 exit = shrinkVertically()
@@ -90,7 +120,19 @@ fun UploadPlantScreen(
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun UploadPlantForm(
-    photo: File?
+    photo: File?,
+    plantName: String,
+    onPlantNameChanged: (String) -> Unit,
+    growthEst: String,
+    onGrowEstChanged: (String) -> Unit,
+    wateringFreq: String,
+    onWateringFreqChanged: (String) -> Unit,
+    tools: List<String>,
+    onToolsChanged: (Int?, String?, ListAction) -> Unit,
+    materials: List<String>,
+    onMaterialsChanged: (Int?, String?, ListAction) -> Unit,
+    steps: List<String>,
+    onStepsChanged: (Int?, String?, ListAction) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -119,8 +161,8 @@ fun UploadPlantForm(
             )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = plantName,
+                onValueChange = onPlantNameChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 textStyle = TextStyle(
                     color = MaterialTheme.colors.onBackground,
@@ -128,7 +170,7 @@ fun UploadPlantForm(
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Text(
                 text = stringResource(id = R.string.growth_estimation),
                 color = MaterialTheme.colors.onBackground,
@@ -137,8 +179,8 @@ fun UploadPlantForm(
             )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = growthEst,
+                onValueChange = onGrowEstChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 textStyle = TextStyle(
                     color = MaterialTheme.colors.onBackground,
@@ -146,7 +188,7 @@ fun UploadPlantForm(
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Text(
                 text = stringResource(id = R.string.watering_frequency),
                 color = MaterialTheme.colors.onBackground,
@@ -155,8 +197,8 @@ fun UploadPlantForm(
             )
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = wateringFreq,
+                onValueChange = onWateringFreqChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 textStyle = TextStyle(
                     color = MaterialTheme.colors.onBackground,
@@ -164,24 +206,41 @@ fun UploadPlantForm(
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Text(
-                text = stringResource(id = R.string.tools_and_materials),
+                text = stringResource(id = R.string.tools),
                 color = MaterialTheme.colors.onBackground,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.body1
             )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                textStyle = TextStyle(
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = poppinsFamily,
-                    fontSize = 14.sp
+
+            tools.forEachIndexed { index, tool ->
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = tool,
+                    onValueChange = { onToolsChanged(index, it, ListAction.UPDATE_ITEM) },
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                    trailingIcon = {
+                        if (tools.size > 1) {
+                            IconButton(onClick = {
+                                onToolsChanged(index, null, ListAction.DELETE_ITEM)
+                            }) {
+                                Icon(
+                                    imageVector = EvaIcons.Outline.Close,
+                                    tint = Red,
+                                    contentDescription = "Delete tool icon"
+                                )
+                            }
+                        }
+                    },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = poppinsFamily,
+                        fontSize = 14.sp
+                    )
                 )
-            )
+            }
+
             Spacer(modifier = Modifier.height(15.dp))
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -191,7 +250,7 @@ fun UploadPlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = {}
+                onClick = { onToolsChanged(null, "", ListAction.ADD_ITEM) }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
@@ -200,24 +259,41 @@ fun UploadPlantForm(
                     contentDescription = "Add icon"
                 )
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(25.dp))
             Text(
-                text = stringResource(id = R.string.steps),
+                text = stringResource(id = R.string.materials),
                 color = MaterialTheme.colors.onBackground,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.body1
             )
-            TextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
-                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                textStyle = TextStyle(
-                    color = MaterialTheme.colors.onBackground,
-                    fontFamily = poppinsFamily,
-                    fontSize = 14.sp
+
+            materials.forEachIndexed { index, material ->
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = material,
+                    onValueChange = { onMaterialsChanged(index, it, ListAction.UPDATE_ITEM) },
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                    trailingIcon = {
+                        if (tools.size > 1) {
+                            IconButton(onClick = {
+                                onMaterialsChanged(index, null, ListAction.DELETE_ITEM)
+                            }) {
+                                Icon(
+                                    imageVector = EvaIcons.Outline.Close,
+                                    tint = Red,
+                                    contentDescription = "Delete tool icon"
+                                )
+                            }
+                        }
+                    },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = poppinsFamily,
+                        fontSize = 14.sp
+                    )
                 )
-            )
+            }
+
             Spacer(modifier = Modifier.height(15.dp))
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
@@ -227,7 +303,60 @@ fun UploadPlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = {}
+                onClick = { onMaterialsChanged(null, "", ListAction.ADD_ITEM) }
+            ) {
+                Icon(
+                    modifier = Modifier.size(30.dp),
+                    imageVector = EvaIcons.Fill.PlusCircle,
+                    tint = MaterialTheme.colors.primary,
+                    contentDescription = "Add icon"
+                )
+            }
+            Spacer(modifier = Modifier.height(25.dp))
+            Text(
+                text = stringResource(id = R.string.steps),
+                color = MaterialTheme.colors.onBackground,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.body1
+            )
+
+            steps.forEachIndexed { index, step ->
+                TextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = step,
+                    onValueChange = { onStepsChanged(index, it, ListAction.UPDATE_ITEM) },
+                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                    trailingIcon = {
+                        if (tools.size > 1) {
+                            IconButton(onClick = {
+                                onStepsChanged(index, null, ListAction.DELETE_ITEM)
+                            }) {
+                                Icon(
+                                    imageVector = EvaIcons.Outline.Close,
+                                    tint = Red,
+                                    contentDescription = "Delete tool icon"
+                                )
+                            }
+                        }
+                    },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colors.onBackground,
+                        fontFamily = poppinsFamily,
+                        fontSize = 14.sp
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(15.dp))
+            OutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                border = BorderStroke(
+                    width = 1.dp,
+                    color = MaterialTheme.colors.primary
+                ),
+                onClick = { onStepsChanged(null, "", ListAction.ADD_ITEM) }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
