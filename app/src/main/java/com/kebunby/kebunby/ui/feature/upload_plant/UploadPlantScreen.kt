@@ -3,6 +3,7 @@ package com.kebunby.kebunby.ui.feature.upload_plant
 import android.app.Activity
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -14,12 +15,14 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -30,10 +33,20 @@ import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.fill.PlusCircle
+import id.zelory.compressor.Compressor
+import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
-fun UploadPlantScreen(navController: NavController) {
+fun UploadPlantScreen(
+    navController: NavController,
+    uploadPlantViewModel: UploadPlantViewModel = hiltViewModel()
+) {
+    val photo = uploadPlantViewModel.photo.value
+    val onPhotoChanged = uploadPlantViewModel::onPhotoChanged
+    val cameraScreenVis = uploadPlantViewModel.cameraScreenVis.value
+    val onCameraScreenVisChanged = uploadPlantViewModel::onCameraScreenVisChanged
+
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
@@ -43,13 +56,33 @@ fun UploadPlantScreen(navController: NavController) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            CustomToolbar(
-                title = stringResource(id = R.string.upload_plant) 
-            )
+            if (!cameraScreenVis) {
+                CustomToolbar(
+                    title = stringResource(id = R.string.upload_plant),
+                    hasBackButton = true,
+                    onBackButtonClicked = { navController.navigateUp() }
+                )
+            }
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            UploadPlantForm(photo = null)
+            UploadPlantForm(photo = photo)
+            AnimatedVisibility(
+                visible = cameraScreenVis,
+                exit = shrinkVertically()
+            ) {
+                CameraScreen(
+                    onBackButtonClicked = { navController.navigateUp() },
+                    onImageCaptured = { photo ->
+                        coroutineScope.launch {
+                            onPhotoChanged(Compressor.compress(context, photo))
+                            onCameraScreenVisChanged(false)
+                        }
+                    },
+                    scaffoldState = scaffoldState,
+                    coroutineScope = coroutineScope
+                )
+            }
         }
     }
 }
@@ -72,6 +105,7 @@ fun UploadPlantForm(
                         .sizeIn(maxHeight = 400.dp)
                         .clip(MaterialTheme.shapes.medium),
                     painter = rememberImagePainter(photo),
+                    contentScale = ContentScale.Crop,
                     contentDescription = "Plant photo"
                 )
             }

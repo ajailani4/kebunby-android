@@ -15,7 +15,6 @@ import java.io.File
 @Composable
 fun CameraScreen(
     onBackButtonClicked: () -> Unit,
-    onCameraScreenVisChanged: (Boolean) -> Unit,
     onImageCaptured: (File) -> Unit,
     scaffoldState: ScaffoldState,
     coroutineScope: CoroutineScope
@@ -36,7 +35,6 @@ fun CameraScreen(
             context = context,
             onImageCaptured = { file ->
                 onImageCaptured(file)
-                onCameraScreenVisChanged(false)
             },
             onError = { exception ->
                 coroutineScope.launch {
