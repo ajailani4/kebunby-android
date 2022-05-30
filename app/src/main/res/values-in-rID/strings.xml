@@ -60,11 +60,11 @@
     <!-- Profile Tab Menu -->
     <string name="planting">Menanam</string>
     <string name="planted">Ditanam</string>
-    <string name="uploaded">Upload</string>
+    <string name="uploaded">Unggah</string>
 
     <string name="no_planting_plants_yet">Belum ada tanaman yang sedang ditanam</string>
     <string name="no_planted_plants_yet">Belum ada tanaman yang sudah ditanam</string>
-    <string name="no_uploaded_plants_yet">Belum ada tanaman yang diupload</string>
+    <string name="no_uploaded_plants_yet">Belum ada tanaman yang diunggah</string>
 
     <string name="yes">Iya</string>
     <string name="no">Tidak</string>
@@ -73,4 +73,10 @@
     <string name="logout_confirm_msg">Apakah kamu yakin ingin keluar?</string>
 
     <string name="take_plant_photo">Ambil foto tanaman</string>
+    <string name="upload_plant">Unggah Tanaman</string>
+
+    <string name="plant_name">Nama Tanaman</string>
+    <string name="growth_estimation">Estimasi Tumbuh</string>
+    <string name="watering_frequency">Jumlah Penyiraman</string>
+    <string name="upload">Unggah</string>
 </resources>

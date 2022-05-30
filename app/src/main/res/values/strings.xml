@@ -73,4 +73,10 @@
     <string name="logout_confirm_msg">Are you sure to logout?</string>
 
     <string name="take_plant_photo">Take a plant photo</string>
+    <string name="upload_plant">Upload Plant</string>
+
+    <string name="plant_name">Plant Name</string>
+    <string name="growth_estimation">Growth Estimation</string>
+    <string name="watering_frequency">Watering Frequency</string>
+    <string name="upload">Upload</string>
 </resources>
