@@ -164,6 +164,7 @@ fun UploadPlantForm(
                 value = plantName,
                 onValueChange = onPlantNameChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                singleLine = true,
                 textStyle = TextStyle(
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = poppinsFamily,
@@ -182,6 +183,7 @@ fun UploadPlantForm(
                 value = growthEst,
                 onValueChange = onGrowEstChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                singleLine = true,
                 textStyle = TextStyle(
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = poppinsFamily,
@@ -200,6 +202,7 @@ fun UploadPlantForm(
                 value = wateringFreq,
                 onValueChange = onWateringFreqChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                singleLine = true,
                 textStyle = TextStyle(
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = poppinsFamily,
