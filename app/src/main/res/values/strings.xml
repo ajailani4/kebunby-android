@@ -78,6 +78,7 @@
     <string name="plant_name">Plant Name</string>
     <string name="growth_estimation">Growth Estimation</string>
     <string name="watering_frequency">Watering Frequency</string>
+    <string name="desc">Description</string>
     <string name="tools">Tools</string>
     <string name="materials">Materials</string>
     <string name="upload">Upload</string>

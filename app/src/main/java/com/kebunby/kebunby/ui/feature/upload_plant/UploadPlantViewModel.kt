@@ -30,6 +30,9 @@ class UploadPlantViewModel @Inject constructor(
     private var _wateringFreq = mutableStateOf("")
     val wateringFreq: State<String> = _wateringFreq
 
+    private var _desc = mutableStateOf("")
+    val desc: State<String> = _desc
+
     private var _tools = mutableStateListOf("Tool 1")
     val tools: SnapshotStateList<String> = _tools
 
@@ -57,6 +60,10 @@ class UploadPlantViewModel @Inject constructor(
 
     fun onWateringFreqChanged(text: String) {
         _wateringFreq.value = text
+    }
+
+    fun onDescChanged(text: String) {
+        _desc.value = text
     }
 
     fun onToolsChanged(index: Int?, tool: String?, action: ListAction) {

@@ -56,6 +56,8 @@ fun UploadPlantScreen(
     val onGrowEstChanged = uploadPlantViewModel::onGrowthEstChanged
     val wateringFreq = uploadPlantViewModel.wateringFreq.value
     val onWateringFreqChanged = uploadPlantViewModel::onWateringFreqChanged
+    val desc = uploadPlantViewModel.desc.value
+    val onDescChanged = uploadPlantViewModel::onDescChanged
     val tools = uploadPlantViewModel.tools
     val onToolsChanged = uploadPlantViewModel::onToolsChanged
     val materials = uploadPlantViewModel.materials
@@ -90,6 +92,8 @@ fun UploadPlantScreen(
                 onGrowEstChanged = onGrowEstChanged,
                 wateringFreq = wateringFreq,
                 onWateringFreqChanged = onWateringFreqChanged,
+                desc = desc,
+                onDescChanged = onDescChanged,
                 tools = tools,
                 onToolsChanged = onToolsChanged,
                 materials = materials,
@@ -127,6 +131,8 @@ fun UploadPlantForm(
     onGrowEstChanged: (String) -> Unit,
     wateringFreq: String,
     onWateringFreqChanged: (String) -> Unit,
+    desc: String,
+    onDescChanged: (String) -> Unit,
     tools: List<String>,
     onToolsChanged: (Int?, String?, ListAction) -> Unit,
     materials: List<String>,
@@ -203,6 +209,24 @@ fun UploadPlantForm(
                 onValueChange = onWateringFreqChanged,
                 colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 singleLine = true,
+                textStyle = TextStyle(
+                    color = MaterialTheme.colors.onBackground,
+                    fontFamily = poppinsFamily,
+                    fontSize = 14.sp
+                )
+            )
+            Spacer(modifier = Modifier.height(25.dp))
+            Text(
+                text = stringResource(id = R.string.desc),
+                color = MaterialTheme.colors.onBackground,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.body1
+            )
+            TextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = desc,
+                onValueChange = onDescChanged,
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                 textStyle = TextStyle(
                     color = MaterialTheme.colors.onBackground,
                     fontFamily = poppinsFamily,
