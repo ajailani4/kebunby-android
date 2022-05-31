@@ -30,13 +30,13 @@ class UploadPlantViewModel @Inject constructor(
     private var _wateringFreq = mutableStateOf("")
     val wateringFreq: State<String> = _wateringFreq
 
-    private var _tools = mutableStateListOf("")
+    private var _tools = mutableStateListOf("Tool 1")
     val tools: SnapshotStateList<String> = _tools
 
-    private var _materials = mutableStateListOf("")
+    private var _materials = mutableStateListOf("Material 1")
     val materials: SnapshotStateList<String> = _materials
 
-    private var _steps = mutableStateListOf("")
+    private var _steps = mutableStateListOf("Step 1")
     val steps: SnapshotStateList<String> = _steps
 
     fun onCameraScreenVisChanged(visibility: Boolean) {

@@ -250,7 +250,7 @@ fun UploadPlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = { onToolsChanged(null, "", ListAction.ADD_ITEM) }
+                onClick = { onToolsChanged(null, "Tool ${tools.size + 1}", ListAction.ADD_ITEM) }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
@@ -274,7 +274,7 @@ fun UploadPlantForm(
                     onValueChange = { onMaterialsChanged(index, it, ListAction.UPDATE_ITEM) },
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     trailingIcon = {
-                        if (tools.size > 1) {
+                        if (materials.size > 1) {
                             IconButton(onClick = {
                                 onMaterialsChanged(index, null, ListAction.DELETE_ITEM)
                             }) {
@@ -303,7 +303,13 @@ fun UploadPlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = { onMaterialsChanged(null, "", ListAction.ADD_ITEM) }
+                onClick = {
+                    onMaterialsChanged(
+                        null,
+                        "Material ${materials.size + 1}",
+                        ListAction.ADD_ITEM
+                    )
+                }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
@@ -327,7 +333,7 @@ fun UploadPlantForm(
                     onValueChange = { onStepsChanged(index, it, ListAction.UPDATE_ITEM) },
                     colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
                     trailingIcon = {
-                        if (tools.size > 1) {
+                        if (steps.size > 1) {
                             IconButton(onClick = {
                                 onStepsChanged(index, null, ListAction.DELETE_ITEM)
                             }) {
@@ -356,7 +362,7 @@ fun UploadPlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = { onStepsChanged(null, "", ListAction.ADD_ITEM) }
+                onClick = { onStepsChanged(null, "Step ${steps.size + 1}", ListAction.ADD_ITEM) }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
