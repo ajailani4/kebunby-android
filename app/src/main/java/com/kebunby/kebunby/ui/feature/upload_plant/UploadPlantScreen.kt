@@ -1,6 +1,7 @@
 package com.kebunby.kebunby.ui.feature.upload_plant
 
 import android.app.Activity
+import android.content.Context
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.shrinkVertically
@@ -11,6 +12,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,7 +29,10 @@ import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
+import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.camera.CameraScreen
 import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -38,6 +43,7 @@ import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.PlusCircle
 import compose.icons.evaicons.outline.Close
 import id.zelory.compressor.Compressor
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -46,6 +52,8 @@ fun UploadPlantScreen(
     navController: NavController,
     uploadPlantViewModel: UploadPlantViewModel = hiltViewModel()
 ) {
+    val onEvent = uploadPlantViewModel::onEvent
+    val uploadPlantState = uploadPlantViewModel.uploadPlantState.value
     val cameraScreenVis = uploadPlantViewModel.cameraScreenVis.value
     val onCameraScreenVisChanged = uploadPlantViewModel::onCameraScreenVisChanged
     val photo = uploadPlantViewModel.photo.value
@@ -85,6 +93,7 @@ fun UploadPlantScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             UploadPlantForm(
+                onEvent = onEvent,
                 photo = photo,
                 plantName = plantName,
                 onPlantNameChanged = onPlantNameChanged,
@@ -99,7 +108,10 @@ fun UploadPlantScreen(
                 materials = materials,
                 onMaterialsChanged = onMaterialsChanged,
                 steps = steps,
-                onStepsChanged = onStepsChanged
+                onStepsChanged = onStepsChanged,
+                coroutineScope = coroutineScope,
+                scaffoldState = scaffoldState,
+                context = context
             )
             AnimatedVisibility(
                 visible = cameraScreenVis,
@@ -118,12 +130,52 @@ fun UploadPlantScreen(
                 )
             }
         }
+
+        // Observe upload plant state
+        when (uploadPlantState) {
+            is UIState.Loading -> {
+                FullSizeProgressBar()
+            }
+
+            is UIState.Success -> {
+                LaunchedEffect(Unit) {
+                    navController.navigate(Screen.ProfileScreen.route) {
+                        popUpTo(Screen.ProfileScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            }
+
+            is UIState.Fail -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        uploadPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        uploadPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
+        }
     }
 }
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun UploadPlantForm(
+    onEvent: (UploadPlantEvent) -> Unit,
     photo: File?,
     plantName: String,
     onPlantNameChanged: (String) -> Unit,
@@ -138,7 +190,10 @@ fun UploadPlantForm(
     materials: List<String>,
     onMaterialsChanged: (Int?, String?, ListAction) -> Unit,
     steps: List<String>,
-    onStepsChanged: (Int?, String?, ListAction) -> Unit
+    onStepsChanged: (Int?, String?, ListAction) -> Unit,
+    coroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+    context: Context
 ) {
     Column(
         modifier = Modifier
@@ -402,7 +457,21 @@ fun UploadPlantForm(
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
-                onClick = {}
+                onClick = {
+                    if (
+                        photo != null && plantName.isNotEmpty() && growthEst.isNotEmpty() &&
+                        wateringFreq.isNotEmpty() && desc.isNotEmpty() && tools.isNotEmpty() &&
+                        materials.isNotEmpty() && steps.isNotEmpty()
+                    ) {
+                        onEvent(UploadPlantEvent.UploadPlant)
+                    } else {
+                        coroutineScope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar(
+                                context.getString(R.string.fill_the_form)
+                            )
+                        }
+                    }
+                }
             ) {
                 Text(
                     modifier = Modifier.padding(5.dp),
