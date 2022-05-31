@@ -116,41 +116,41 @@ fun HomeScreen(
                         scaffoldState = scaffoldState
                     )
                 }
-
-                // Observe add favorite plant state
-                when (addFavPlantState) {
-                    is UIState.Error -> {
-                        LaunchedEffect(Unit) {
-                            coroutineScope.launch {
-                                addFavPlantState.message?.let { message ->
-                                    scaffoldState.snackbarHostState.showSnackbar(message)
-                                }
-                            }
-                        }
-
-                        onEvent(HomeEvent.Idle)
-                    }
-
-                    else -> {}
-                }
-
-                // Observe delete favorite plant state
-                when (deleteFavPlantState) {
-                    is UIState.Error -> {
-                        LaunchedEffect(Unit) {
-                            coroutineScope.launch {
-                                deleteFavPlantState.message?.let { message ->
-                                    scaffoldState.snackbarHostState.showSnackbar(message)
-                                }
-                            }
-                        }
-
-                        onEvent(HomeEvent.Idle)
-                    }
-
-                    else -> {}
-                }
             }
+        }
+
+        // Observe add favorite plant state
+        when (addFavPlantState) {
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        addFavPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(HomeEvent.Idle)
+            }
+
+            else -> {}
+        }
+
+        // Observe delete favorite plant state
+        when (deleteFavPlantState) {
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        deleteFavPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(HomeEvent.Idle)
+            }
+
+            else -> {}
         }
     }
 }
