@@ -116,7 +116,7 @@ fun PlantDetailScreen(
                                 Image(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .height(240.dp),
+                                        .height(260.dp),
                                     painter = rememberImagePainter(plant.image),
                                     contentScale = ContentScale.Crop,
                                     contentDescription = "Plant image"
