@@ -52,6 +52,8 @@
     <string name="already_planted">Already Planted</string>
     <string name="plant_now_confirm_msg">Are you sure to plant this?</string>
     <string name="finish_planting_confirm_msg">Are you sure to finish the planting?</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 
     <string name="search_plant">Search plant</string>
     <string name="no_plants_yet">No plants yet</string>
@@ -71,4 +73,16 @@
 
     <string name="logout">Logout</string>
     <string name="logout_confirm_msg">Are you sure to logout?</string>
+
+    <string name="take_plant_photo">Take a plant photo</string>
+    <string name="upload_plant">Upload Plant</string>
+
+    <string name="plant_name">Plant Name</string>
+    <string name="category">Category</string>
+    <string name="growth_estimation">Growth Estimation</string>
+    <string name="watering_frequency">Watering Frequency</string>
+    <string name="desc">Description</string>
+    <string name="tools">Tools</string>
+    <string name="materials">Materials</string>
+    <string name="upload">Upload</string>
 </resources>

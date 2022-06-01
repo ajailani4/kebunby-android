@@ -243,7 +243,7 @@ fun RegisterScreen(
                         Spacer(modifier = Modifier.height(30.dp))
                         Button(
                             modifier = Modifier.fillMaxWidth(),
-                            shape = MaterialTheme.shapes.medium,
+                            shape = MaterialTheme.shapes.large,
                             enabled = registerState != UIState.Loading,
                             onClick = {
                                 if (
@@ -295,8 +295,6 @@ fun RegisterScreen(
 
         // Observe register state
         when (registerState) {
-            is UIState.Idle -> {}
-
             is UIState.Loading -> {
                 FullSizeProgressBar()
             }
@@ -334,6 +332,8 @@ fun RegisterScreen(
 
                 onEvent(RegisterEvent.Idle)
             }
+
+            else -> {}
         }
     }
 }

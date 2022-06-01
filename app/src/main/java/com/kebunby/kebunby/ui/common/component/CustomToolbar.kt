@@ -20,10 +20,8 @@ import compose.icons.evaicons.fill.ArrowBack
 
 @Composable
 fun CustomToolbar(
-    navController: NavController,
     title: String,
     hasBackButton: Boolean = false,
-    isBackImmediately: Boolean = true,
     onBackButtonClicked: () -> Unit = {},
     hasMenuIcon: Boolean = false,
     menuIcons: List<Pair<@Composable () -> Unit, () -> Unit>>? = null
@@ -41,13 +39,7 @@ fun CustomToolbar(
             ) {
                 IconButton(
                     modifier = Modifier.size(24.dp),
-                    onClick = {
-                        if (isBackImmediately) {
-                            navController.navigateUp()
-                        } else {
-                            onBackButtonClicked()
-                        }
-                    }
+                    onClick = onBackButtonClicked
                 ) {
                     Icon(
                         imageVector = EvaIcons.Fill.ArrowBack,
@@ -85,6 +77,10 @@ fun CustomToolbar(
                             onClick = icon.second
                         ) {
                             icon.first()
+                        }
+
+                        if (icon != menuIcons.last()) {
+                            Spacer(modifier = Modifier.width(20.dp))
                         }
                     }
                 }

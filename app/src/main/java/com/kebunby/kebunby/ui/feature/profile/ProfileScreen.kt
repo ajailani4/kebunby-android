@@ -31,6 +31,8 @@ import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -49,11 +51,15 @@ import com.kebunby.kebunby.ui.feature.profile.uploaded.UploadedScreen
 import com.kebunby.kebunby.ui.theme.Grey
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
+import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.LogOut
+import compose.icons.evaicons.outline.LogOut
+import compose.icons.evaicons.outline.Plus
+import compose.icons.evaicons.outline.PlusCircle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalPermissionsApi::class)
 @Composable
 fun ProfileScreen(
     navController: NavController,
@@ -95,19 +101,49 @@ fun ProfileScreen(
         }
     }
 
+    val cameraPermissionState =
+        rememberPermissionState(android.Manifest.permission.CAMERA)
+    val readExStoragePermissionState =
+        rememberPermissionState(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
             CustomToolbar(
-                navController = navController,
                 title = stringResource(id = R.string.profile),
                 hasMenuIcon = true,
                 menuIcons = listOf(
                     Pair(
                         {
                             Icon(
-                                imageVector = EvaIcons.Fill.LogOut,
-                                tint = Color.White,
+                                imageVector = EvaIcons.Outline.Plus,
+                                tint = MaterialTheme.colors.onPrimary,
+                                contentDescription = "Upload icon"
+                            )
+                        },
+                        {
+                            when {
+                                cameraPermissionState.hasPermission && readExStoragePermissionState.hasPermission -> {
+                                    navController.navigate(Screen.UploadPlantScreen.route)
+                                }
+
+                                cameraPermissionState.shouldShowRationale ||
+                                    !cameraPermissionState.permissionRequested -> {
+                                    cameraPermissionState.launchPermissionRequest()
+                                }
+
+                                readExStoragePermissionState.shouldShowRationale ||
+                                    !readExStoragePermissionState.permissionRequested -> {
+                                    readExStoragePermissionState.launchPermissionRequest()
+                                }
+                            }
+                        }
+                    ),
+                    Pair(
+                        {
+                            Icon(
+                                imageVector = EvaIcons.Outline.LogOut,
+                                tint = MaterialTheme.colors.onPrimary,
                                 contentDescription = "Logout icon"
                             )
                         },

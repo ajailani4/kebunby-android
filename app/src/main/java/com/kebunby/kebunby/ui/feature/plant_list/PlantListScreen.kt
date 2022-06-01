@@ -52,7 +52,6 @@ fun PlantListScreen(
         scaffoldState = scaffoldState,
         topBar = {
             CustomToolbar(
-                navController = navController,
                 title = when {
                     isTrending == true -> {
                         stringResource(id = R.string.trending)
@@ -68,7 +67,8 @@ fun PlantListScreen(
 
                     else -> "Plants"
                 },
-                hasBackButton = true
+                hasBackButton = true,
+                onBackButtonClicked = { navController.navigateUp() }
             )
         }
     ) {

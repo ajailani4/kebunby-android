@@ -102,12 +102,21 @@ class HomeViewModel @Inject constructor(
         _trendingPlants[index] = plant
     }
 
+    fun clearTrendingPlants() {
+        _trendingPlants.clear()
+    }
+
+
     fun setForBeginnerPlants(plants: List<PlantItem>) {
         _forBeginnerPlants.addAll(plants)
     }
 
     fun updateForBeginnerPlants(index: Int, plant: PlantItem) {
         _forBeginnerPlants[index] = plant
+    }
+
+    fun clearForBeginnerPlants() {
+        _forBeginnerPlants.clear()
     }
 
     private fun idle() {

@@ -164,7 +164,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(30.dp))
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    shape = MaterialTheme.shapes.medium,
+                    shape = MaterialTheme.shapes.large,
                     enabled = loginState != UIState.Loading,
                     onClick = {
                         if (username.isNotEmpty() && password.isNotEmpty()) {
@@ -217,8 +217,6 @@ fun LoginScreen(
 
         // Observe login state
         when (loginState) {
-            is UIState.Idle -> {}
-
             is UIState.Loading -> {
                 FullSizeProgressBar()
             }
@@ -256,6 +254,8 @@ fun LoginScreen(
 
                 onEvent(LoginEvent.Idle)
             }
+
+            else -> {}
         }
     }
 }

@@ -5,6 +5,8 @@ import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.model.response.BaseResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -41,6 +43,21 @@ interface PlantService {
         @Query("isPlanting") isPlanting: Boolean?,
         @Query("isPlanted") isPlanted: Boolean?
     ): Response<BaseResponse<List<PlantItem>>>
+
+    @Multipart
+    @POST("plants")
+    suspend fun uploadPlant(
+        @Part("name") name: RequestBody,
+        @Part image: MultipartBody.Part,
+        @Part("category") category: RequestBody,
+        @Part("wateringFreq") wateringFreq: RequestBody,
+        @Part("growthEst") growthEst: RequestBody,
+        @Part("desc") desc: RequestBody,
+        @Part("tools") tools: RequestBody,
+        @Part("materials") materials: RequestBody,
+        @Part("steps") steps: RequestBody,
+        @Part("author") author: RequestBody
+    ): Response<BaseResponse<Any>>
 
     @POST("users/{username}/plants")
     suspend fun addPlantActivity(

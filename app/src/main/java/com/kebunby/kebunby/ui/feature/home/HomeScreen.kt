@@ -61,9 +61,11 @@ fun HomeScreen(
     val trendingPlants = homeViewModel.trendingPlants
     val setTrendingPlants = homeViewModel::setTrendingPlants
     val updateTrendingPlants = homeViewModel::updateTrendingPlants
+    val clearTrendingPlants = homeViewModel::clearTrendingPlants
     val forBeginnerPlants = homeViewModel.forBeginnerPlants
     val setForBeginnerPlants = homeViewModel::setForBeginnerPlants
     val updateForBeginnerPlants = homeViewModel::updateForBeginnerPlants
+    val clearForBeginnerPlants = homeViewModel::clearForBeginnerPlants
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -73,6 +75,11 @@ fun HomeScreen(
             state = rememberSwipeRefreshState(isRefreshing = swipeRefreshing),
             onRefresh = {
                 onSwipeRefreshingChanged(true)
+
+                // Clear local plant list
+                clearTrendingPlants()
+                clearForBeginnerPlants()
+
                 onEvent(HomeEvent.LoadUserProfile)
                 onEvent(HomeEvent.LoadTrendingPlants)
                 onEvent(HomeEvent.LoadForBeginnerPlants)
@@ -116,41 +123,41 @@ fun HomeScreen(
                         scaffoldState = scaffoldState
                     )
                 }
-
-                // Observe add favorite plant state
-                when (addFavPlantState) {
-                    is UIState.Error -> {
-                        LaunchedEffect(Unit) {
-                            coroutineScope.launch {
-                                addFavPlantState.message?.let { message ->
-                                    scaffoldState.snackbarHostState.showSnackbar(message)
-                                }
-                            }
-                        }
-
-                        onEvent(HomeEvent.Idle)
-                    }
-
-                    else -> {}
-                }
-
-                // Observe delete favorite plant state
-                when (deleteFavPlantState) {
-                    is UIState.Error -> {
-                        LaunchedEffect(Unit) {
-                            coroutineScope.launch {
-                                deleteFavPlantState.message?.let { message ->
-                                    scaffoldState.snackbarHostState.showSnackbar(message)
-                                }
-                            }
-                        }
-
-                        onEvent(HomeEvent.Idle)
-                    }
-
-                    else -> {}
-                }
             }
+        }
+
+        // Observe add favorite plant state
+        when (addFavPlantState) {
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        addFavPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(HomeEvent.Idle)
+            }
+
+            else -> {}
+        }
+
+        // Observe delete favorite plant state
+        when (deleteFavPlantState) {
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        deleteFavPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+
+                onEvent(HomeEvent.Idle)
+            }
+
+            else -> {}
         }
     }
 }
