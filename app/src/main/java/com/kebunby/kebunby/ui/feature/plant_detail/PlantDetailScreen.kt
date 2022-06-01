@@ -244,6 +244,21 @@ fun PlantDetailScreen(
                                 }
                                 Spacer(modifier = Modifier.height(20.dp))
 
+                                // Description
+                                Text(
+                                    text = stringResource(id = R.string.desc),
+                                    color = MaterialTheme.colors.onBackground,
+                                    fontWeight = FontWeight.SemiBold,
+                                    style = MaterialTheme.typography.subtitle2
+                                )
+                                Spacer(modifier = Modifier.height(5.dp))
+                                Text(
+                                    text = plant.desc,
+                                    color = MaterialTheme.colors.onBackground,
+                                    style = MaterialTheme.typography.body1
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+
                                 // Tools and Materials
                                 Text(
                                     text = stringResource(id = R.string.tools_and_materials),
@@ -251,7 +266,7 @@ fun PlantDetailScreen(
                                     fontWeight = FontWeight.SemiBold,
                                     style = MaterialTheme.typography.subtitle2
                                 )
-                                Spacer(modifier = Modifier.padding(5.dp))
+                                Spacer(modifier = Modifier.height(5.dp))
 
                                 plant.tools.forEach { tool ->
                                     Text(
@@ -280,7 +295,7 @@ fun PlantDetailScreen(
                                     fontWeight = FontWeight.SemiBold,
                                     style = MaterialTheme.typography.subtitle2
                                 )
-                                Spacer(modifier = Modifier.padding(5.dp))
+                                Spacer(modifier = Modifier.height(5.dp))
 
                                 plant.steps.forEachIndexed { index, step ->
                                     StepItem(

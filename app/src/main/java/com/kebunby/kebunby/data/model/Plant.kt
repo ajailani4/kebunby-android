@@ -11,6 +11,7 @@ data class Plant(
     val isFavorited: Boolean,
     val wateringFreq: String,
     val growthEst: String,
+    val desc: String,
     val tools: List<String>,
     val materials: List<String>,
     val steps: List<String>,

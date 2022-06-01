@@ -295,8 +295,6 @@ fun RegisterScreen(
 
         // Observe register state
         when (registerState) {
-            is UIState.Idle -> {}
-
             is UIState.Loading -> {
                 FullSizeProgressBar()
             }
@@ -334,6 +332,8 @@ fun RegisterScreen(
 
                 onEvent(RegisterEvent.Idle)
             }
+
+            else -> {}
         }
     }
 }
