@@ -7,6 +7,9 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
+import com.kebunby.kebunby.data.model.Plant
+import com.kebunby.kebunby.data.model.PlantCategory
+import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.UploadPlantUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import com.kebunby.kebunby.ui.common.UIState
@@ -22,8 +25,12 @@ import javax.inject.Inject
 @HiltViewModel
 class UploadPlantViewModel @Inject constructor(
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
+    private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase,
     private val uploadPlantUseCase: UploadPlantUseCase
 ) : ViewModel() {
+    private var _plantCategoriesState = mutableStateOf<UIState<List<PlantCategory>>>(UIState.Idle)
+    val plantCategoriesState: State<UIState<List<PlantCategory>>> = _plantCategoriesState
+
     private var _uploadPlantState = mutableStateOf<UIState<Any>>(UIState.Idle)
     val uploadPlantState: State<UIState<Any>> = _uploadPlantState
 
@@ -35,6 +42,12 @@ class UploadPlantViewModel @Inject constructor(
 
     private var _plantName = mutableStateOf("")
     val plantName: State<String> = _plantName
+
+    private var _selectedCategory = mutableStateOf<Pair<Int, Int>?>(null)
+    val selectedCategory: State<Pair<Int, Int>?> = _selectedCategory
+
+    private var _categorySpinnerVis = mutableStateOf(false)
+    val categorySpinnerVis: State<Boolean> = _categorySpinnerVis
 
     private var _growthEst = mutableStateOf("")
     val growthEst: State<String> = _growthEst
@@ -54,8 +67,14 @@ class UploadPlantViewModel @Inject constructor(
     private var _steps = mutableStateListOf("Step 1")
     val steps: SnapshotStateList<String> = _steps
 
+    init {
+        onEvent(UploadPlantEvent.LoadPlantCategories)
+    }
+
     fun onEvent(event: UploadPlantEvent) {
         when (event) {
+            UploadPlantEvent.LoadPlantCategories -> getPlantCategories()
+
             UploadPlantEvent.UploadPlant -> uploadPlant()
         }
     }
@@ -66,6 +85,14 @@ class UploadPlantViewModel @Inject constructor(
 
     fun onPhotoChanged(file: File?) {
         _photo.value = file
+    }
+
+    fun onSelectedCategoryChanged(category: Pair<Int, Int>) {
+        _selectedCategory.value = category
+    }
+
+    fun onCategorySpinnerVisChanged(visibility: Boolean) {
+        _categorySpinnerVis.value = visibility
     }
 
     fun onPlantNameChanged(text: String) {
@@ -132,6 +159,22 @@ class UploadPlantViewModel @Inject constructor(
         }
     }
 
+    private fun getPlantCategories() {
+        viewModelScope.launch {
+            val resource = getPlantCategoriesUseCase.invoke()
+
+            resource.catch {
+                _plantCategoriesState.value = UIState.Error(it.localizedMessage)
+            }.collect {
+                _plantCategoriesState.value = when (it) {
+                    is Resource.Success -> UIState.Success(it.data)
+
+                    is Resource.Error -> UIState.Fail(it.message)
+                }
+            }
+        }
+    }
+
     private fun uploadPlant() {
         _uploadPlantState.value = UIState.Loading
 
@@ -141,7 +184,7 @@ class UploadPlantViewModel @Inject constructor(
             val resource = uploadPlantUseCase.invoke(
                 name = _plantName.value,
                 image = _photo.value!!,
-                category = "1",
+                category = _selectedCategory.value!!.second.toString(),
                 wateringFreq = _wateringFreq.value,
                 growthEst = _growthEst.value,
                 desc = _desc.value,

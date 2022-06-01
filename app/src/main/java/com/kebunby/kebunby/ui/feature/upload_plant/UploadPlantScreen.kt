@@ -5,30 +5,30 @@ import android.content.Context
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
@@ -40,6 +40,7 @@ import com.kebunby.kebunby.util.ListAction
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
+import compose.icons.evaicons.fill.ArrowDown
 import compose.icons.evaicons.fill.PlusCircle
 import compose.icons.evaicons.outline.Close
 import id.zelory.compressor.Compressor
@@ -53,6 +54,7 @@ fun UploadPlantScreen(
     uploadPlantViewModel: UploadPlantViewModel = hiltViewModel()
 ) {
     val onEvent = uploadPlantViewModel::onEvent
+    val plantCategoriesState = uploadPlantViewModel.plantCategoriesState.value
     val uploadPlantState = uploadPlantViewModel.uploadPlantState.value
     val cameraScreenVis = uploadPlantViewModel.cameraScreenVis.value
     val onCameraScreenVisChanged = uploadPlantViewModel::onCameraScreenVisChanged
@@ -60,6 +62,10 @@ fun UploadPlantScreen(
     val onPhotoChanged = uploadPlantViewModel::onPhotoChanged
     val plantName = uploadPlantViewModel.plantName.value
     val onPlantNameChanged = uploadPlantViewModel::onPlantNameChanged
+    val selectedCategory = uploadPlantViewModel.selectedCategory.value
+    val onSelectedCategoryChanged = uploadPlantViewModel::onSelectedCategoryChanged
+    val categorySpinnerVis = uploadPlantViewModel.categorySpinnerVis.value
+    val onCategorySpinnerVisChanged = uploadPlantViewModel::onCategorySpinnerVisChanged
     val growthEst = uploadPlantViewModel.growthEst.value
     val onGrowEstChanged = uploadPlantViewModel::onGrowthEstChanged
     val wateringFreq = uploadPlantViewModel.wateringFreq.value
@@ -97,6 +103,11 @@ fun UploadPlantScreen(
                 photo = photo,
                 plantName = plantName,
                 onPlantNameChanged = onPlantNameChanged,
+                plantCategoriesState = plantCategoriesState,
+                selectedCategory = selectedCategory,
+                onSelectedCategoryChanged = onSelectedCategoryChanged,
+                categorySpinnerVis = categorySpinnerVis,
+                onCategorySpinnerVisChanged = onCategorySpinnerVisChanged,
                 growthEst = growthEst,
                 onGrowEstChanged = onGrowEstChanged,
                 wateringFreq = wateringFreq,
@@ -179,6 +190,11 @@ fun UploadPlantForm(
     photo: File?,
     plantName: String,
     onPlantNameChanged: (String) -> Unit,
+    plantCategoriesState: UIState<List<PlantCategory>>,
+    selectedCategory: Pair<Int, Int>?,
+    onSelectedCategoryChanged: (Pair<Int, Int>) -> Unit,
+    categorySpinnerVis: Boolean,
+    onCategorySpinnerVisChanged: (Boolean) -> Unit,
     growthEst: String,
     onGrowEstChanged: (String) -> Unit,
     wateringFreq: String,
@@ -214,6 +230,8 @@ fun UploadPlantForm(
             }
 
             Spacer(modifier = Modifier.height(25.dp))
+
+            // Plant Name
             Text(
                 text = stringResource(id = R.string.plant_name),
                 color = MaterialTheme.colors.onBackground,
@@ -233,6 +251,114 @@ fun UploadPlantForm(
                 )
             )
             Spacer(modifier = Modifier.height(25.dp))
+
+            // Category
+            // Observe plant categories state
+            when (plantCategoriesState) {
+                is UIState.Success -> {
+                    val plantCategories = plantCategoriesState.data
+                    var boxSize by remember { mutableStateOf(Size.Zero) }
+
+                    if (plantCategories != null) {
+                        if (selectedCategory == null) {
+                            onSelectedCategoryChanged(Pair(0, plantCategories[0].id))
+                        }
+
+                        Text(
+                            text = stringResource(id = R.string.category),
+                            color = MaterialTheme.colors.onBackground,
+                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.body1
+                        )
+                        Box(
+                            modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
+                                boxSize = layoutCoordinates.size.toSize()
+                            }
+                        ) {
+                            TextField(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable(onClick = {
+                                        onCategorySpinnerVisChanged(true)
+                                    }),
+                                value = if (plantCategories.isNotEmpty() && selectedCategory != null) {
+                                    plantCategories[selectedCategory.first].category
+                                } else {
+                                    ""
+                                },
+                                onValueChange = {},
+                                trailingIcon = {
+                                    Icon(
+                                        imageVector = EvaIcons.Fill.ArrowDown,
+                                        tint = MaterialTheme.colors.onBackground,
+                                        contentDescription = "Delete tool icon"
+                                    )
+                                },
+                                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                                enabled = false,
+                                singleLine = true,
+                                textStyle = TextStyle(
+                                    color = MaterialTheme.colors.onBackground,
+                                    fontFamily = poppinsFamily,
+                                    fontSize = 14.sp
+                                )
+                            )
+                            DropdownMenu(
+                                modifier = Modifier
+                                    .background(color = MaterialTheme.colors.background)
+                                    .width(
+                                        with(LocalDensity.current) {
+                                            boxSize.width.toDp()
+                                        }
+                                    ),
+                                expanded = categorySpinnerVis,
+                                onDismissRequest = { onCategorySpinnerVisChanged(false) }
+                            ) {
+                                plantCategories.forEachIndexed { index, plantCategory ->
+                                    DropdownMenuItem(
+                                        onClick = {
+                                            onSelectedCategoryChanged(Pair(index, plantCategory.id))
+                                            onCategorySpinnerVisChanged(false)
+                                        }
+                                    ) {
+                                        Text(
+                                            text = plantCategory.category,
+                                            color = MaterialTheme.colors.onBackground,
+                                            style = MaterialTheme.typography.body1
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                is UIState.Fail -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantCategoriesState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                is UIState.Error -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantCategoriesState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                else -> {}
+            }
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            // Growth Estimation
             Text(
                 text = stringResource(id = R.string.growth_estimation),
                 color = MaterialTheme.colors.onBackground,
@@ -252,6 +378,8 @@ fun UploadPlantForm(
                 )
             )
             Spacer(modifier = Modifier.height(25.dp))
+
+            // Watering Frequency
             Text(
                 text = stringResource(id = R.string.watering_frequency),
                 color = MaterialTheme.colors.onBackground,
@@ -271,6 +399,8 @@ fun UploadPlantForm(
                 )
             )
             Spacer(modifier = Modifier.height(25.dp))
+
+            // Description
             Text(
                 text = stringResource(id = R.string.desc),
                 color = MaterialTheme.colors.onBackground,
@@ -289,6 +419,8 @@ fun UploadPlantForm(
                 )
             )
             Spacer(modifier = Modifier.height(25.dp))
+
+            // Tools
             Text(
                 text = stringResource(id = R.string.tools),
                 color = MaterialTheme.colors.onBackground,
@@ -342,6 +474,8 @@ fun UploadPlantForm(
                 )
             }
             Spacer(modifier = Modifier.height(25.dp))
+
+            // Materials
             Text(
                 text = stringResource(id = R.string.materials),
                 color = MaterialTheme.colors.onBackground,
@@ -401,6 +535,8 @@ fun UploadPlantForm(
                 )
             }
             Spacer(modifier = Modifier.height(25.dp))
+
+            // Steps
             Text(
                 text = stringResource(id = R.string.steps),
                 color = MaterialTheme.colors.onBackground,
@@ -459,9 +595,9 @@ fun UploadPlantForm(
                 shape = MaterialTheme.shapes.large,
                 onClick = {
                     if (
-                        photo != null && plantName.isNotEmpty() && growthEst.isNotEmpty() &&
-                        wateringFreq.isNotEmpty() && desc.isNotEmpty() && tools.isNotEmpty() &&
-                        materials.isNotEmpty() && steps.isNotEmpty()
+                        photo != null && plantName.isNotEmpty() && selectedCategory != null &&
+                        growthEst.isNotEmpty() && wateringFreq.isNotEmpty() && desc.isNotEmpty() &&
+                        tools.isNotEmpty() && materials.isNotEmpty() && steps.isNotEmpty()
                     ) {
                         onEvent(UploadPlantEvent.UploadPlant)
                     } else {
