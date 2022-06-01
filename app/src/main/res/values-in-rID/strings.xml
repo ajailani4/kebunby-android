@@ -52,6 +52,8 @@
     <string name="already_planted">Sudah Ditanam</string>
     <string name="plant_now_confirm_msg">Apakah kamu yakin ingin menanam ini?</string>
     <string name="finish_planting_confirm_msg">Apakah kamu yakin ingin menyelesaikan penanaman?</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Hapus</string>
 
     <string name="search_plant">Cari tanaman</string>
     <string name="no_plants_yet">Belum ada tanaman</string>
