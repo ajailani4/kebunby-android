@@ -168,12 +168,12 @@ fun PlantDetailScreen(
                                 }
                             }
 
-                            // Short Info
                             Column(
                                 modifier = Modifier
                                     .padding(horizontal = 20.dp)
                                     .padding(top = 15.dp, bottom = 80.dp)
                             ) {
+                                // Short Info
                                 Row(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.SpaceBetween
@@ -203,7 +203,7 @@ fun PlantDetailScreen(
                                     text = plant.name,
                                     color = MaterialTheme.colors.onBackground,
                                     fontWeight = FontWeight.Bold,
-                                    style = MaterialTheme.typography.h3
+                                    style = MaterialTheme.typography.h2
                                 )
                                 Text(
                                     text = plant.category,
@@ -249,7 +249,7 @@ fun PlantDetailScreen(
                                     text = stringResource(id = R.string.desc),
                                     color = MaterialTheme.colors.onBackground,
                                     fontWeight = FontWeight.SemiBold,
-                                    style = MaterialTheme.typography.subtitle2
+                                    style = MaterialTheme.typography.h4
                                 )
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Text(
@@ -264,7 +264,7 @@ fun PlantDetailScreen(
                                     text = stringResource(id = R.string.tools_and_materials),
                                     color = MaterialTheme.colors.onBackground,
                                     fontWeight = FontWeight.SemiBold,
-                                    style = MaterialTheme.typography.subtitle2
+                                    style = MaterialTheme.typography.h4
                                 )
                                 Spacer(modifier = Modifier.height(5.dp))
 
@@ -293,7 +293,7 @@ fun PlantDetailScreen(
                                     text = stringResource(id = R.string.steps),
                                     color = MaterialTheme.colors.onBackground,
                                     fontWeight = FontWeight.SemiBold,
-                                    style = MaterialTheme.typography.subtitle2
+                                    style = MaterialTheme.typography.h4
                                 )
                                 Spacer(modifier = Modifier.height(5.dp))
 
