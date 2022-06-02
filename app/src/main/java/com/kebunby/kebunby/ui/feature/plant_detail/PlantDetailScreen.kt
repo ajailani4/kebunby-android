@@ -177,7 +177,7 @@ fun PlantDetailScreen(
                                                     }
                                                 }
                                             )
-                                            Spacer(modifier = Modifier.width(20.dp))
+                                            Spacer(modifier = Modifier.width(15.dp))
                                             TopMenuButton(
                                                 icon = EvaIcons.Outline.MoreVertical,
                                                 tint = Grey,

@@ -21,7 +21,7 @@ fun TopMenuButton(
     onClick: () -> Unit
 ) {
     Button(
-        modifier = Modifier.size(48.dp),
+        modifier = Modifier.size(42.dp),
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
         contentPadding = PaddingValues(0.dp),
