@@ -59,6 +59,9 @@ class PlantDetailViewModel @Inject constructor(
     private var _finishPlantingDlgVis = mutableStateOf(false)
     val finishPlantingDlgVis: State<Boolean> = _finishPlantingDlgVis
 
+    private var _fullSizeImgVis = mutableStateOf(false)
+    val fullSizeImgVis: State<Boolean> = _fullSizeImgVis
+
     init {
         onEvent(PlantDetailEvent.LoadPlantDetail)
     }
@@ -91,6 +94,10 @@ class PlantDetailViewModel @Inject constructor(
 
     fun onFinishPlantingDlgVisChanged(visibility: Boolean) {
         _finishPlantingDlgVis.value = visibility
+    }
+
+    fun onFullSizeImgVisChanged(visibility: Boolean) {
+        _fullSizeImgVis.value = visibility
     }
 
     private fun getPlantDetail() {

@@ -30,10 +30,7 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
-import com.kebunby.kebunby.ui.feature.plant_detail.component.BottomSheetItem
-import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
-import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
-import com.kebunby.kebunby.ui.feature.plant_detail.component.TopMenuButton
+import com.kebunby.kebunby.ui.feature.plant_detail.component.*
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -74,6 +71,8 @@ fun PlantDetailScreen(
     val onPlantNowDialogVisChanged = plantDetailViewModel::onPlantNowDialogVisChanged
     val finishPlantingDlgVis = plantDetailViewModel.finishPlantingDlgVis.value
     val onFinishPlantingDlgVisChanged = plantDetailViewModel::onFinishPlantingDlgVisChanged
+    val fullSizeImgVis = plantDetailViewModel.fullSizeImgVis.value
+    val onFullSizeImgVisChanged = plantDetailViewModel::onFullSizeImgVisChanged
 
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scaffoldState = rememberScaffoldState()
@@ -112,25 +111,25 @@ fun PlantDetailScreen(
                     )
                 }
             ) {
-                Box {
-                    // Observe plant detail state
-                    when (plantDetailState) {
-                        is UIState.Loading -> {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator()
-                            }
+                // Observe plant detail state
+                when (plantDetailState) {
+                    is UIState.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
                         }
+                    }
 
-                        is UIState.Success -> {
-                            onSwipeRefreshingChanged(false)
+                    is UIState.Success -> {
+                        onSwipeRefreshingChanged(false)
 
-                            val plant = plantDetailState.data!!
+                        val plant = plantDetailState.data!!
 
-                            if (isFavorited == null) onFavoritePlant(plant.isFavorited)
+                        if (isFavorited == null) onFavoritePlant(plant.isFavorited)
 
+                        Box {
                             Column(
                                 modifier = Modifier
                                     .background(color = MaterialTheme.colors.background)
@@ -142,7 +141,8 @@ fun PlantDetailScreen(
                                     Image(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .height(260.dp),
+                                            .height(260.dp)
+                                            .clickable(onClick = { onFullSizeImgVisChanged(true) }),
                                         painter = rememberImagePainter(plant.image),
                                         contentScale = ContentScale.Crop,
                                         contentDescription = "Plant image"
@@ -381,34 +381,41 @@ fun PlantDetailScreen(
                                     }
                                 }
                             }
-                        }
 
-                        is UIState.Fail -> {
-                            onSwipeRefreshingChanged(false)
-
-                            LaunchedEffect(Unit) {
-                                coroutineScope.launch {
-                                    plantDetailState.message?.let { message ->
-                                        scaffoldState.snackbarHostState.showSnackbar(message)
-                                    }
-                                }
+                            if (fullSizeImgVis) {
+                                FullSizeImage(
+                                    image = plant.image,
+                                    onVisibilityChanged = onFullSizeImgVisChanged
+                                )
                             }
                         }
-
-                        is UIState.Error -> {
-                            onSwipeRefreshingChanged(false)
-
-                            LaunchedEffect(Unit) {
-                                coroutineScope.launch {
-                                    plantDetailState.message?.let { message ->
-                                        scaffoldState.snackbarHostState.showSnackbar(message)
-                                    }
-                                }
-                            }
-                        }
-
-                        else -> {}
                     }
+
+                    is UIState.Fail -> {
+                        onSwipeRefreshingChanged(false)
+
+                        LaunchedEffect(Unit) {
+                            coroutineScope.launch {
+                                plantDetailState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+                    }
+
+                    is UIState.Error -> {
+                        onSwipeRefreshingChanged(false)
+
+                        LaunchedEffect(Unit) {
+                            coroutineScope.launch {
+                                plantDetailState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+                    }
+
+                    else -> {}
                 }
             }
 
