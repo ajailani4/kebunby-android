@@ -69,6 +69,7 @@ fun PlantDetailScreen(
     val onSwipeRefreshingChanged = plantDetailViewModel::onSwipeRefreshingChanged
     val isFavorited = plantDetailViewModel.isFavorited.value
     val onFavoritePlant = plantDetailViewModel::onFavoritePlant
+    val moreMenuBtnVis = plantDetailViewModel.moreMenuBtnVis.value
     val plantNowDialogVis = plantDetailViewModel.plantNowDialogVis.value
     val onPlantNowDialogVisChanged = plantDetailViewModel::onPlantNowDialogVisChanged
     val finishPlantingDlgVis = plantDetailViewModel.finishPlantingDlgVis.value
@@ -177,17 +178,20 @@ fun PlantDetailScreen(
                                                     }
                                                 }
                                             )
-                                            Spacer(modifier = Modifier.width(15.dp))
-                                            TopMenuButton(
-                                                icon = EvaIcons.Outline.MoreVertical,
-                                                tint = Grey,
-                                                contentDescription = "More button",
-                                                onClick = {
-                                                    coroutineScope.launch {
-                                                        bottomSheetState.show()
+
+                                            if (moreMenuBtnVis) {
+                                                Spacer(modifier = Modifier.width(15.dp))
+                                                TopMenuButton(
+                                                    icon = EvaIcons.Outline.MoreVertical,
+                                                    tint = Grey,
+                                                    contentDescription = "More button",
+                                                    onClick = {
+                                                        coroutineScope.launch {
+                                                            bottomSheetState.show()
+                                                        }
                                                     }
-                                                }
-                                            )
+                                                )
+                                            }
                                         }
                                     }
                                 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.Plant
+import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.domain.use_case.plant.AddPlantActivityUseCase
 import com.kebunby.kebunby.domain.use_case.plant.DeletePlantActivityUseCase
@@ -48,6 +49,9 @@ class PlantDetailViewModel @Inject constructor(
 
     private var _isFavorited = mutableStateOf<Boolean?>(null)
     val isFavorited: State<Boolean?> = _isFavorited
+
+    private var _moreMenuBtnVis = mutableStateOf(false)
+    val moreMenuBtnVis: State<Boolean> = _moreMenuBtnVis
 
     private var _plantNowDialogVis = mutableStateOf(false)
     val plantNowDialogVis: State<Boolean> = _plantNowDialogVis
@@ -93,6 +97,7 @@ class PlantDetailViewModel @Inject constructor(
         _plantDetailState.value = UIState.Loading
 
         viewModelScope.launch {
+            val userCredential = getUserCredentialUseCase.invoke().first()
             val resource = getPlantDetailUseCase.invoke(savedStateHandle.get<Int>("plantId")!!)
 
             resource.catch {
@@ -100,6 +105,10 @@ class PlantDetailViewModel @Inject constructor(
             }.collect {
                 _plantDetailState.value = when (it) {
                     is Resource.Success -> {
+                        if (userCredential.username == it.data?.author) {
+                            _moreMenuBtnVis.value = true
+                        }
+
                         UIState.Success(it.data)
                     }
 
