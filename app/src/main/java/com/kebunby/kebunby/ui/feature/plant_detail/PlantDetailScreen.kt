@@ -2,7 +2,6 @@ package com.kebunby.kebunby.ui.feature.plant_detail
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -239,7 +238,7 @@ fun PlantDetailScreen(
                                             style = MaterialTheme.typography.h2
                                         )
                                         Text(
-                                            text = plant.category.category,
+                                            text = plant.category.name,
                                             color = Grey,
                                             fontWeight = FontWeight.SemiBold,
                                             style = MaterialTheme.typography.body1

@@ -43,11 +43,11 @@ fun PlantCategoryCard(
                         else -> R.drawable.ic_decorative_plant
                     }
                 ),
-                contentDescription = "Plant category icon"
+                contentDescription = "Plant name icon"
             )
             Spacer(modifier = Modifier.width(15.dp))
             Text(
-                text = plantCategory.category,
+                text = plantCategory.name,
                 color = MaterialTheme.colors.onSurface,
                 fontWeight = FontWeight.SemiBold,
                 style = MaterialTheme.typography.subtitle2

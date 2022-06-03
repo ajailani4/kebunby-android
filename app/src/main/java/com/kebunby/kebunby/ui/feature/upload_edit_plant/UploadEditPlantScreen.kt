@@ -46,7 +46,6 @@ import compose.icons.evaicons.outline.Close
 import id.zelory.compressor.Compressor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
 fun UploadEditPlantScreen(
@@ -340,11 +339,7 @@ fun PlantForm(
                                     .clickable(onClick = {
                                         onCategorySpinnerVisChanged(true)
                                     }),
-                                value = if (plantCategories.isNotEmpty() && selectedCategory != null) {
-                                    selectedCategory.category
-                                } else {
-                                    ""
-                                },
+                                value = selectedCategory?.name ?: "",
                                 onValueChange = {},
                                 trailingIcon = {
                                     Icon(
@@ -381,7 +376,7 @@ fun PlantForm(
                                         }
                                     ) {
                                         Text(
-                                            text = plantCategory.category,
+                                            text = plantCategory.name,
                                             color = MaterialTheme.colors.onBackground,
                                             style = MaterialTheme.typography.body1
                                         )

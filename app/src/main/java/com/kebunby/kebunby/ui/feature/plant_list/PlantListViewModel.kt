@@ -28,7 +28,7 @@ class PlantListViewModel @Inject constructor(
     val isTrending = savedStateHandle.get<Boolean>("isTrending")
     val forBeginner = savedStateHandle.get<Boolean>("forBeginner")
     val categoryId = savedStateHandle.get<Int>("categoryId")
-    val category = savedStateHandle.get<String>("category")
+    val category = savedStateHandle.get<String>("name")
 
     private var _pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
     val pagingPlants: StateFlow<PagingData<PlantItem>> = _pagingPlants

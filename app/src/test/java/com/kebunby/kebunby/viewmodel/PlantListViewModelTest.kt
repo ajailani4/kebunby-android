@@ -50,7 +50,7 @@ class PlantListViewModelTest {
             set("forBeginner", false)
             set("searchQuery", null)
             set("categoryId", 0)
-            set("category", "Tanaman Hias")
+            set("name", "Tanaman Hias")
         }
     }
 

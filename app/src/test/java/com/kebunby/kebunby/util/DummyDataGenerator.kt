@@ -60,7 +60,7 @@ fun generatePlants() =
 fun generatePlantCategory() =
     PlantCategory(
         id = 1,
-        category = "Tanaman Hias"
+        name = "Tanaman Hias"
     )
 
 fun generatePlantCategories() =
