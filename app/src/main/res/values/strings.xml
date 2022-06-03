@@ -86,5 +86,6 @@
     <string name="tools">Tools</string>
     <string name="materials">Materials</string>
     <string name="upload">Upload</string>
+    <string name="save">Save</string>
     <string name="photo_size_is_too_large">Photo size is too large</string>
 </resources>

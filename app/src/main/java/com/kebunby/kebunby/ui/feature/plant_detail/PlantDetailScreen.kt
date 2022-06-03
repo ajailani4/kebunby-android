@@ -89,6 +89,10 @@ fun PlantDetailScreen(
                     title = stringResource(id = R.string.edit),
                     onClick = {
                         navController.navigate(Screen.UploadEditPlantScreen.route + "?plantId=$plantId")
+
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
                     }
                 )
                 BottomSheetItem(

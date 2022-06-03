@@ -5,4 +5,5 @@ sealed class UploadEditPlantEvent {
     object LoadPlantDetail : UploadEditPlantEvent()
     object LoadPlantCategories : UploadEditPlantEvent()
     object UploadPlant : UploadEditPlantEvent()
+    object EditPlant : UploadEditPlantEvent()
 }

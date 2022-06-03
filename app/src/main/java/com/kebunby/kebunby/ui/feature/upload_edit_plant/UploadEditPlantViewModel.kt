@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.PlantCategory
+import com.kebunby.kebunby.domain.use_case.plant.EditPlantUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
 import com.kebunby.kebunby.domain.use_case.plant.UploadPlantUseCase
@@ -30,7 +31,8 @@ class UploadEditPlantViewModel @Inject constructor(
     private val getPlantDetailUseCase: GetPlantDetailUseCase,
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase,
-    private val uploadPlantUseCase: UploadPlantUseCase
+    private val uploadPlantUseCase: UploadPlantUseCase,
+    private val editPlantUseCase: EditPlantUseCase
 ) : ViewModel() {
     val plantId = savedStateHandle.get<Int>("plantId")
 
@@ -42,6 +44,9 @@ class UploadEditPlantViewModel @Inject constructor(
 
     private var _uploadPlantState = mutableStateOf<UIState<Any>>(UIState.Idle)
     val uploadPlantState: State<UIState<Any>> = _uploadPlantState
+
+    private var _editPlantState = mutableStateOf<UIState<Any>>(UIState.Idle)
+    val editPlantState: State<UIState<Any>> = _editPlantState
 
     private var _cameraScreenVis = mutableStateOf(true)
     val cameraScreenVis: State<Boolean> = _cameraScreenVis
@@ -76,6 +81,9 @@ class UploadEditPlantViewModel @Inject constructor(
     private var _steps = mutableStateListOf("Step 1")
     val steps: SnapshotStateList<String> = _steps
 
+    private var popularity = 0
+    private var publishedOn = ""
+
     init {
         if (plantId!! > 0) {
             _cameraScreenVis.value = false
@@ -94,6 +102,8 @@ class UploadEditPlantViewModel @Inject constructor(
             UploadEditPlantEvent.LoadPlantCategories -> getPlantCategories()
 
             UploadEditPlantEvent.UploadPlant -> uploadPlant()
+
+            UploadEditPlantEvent.EditPlant -> editPlant()
         }
     }
 
@@ -192,6 +202,14 @@ class UploadEditPlantViewModel @Inject constructor(
         _steps.addAll(items)
     }
 
+    fun setPopularity(_popularity: Int) {
+        popularity = _popularity
+    }
+
+    fun setPublishedOn(_publishedOn: String) {
+        publishedOn = _publishedOn
+    }
+
     private fun idle() {
         _plantDetailState.value = UIState.Idle
         _uploadPlantState.value = UIState.Idle
@@ -258,6 +276,40 @@ class UploadEditPlantViewModel @Inject constructor(
                 _uploadPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 _uploadPlantState.value = when (it) {
+                    is Resource.Success -> UIState.Success(it.data)
+
+                    is Resource.Error -> UIState.Fail(it.message)
+                }
+            }
+        }
+    }
+
+    private fun editPlant() {
+        _editPlantState.value = UIState.Loading
+
+        viewModelScope.launch {
+            val userCredential = getUserCredentialUseCase.invoke().first()
+
+            val resource = editPlantUseCase.invoke(
+                id = plantId!!,
+                name = _plantName.value,
+                image = if (_photo.value is File) _photo.value as File else null,
+                category = _selectedCategory.value!!.id.toString(),
+                wateringFreq = _wateringFreq.value,
+                growthEst = _growthEst.value,
+                desc = _desc.value,
+                tools = _tools,
+                materials = _materials,
+                steps = _steps,
+                author = userCredential.username!!,
+                popularity = popularity.toString(),
+                publishedOn = publishedOn
+            )
+
+            resource.catch {
+                _editPlantState.value = UIState.Error(it.localizedMessage)
+            }.collect {
+                _editPlantState.value = when (it) {
                     is Resource.Success -> UIState.Success(it.data)
 
                     is Resource.Error -> UIState.Fail(it.message)

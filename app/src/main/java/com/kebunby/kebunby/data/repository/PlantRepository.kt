@@ -51,6 +51,22 @@ interface PlantRepository {
         author: String
     ): Flow<Resource<Any>>
 
+    fun editPlant(
+        id: Int,
+        name: String,
+        image: File?,
+        category: String,
+        wateringFreq: String,
+        growthEst: String,
+        desc: String,
+        tools: List<String>,
+        materials: List<String>,
+        steps: List<String>,
+        author: String,
+        popularity: String,
+        publishedOn: String
+    ): Flow<Resource<Any>>
+
     fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,

@@ -86,5 +86,6 @@
     <string name="tools">Alat</string>
     <string name="materials">Bahan</string>
     <string name="upload">Unggah</string>
+    <string name="save">Simpan</string>
     <string name="photo_size_is_too_large">Ukuran foto terlalu besar</string>
 </resources>

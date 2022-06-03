@@ -60,6 +60,7 @@ fun UploadEditPlantScreen(
     val plantDetailState = uploadEditPlantViewModel.plantDetailState.value
     val plantCategoriesState = uploadEditPlantViewModel.plantCategoriesState.value
     val uploadPlantState = uploadEditPlantViewModel.uploadPlantState.value
+    val editPlantState = uploadEditPlantViewModel.editPlantState.value
     val cameraScreenVis = uploadEditPlantViewModel.cameraScreenVis.value
     val onCameraScreenVisChanged = uploadEditPlantViewModel::onCameraScreenVisChanged
     val photo = uploadEditPlantViewModel.photo.value
@@ -85,6 +86,8 @@ fun UploadEditPlantScreen(
     val steps = uploadEditPlantViewModel.steps
     val onStepsChanged = uploadEditPlantViewModel::onStepsChanged
     val setSteps = uploadEditPlantViewModel::setSteps
+    val setPopularity = uploadEditPlantViewModel::setPopularity
+    val setPublishedOn = uploadEditPlantViewModel::setPublishedOn
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -110,6 +113,7 @@ fun UploadEditPlantScreen(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             PlantForm(
+                plantId = plantId,
                 onEvent = onEvent,
                 photo = photo,
                 plantName = plantName,
@@ -180,6 +184,8 @@ fun UploadEditPlantScreen(
                         setTools(plant.tools)
                         setMaterials(plant.materials)
                         setSteps(plant.steps)
+                        setPopularity(plant.popularity)
+                        setPublishedOn(plant.publishedOn)
                     }
 
                     onEvent(UploadEditPlantEvent.Idle)
@@ -247,12 +253,48 @@ fun UploadEditPlantScreen(
 
             else -> {}
         }
+
+        // Observe edit plant state
+        when (editPlantState) {
+            is UIState.Loading -> {
+                FullSizeProgressBar()
+            }
+
+            is UIState.Success -> {
+                LaunchedEffect(Unit) {
+                    navController.navigateUp()
+                }
+            }
+
+            is UIState.Fail -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        editPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        editPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
+        }
     }
 }
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PlantForm(
+    plantId: Int,
     onEvent: (UploadEditPlantEvent) -> Unit,
     photo: Any?,
     plantName: String,
@@ -662,7 +704,11 @@ fun PlantForm(
                         growthEst.isNotEmpty() && wateringFreq.isNotEmpty() && desc.isNotEmpty() &&
                         tools.isNotEmpty() && materials.isNotEmpty() && steps.isNotEmpty()
                     ) {
-                        onEvent(UploadEditPlantEvent.UploadPlant)
+                        if (plantId > 0) {
+                            onEvent(UploadEditPlantEvent.EditPlant)
+                        } else {
+                            onEvent(UploadEditPlantEvent.UploadPlant)
+                        }
                     } else {
                         coroutineScope.launch {
                             scaffoldState.snackbarHostState.showSnackbar(
@@ -674,7 +720,11 @@ fun PlantForm(
             ) {
                 Text(
                     modifier = Modifier.padding(5.dp),
-                    text = stringResource(id = R.string.upload),
+                    text = if (plantId > 0) {
+                        stringResource(id = R.string.save)
+                    } else {
+                        stringResource(id = R.string.upload)
+                    },
                     color = MaterialTheme.colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.subtitle1

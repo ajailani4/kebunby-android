@@ -149,6 +149,46 @@ class PlantRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun editPlant(
+        id: Int,
+        name: String,
+        image: File?,
+        category: String,
+        wateringFreq: String,
+        growthEst: String,
+        desc: String,
+        tools: List<String>,
+        materials: List<String>,
+        steps: List<String>,
+        author: String,
+        popularity: String,
+        publishedOn: String
+    ) = flow {
+        val response = plantRemoteDataSource.editPlant(
+            id = id,
+            name = name,
+            image = image,
+            category = category,
+            wateringFreq = wateringFreq,
+            growthEst = growthEst,
+            desc = desc,
+            tools = tools,
+            materials = materials,
+            steps = steps,
+            author = author,
+            popularity = popularity,
+            publishedOn = publishedOn
+        )
+
+        when (response.code()) {
+            200 -> emit(Resource.Success(response.body()?.data))
+
+            413 -> emit(Resource.Error(context.resources.getString(R.string.photo_size_is_too_large)))
+
+            else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
+        }
+    }
+
     override fun addPlantActivity(
         username: String,
         isPlanting: Boolean?,
