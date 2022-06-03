@@ -6,13 +6,8 @@ import javax.inject.Inject
 class GetPagingPlantsByCategoryUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private fun getPlantsPagingByCategory(categoryId: Int) =
-        plantRepository.getPagingPlantsByCategory(
-            categoryId = categoryId
-        )
-
     operator fun invoke(categoryId: Int) =
-        getPlantsPagingByCategory(
+        plantRepository.getPagingPlantsByCategory(
             categoryId = categoryId
         )
 }

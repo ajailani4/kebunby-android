@@ -6,7 +6,5 @@ import javax.inject.Inject
 class GetUserCredentialUseCase @Inject constructor(
     private val userCredentialRepository: UserCredentialRepository
 ) {
-    private fun getUserCredential() = userCredentialRepository.getUserCredential()
-
-    operator fun invoke() = getUserCredential()
+    operator fun invoke() = userCredentialRepository.getUserCredential()
 }
