@@ -25,7 +25,7 @@ sealed class Screen(
 
     object PlantDetailScreen : Screen("plant_detail_screen")
 
-    object UploadPlantScreen : Screen("upload_plant_screen")
+    object UploadEditPlantScreen : Screen("upload_edit_plant_screen")
 
     // Bottom nav menu
     object HomeScreen : Screen(

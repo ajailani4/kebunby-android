@@ -58,7 +58,7 @@ fun PlantCard(
                     style = MaterialTheme.typography.h4
                 )
                 Text(
-                    text = plantItem?.category ?: "-",
+                    text = plantItem?.category?.category ?: "-",
                     color = Grey,
                     fontWeight = FontWeight.SemiBold,
                     maxLines = 1,

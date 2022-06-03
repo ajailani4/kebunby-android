@@ -29,6 +29,8 @@ class PlantDetailViewModel @Inject constructor(
     private val addPlantActivityUseCase: AddPlantActivityUseCase,
     private val deletePlantActivityUseCase: DeletePlantActivityUseCase
 ) : ViewModel() {
+    val plantId = savedStateHandle.get<Int>("plantId")
+
     private var _plantDetailState = mutableStateOf<UIState<Plant>>(UIState.Idle)
     val plantDetailState: State<UIState<Plant>> = _plantDetailState
 

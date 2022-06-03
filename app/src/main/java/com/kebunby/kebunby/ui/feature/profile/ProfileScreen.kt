@@ -15,7 +15,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -50,12 +49,9 @@ import com.kebunby.kebunby.ui.feature.profile.planting.PlantingScreen
 import com.kebunby.kebunby.ui.feature.profile.uploaded.UploadedScreen
 import com.kebunby.kebunby.ui.theme.Grey
 import compose.icons.EvaIcons
-import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.outline.LogOut
 import compose.icons.evaicons.outline.Plus
-import compose.icons.evaicons.outline.PlusCircle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -124,7 +120,7 @@ fun ProfileScreen(
                         {
                             when {
                                 cameraPermissionState.hasPermission && readExStoragePermissionState.hasPermission -> {
-                                    navController.navigate(Screen.UploadPlantScreen.route)
+                                    navController.navigate(Screen.UploadEditPlantScreen.route)
                                 }
 
                                 cameraPermissionState.shouldShowRationale ||

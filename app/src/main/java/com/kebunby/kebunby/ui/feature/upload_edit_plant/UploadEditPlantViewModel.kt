@@ -1,15 +1,17 @@
-package com.kebunby.kebunby.ui.feature.upload_plant
+package com.kebunby.kebunby.ui.feature.upload_edit_plant
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
+import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
 import com.kebunby.kebunby.domain.use_case.plant.UploadPlantUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import com.kebunby.kebunby.ui.common.UIState
@@ -23,11 +25,18 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class UploadPlantViewModel @Inject constructor(
+class UploadEditPlantViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val getPlantDetailUseCase: GetPlantDetailUseCase,
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase,
     private val uploadPlantUseCase: UploadPlantUseCase
 ) : ViewModel() {
+    val plantId = savedStateHandle.get<Int>("plantId")
+
+    private var _plantDetailState = mutableStateOf<UIState<Plant>>(UIState.Idle)
+    val plantDetailState: State<UIState<Plant>> = _plantDetailState
+
     private var _plantCategoriesState = mutableStateOf<UIState<List<PlantCategory>>>(UIState.Idle)
     val plantCategoriesState: State<UIState<List<PlantCategory>>> = _plantCategoriesState
 
@@ -37,14 +46,14 @@ class UploadPlantViewModel @Inject constructor(
     private var _cameraScreenVis = mutableStateOf(true)
     val cameraScreenVis: State<Boolean> = _cameraScreenVis
 
-    private var _photo = mutableStateOf<File?>(null)
-    val photo: State<File?> = _photo
+    private var _photo = mutableStateOf<Any?>(null)
+    val photo: State<Any?> = _photo
 
     private var _plantName = mutableStateOf("")
     val plantName: State<String> = _plantName
 
-    private var _selectedCategory = mutableStateOf<Pair<Int, Int>?>(null)
-    val selectedCategory: State<Pair<Int, Int>?> = _selectedCategory
+    private var _selectedCategory = mutableStateOf<PlantCategory?>(null)
+    val selectedCategory: State<PlantCategory?> = _selectedCategory
 
     private var _categorySpinnerVis = mutableStateOf(false)
     val categorySpinnerVis: State<Boolean> = _categorySpinnerVis
@@ -68,14 +77,23 @@ class UploadPlantViewModel @Inject constructor(
     val steps: SnapshotStateList<String> = _steps
 
     init {
-        onEvent(UploadPlantEvent.LoadPlantCategories)
+        if (plantId!! > 0) {
+            _cameraScreenVis.value = false
+            onEvent(UploadEditPlantEvent.LoadPlantDetail)
+        }
+
+        onEvent(UploadEditPlantEvent.LoadPlantCategories)
     }
 
-    fun onEvent(event: UploadPlantEvent) {
+    fun onEvent(event: UploadEditPlantEvent) {
         when (event) {
-            UploadPlantEvent.LoadPlantCategories -> getPlantCategories()
+            UploadEditPlantEvent.Idle -> idle()
 
-            UploadPlantEvent.UploadPlant -> uploadPlant()
+            UploadEditPlantEvent.LoadPlantDetail -> getPlantDetail()
+
+            UploadEditPlantEvent.LoadPlantCategories -> getPlantCategories()
+
+            UploadEditPlantEvent.UploadPlant -> uploadPlant()
         }
     }
 
@@ -83,11 +101,11 @@ class UploadPlantViewModel @Inject constructor(
         _cameraScreenVis.value = visibility
     }
 
-    fun onPhotoChanged(file: File?) {
-        _photo.value = file
+    fun onPhotoChanged(photo: Any?) {
+        _photo.value = photo
     }
 
-    fun onSelectedCategoryChanged(category: Pair<Int, Int>) {
+    fun onSelectedCategoryChanged(category: PlantCategory) {
         _selectedCategory.value = category
     }
 
@@ -127,6 +145,11 @@ class UploadPlantViewModel @Inject constructor(
         }
     }
 
+    fun setTools(items: List<String>) {
+        _tools.clear()
+        _tools.addAll(items)
+    }
+
     fun onMaterialsChanged(index: Int?, material: String?, action: ListAction) {
         when (action) {
             ListAction.ADD_ITEM -> {
@@ -143,6 +166,11 @@ class UploadPlantViewModel @Inject constructor(
         }
     }
 
+    fun setMaterials(items: List<String>) {
+        _materials.clear()
+        _materials.addAll(items)
+    }
+
     fun onStepsChanged(index: Int?, step: String?, action: ListAction) {
         when (action) {
             ListAction.ADD_ITEM -> {
@@ -155,6 +183,38 @@ class UploadPlantViewModel @Inject constructor(
 
             ListAction.DELETE_ITEM -> {
                 if (index != null) _steps.removeAt(index)
+            }
+        }
+    }
+
+    fun setSteps(items: List<String>) {
+        _steps.clear()
+        _steps.addAll(items)
+    }
+
+    private fun idle() {
+        _plantDetailState.value = UIState.Idle
+        _uploadPlantState.value = UIState.Idle
+    }
+
+    private fun getPlantDetail() {
+        _plantDetailState.value = UIState.Loading
+
+        viewModelScope.launch {
+            val resource = getPlantDetailUseCase.invoke(plantId!!)
+
+            resource.catch {
+                _plantDetailState.value = UIState.Error(it.localizedMessage)
+            }.collect {
+                _plantDetailState.value = when (it) {
+                    is Resource.Success -> {
+                        UIState.Success(it.data)
+                    }
+
+                    is Resource.Error -> {
+                        UIState.Fail(it.message)
+                    }
+                }
             }
         }
     }
@@ -183,8 +243,8 @@ class UploadPlantViewModel @Inject constructor(
 
             val resource = uploadPlantUseCase.invoke(
                 name = _plantName.value,
-                image = _photo.value!!,
-                category = _selectedCategory.value!!.second.toString(),
+                image = _photo.value as File,
+                category = _selectedCategory.value!!.id.toString(),
                 wateringFreq = _wateringFreq.value,
                 growthEst = _growthEst.value,
                 desc = _desc.value,

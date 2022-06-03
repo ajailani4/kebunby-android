@@ -1,4 +1,4 @@
-package com.kebunby.kebunby.ui.feature.upload_plant
+package com.kebunby.kebunby.ui.feature.upload_edit_plant
 
 import android.app.Activity
 import android.content.Context
@@ -49,35 +49,40 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
-fun UploadPlantScreen(
+fun UploadEditPlantScreen(
     navController: NavController,
-    uploadPlantViewModel: UploadPlantViewModel = hiltViewModel()
+    uploadEditPlantViewModel: UploadEditPlantViewModel = hiltViewModel()
 ) {
-    val onEvent = uploadPlantViewModel::onEvent
-    val plantCategoriesState = uploadPlantViewModel.plantCategoriesState.value
-    val uploadPlantState = uploadPlantViewModel.uploadPlantState.value
-    val cameraScreenVis = uploadPlantViewModel.cameraScreenVis.value
-    val onCameraScreenVisChanged = uploadPlantViewModel::onCameraScreenVisChanged
-    val photo = uploadPlantViewModel.photo.value
-    val onPhotoChanged = uploadPlantViewModel::onPhotoChanged
-    val plantName = uploadPlantViewModel.plantName.value
-    val onPlantNameChanged = uploadPlantViewModel::onPlantNameChanged
-    val selectedCategory = uploadPlantViewModel.selectedCategory.value
-    val onSelectedCategoryChanged = uploadPlantViewModel::onSelectedCategoryChanged
-    val categorySpinnerVis = uploadPlantViewModel.categorySpinnerVis.value
-    val onCategorySpinnerVisChanged = uploadPlantViewModel::onCategorySpinnerVisChanged
-    val growthEst = uploadPlantViewModel.growthEst.value
-    val onGrowEstChanged = uploadPlantViewModel::onGrowthEstChanged
-    val wateringFreq = uploadPlantViewModel.wateringFreq.value
-    val onWateringFreqChanged = uploadPlantViewModel::onWateringFreqChanged
-    val desc = uploadPlantViewModel.desc.value
-    val onDescChanged = uploadPlantViewModel::onDescChanged
-    val tools = uploadPlantViewModel.tools
-    val onToolsChanged = uploadPlantViewModel::onToolsChanged
-    val materials = uploadPlantViewModel.materials
-    val onMaterialsChanged = uploadPlantViewModel::onMaterialsChanged
-    val steps = uploadPlantViewModel.steps
-    val onStepsChanged = uploadPlantViewModel::onStepsChanged
+    val plantId = uploadEditPlantViewModel.plantId!!
+    val onEvent = uploadEditPlantViewModel::onEvent
+    val plantDetailState = uploadEditPlantViewModel.plantDetailState.value
+    val plantCategoriesState = uploadEditPlantViewModel.plantCategoriesState.value
+    val uploadPlantState = uploadEditPlantViewModel.uploadPlantState.value
+    val cameraScreenVis = uploadEditPlantViewModel.cameraScreenVis.value
+    val onCameraScreenVisChanged = uploadEditPlantViewModel::onCameraScreenVisChanged
+    val photo = uploadEditPlantViewModel.photo.value
+    val onPhotoChanged = uploadEditPlantViewModel::onPhotoChanged
+    val plantName = uploadEditPlantViewModel.plantName.value
+    val onPlantNameChanged = uploadEditPlantViewModel::onPlantNameChanged
+    val selectedCategory = uploadEditPlantViewModel.selectedCategory.value
+    val onSelectedCategoryChanged = uploadEditPlantViewModel::onSelectedCategoryChanged
+    val categorySpinnerVis = uploadEditPlantViewModel.categorySpinnerVis.value
+    val onCategorySpinnerVisChanged = uploadEditPlantViewModel::onCategorySpinnerVisChanged
+    val growthEst = uploadEditPlantViewModel.growthEst.value
+    val onGrowEstChanged = uploadEditPlantViewModel::onGrowthEstChanged
+    val wateringFreq = uploadEditPlantViewModel.wateringFreq.value
+    val onWateringFreqChanged = uploadEditPlantViewModel::onWateringFreqChanged
+    val desc = uploadEditPlantViewModel.desc.value
+    val onDescChanged = uploadEditPlantViewModel::onDescChanged
+    val tools = uploadEditPlantViewModel.tools
+    val onToolsChanged = uploadEditPlantViewModel::onToolsChanged
+    val setTools = uploadEditPlantViewModel::setTools
+    val materials = uploadEditPlantViewModel.materials
+    val onMaterialsChanged = uploadEditPlantViewModel::onMaterialsChanged
+    val setMaterials = uploadEditPlantViewModel::setMaterials
+    val steps = uploadEditPlantViewModel.steps
+    val onStepsChanged = uploadEditPlantViewModel::onStepsChanged
+    val setSteps = uploadEditPlantViewModel::setSteps
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -90,7 +95,11 @@ fun UploadPlantScreen(
         topBar = {
             if (!cameraScreenVis) {
                 CustomToolbar(
-                    title = stringResource(id = R.string.upload_plant),
+                    title = if (plantId > 0) {
+                        stringResource(id = R.string.edit_plant)
+                    } else {
+                        stringResource(id = R.string.upload_plant)
+                    },
                     hasBackButton = true,
                     onBackButtonClicked = { navController.navigateUp() }
                 )
@@ -98,7 +107,7 @@ fun UploadPlantScreen(
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            UploadPlantForm(
+            PlantForm(
                 onEvent = onEvent,
                 photo = photo,
                 plantName = plantName,
@@ -139,6 +148,56 @@ fun UploadPlantScreen(
                     scaffoldState = scaffoldState,
                     coroutineScope = coroutineScope
                 )
+            }
+        }
+
+        if (plantId > 0) {
+            // Observe plant detail state
+            when (plantDetailState) {
+                is UIState.Loading -> {
+                    FullSizeProgressBar()
+                }
+
+                is UIState.Success -> {
+                    val plant = plantDetailState.data
+
+                    // Setup values for PlantForm
+                    if (plant != null) {
+                        onPhotoChanged(plant.image)
+                        onPlantNameChanged(plant.name)
+                        onSelectedCategoryChanged(plant.category)
+                        onGrowEstChanged(plant.growthEst)
+                        onWateringFreqChanged(plant.wateringFreq)
+                        onDescChanged(plant.desc)
+                        setTools(plant.tools)
+                        setMaterials(plant.materials)
+                        setSteps(plant.steps)
+                    }
+
+                    onEvent(UploadEditPlantEvent.Idle)
+                }
+
+                is UIState.Fail -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantDetailState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                is UIState.Error -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantDetailState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                else -> {}
             }
         }
 
@@ -185,14 +244,14 @@ fun UploadPlantScreen(
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun UploadPlantForm(
-    onEvent: (UploadPlantEvent) -> Unit,
-    photo: File?,
+fun PlantForm(
+    onEvent: (UploadEditPlantEvent) -> Unit,
+    photo: Any?,
     plantName: String,
     onPlantNameChanged: (String) -> Unit,
     plantCategoriesState: UIState<List<PlantCategory>>,
-    selectedCategory: Pair<Int, Int>?,
-    onSelectedCategoryChanged: (Pair<Int, Int>) -> Unit,
+    selectedCategory: PlantCategory?,
+    onSelectedCategoryChanged: (PlantCategory) -> Unit,
     categorySpinnerVis: Boolean,
     onCategorySpinnerVisChanged: (Boolean) -> Unit,
     growthEst: String,
@@ -225,7 +284,7 @@ fun UploadPlantForm(
                         .clip(MaterialTheme.shapes.medium),
                     painter = rememberImagePainter(photo),
                     contentScale = ContentScale.Crop,
-                    contentDescription = "Plant photo"
+                    contentDescription = "Plant photoFile"
                 )
             }
 
@@ -261,7 +320,7 @@ fun UploadPlantForm(
 
                     if (plantCategories != null) {
                         if (selectedCategory == null) {
-                            onSelectedCategoryChanged(Pair(0, plantCategories[0].id))
+                            onSelectedCategoryChanged(plantCategories[0])
                         }
 
                         Text(
@@ -282,7 +341,7 @@ fun UploadPlantForm(
                                         onCategorySpinnerVisChanged(true)
                                     }),
                                 value = if (plantCategories.isNotEmpty() && selectedCategory != null) {
-                                    plantCategories[selectedCategory.first].category
+                                    selectedCategory.category
                                 } else {
                                     ""
                                 },
@@ -317,7 +376,7 @@ fun UploadPlantForm(
                                 plantCategories.forEachIndexed { index, plantCategory ->
                                     DropdownMenuItem(
                                         onClick = {
-                                            onSelectedCategoryChanged(Pair(index, plantCategory.id))
+                                            onSelectedCategoryChanged(plantCategory)
                                             onCategorySpinnerVisChanged(false)
                                         }
                                     ) {
@@ -599,7 +658,7 @@ fun UploadPlantForm(
                         growthEst.isNotEmpty() && wateringFreq.isNotEmpty() && desc.isNotEmpty() &&
                         tools.isNotEmpty() && materials.isNotEmpty() && steps.isNotEmpty()
                     ) {
-                        onEvent(UploadPlantEvent.UploadPlant)
+                        onEvent(UploadEditPlantEvent.UploadPlant)
                     } else {
                         coroutineScope.launch {
                             scaffoldState.snackbarHostState.showSnackbar(

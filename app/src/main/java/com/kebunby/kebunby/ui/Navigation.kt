@@ -14,7 +14,7 @@ import com.kebunby.kebunby.ui.feature.plant_detail.PlantDetailScreen
 import com.kebunby.kebunby.ui.feature.plant_list.PlantListScreen
 import com.kebunby.kebunby.ui.feature.profile.ProfileScreen
 import com.kebunby.kebunby.ui.feature.register.RegisterScreen
-import com.kebunby.kebunby.ui.feature.upload_plant.UploadPlantScreen
+import com.kebunby.kebunby.ui.feature.upload_edit_plant.UploadEditPlantScreen
 
 @Composable
 fun Navigation(navController: NavHostController, startDestination: String) {
@@ -68,8 +68,16 @@ fun Navigation(navController: NavHostController, startDestination: String) {
             PlantDetailScreen(navController)
         }
 
-        composable(route = Screen.UploadPlantScreen.route) {
-            UploadPlantScreen(navController)
+        composable(
+            route = Screen.UploadEditPlantScreen.route + "?plantId={plantId}",
+            arguments = listOf(
+                navArgument("plantId") {
+                    type = NavType.IntType
+                    defaultValue = 0
+                }
+            )
+        ) {
+            UploadEditPlantScreen(navController)
         }
 
         // Bottom nav menu

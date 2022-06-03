@@ -80,7 +80,7 @@ fun PlantMiniCard(
                     .padding(horizontal = 15.dp)
             ) {
                 Text(
-                    text = plantItem.category,
+                    text = plantItem.category.category,
                     color = Grey,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
