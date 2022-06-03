@@ -143,6 +143,8 @@ class PlantRepositoryImpl @Inject constructor(
         when (response.code()) {
             201 -> emit(Resource.Success(response.body()?.data))
 
+            413 -> emit(Resource.Error(context.resources.getString(R.string.photo_size_is_too_large)))
+
             else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
         }
     }
