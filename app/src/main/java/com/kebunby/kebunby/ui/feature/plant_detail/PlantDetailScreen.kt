@@ -19,6 +19,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
@@ -27,11 +28,15 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CircleIconButton
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
-import com.kebunby.kebunby.ui.feature.plant_detail.component.*
+import com.kebunby.kebunby.ui.feature.plant_detail.component.BottomSheetItem
+import com.kebunby.kebunby.ui.feature.plant_detail.component.FullSizeImage
+import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
+import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -54,7 +59,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun PlantDetailScreen(
     navController: NavController,
-    plantDetailViewModel: PlantDetailViewModel = hiltViewModel()
+    plantDetailViewModel: PlantDetailViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     val plantId = plantDetailViewModel.plantId
     val onEvent = plantDetailViewModel::onEvent
@@ -76,6 +82,9 @@ fun PlantDetailScreen(
     val fullSizeImgVis = plantDetailViewModel.fullSizeImgVis.value
     val onFullSizeImgVisChanged = plantDetailViewModel::onFullSizeImgVisChanged
 
+    val isReloaded = sharedViewModel.isReloaded.value
+    val onReload = sharedViewModel::onReload
+
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -89,11 +98,11 @@ fun PlantDetailScreen(
                     icon = EvaIcons.Fill.Edit,
                     title = stringResource(id = R.string.edit),
                     onClick = {
-                        navController.navigate(Screen.UploadEditPlantScreen.route + "?plantId=$plantId")
-
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }
+
+                        navController.navigate(Screen.UploadEditPlantScreen.route + "?plantId=$plantId")
                     }
                 )
                 BottomSheetItem(
@@ -132,6 +141,7 @@ fun PlantDetailScreen(
 
                     is UIState.Success -> {
                         onSwipeRefreshingChanged(false)
+                        onReload(false)
 
                         val plant = plantDetailState.data
 
@@ -543,5 +553,8 @@ fun PlantDetailScreen(
                 else -> {}
             }
         }
+
+        // Observe is reloaded state
+        if (isReloaded) onEvent(PlantDetailEvent.LoadPlantDetail)
     }
 }

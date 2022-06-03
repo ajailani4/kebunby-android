@@ -38,10 +38,12 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
+import com.kebunby.kebunby.ui.feature.plant_detail.PlantDetailEvent
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
 import com.kebunby.kebunby.ui.feature.profile.component.ProfileHeaderShimmer
 import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen
@@ -59,7 +61,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    profileViewModel: ProfileViewModel = hiltViewModel()
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     val onEvent = profileViewModel::onEvent
     val userProfileState = profileViewModel.userProfileState.value
@@ -68,6 +71,9 @@ fun ProfileScreen(
     val onSwipeRefreshingChanged = profileViewModel::onSwipeRefreshingChanged
     val logoutConfirmDlgVis = profileViewModel.logoutConfirmDlgVis.value
     val onLogoutConfirmDlgVisChanged = profileViewModel::onLogoutConfirmDlgVisChanged
+
+    val isReloaded = sharedViewModel.isReloaded.value
+    val onReload = sharedViewModel::onReload
 
     val profileTabMenus = listOf(
         stringResource(R.string.planting),
@@ -175,6 +181,7 @@ fun ProfileScreen(
                         onEvent = onEvent,
                         userProfileState = userProfileState,
                         onSwipeRefreshingChanged = onSwipeRefreshingChanged,
+                        onReload = onReload,
                         scaffoldState = scaffoldState,
                         coroutineScope = coroutineScope
                     )
@@ -199,21 +206,21 @@ fun ProfileScreen(
                                 0 -> {
                                     PlantingScreen(
                                         navController = navController,
-                                        isRefreshing = swipeRefreshing
+                                        isRefreshing = swipeRefreshing || isReloaded
                                     )
                                 }
 
                                 1 -> {
                                     PlantedScreen(
                                         navController = navController,
-                                        isRefreshing = swipeRefreshing
+                                        isRefreshing = swipeRefreshing || isReloaded
                                     )
                                 }
 
                                 2 -> {
                                     UploadedScreen(
                                         navController = navController,
-                                        isRefreshing = swipeRefreshing
+                                        isRefreshing = swipeRefreshing || isReloaded
                                     )
                                 }
                             }
@@ -255,6 +262,9 @@ fun ProfileScreen(
 
             else -> {}
         }
+
+        // Observe is reloaded state
+        if (isReloaded) onEvent(ProfileEvent.LoadUserProfile)
     }
 }
 
@@ -264,6 +274,7 @@ fun ProfileHeader(
     onEvent: (ProfileEvent) -> Unit,
     userProfileState: UIState<User>,
     onSwipeRefreshingChanged: (Boolean) -> Unit,
+    onReload: (Boolean) -> Unit,
     scaffoldState: ScaffoldState,
     coroutineScope: CoroutineScope
 ) {
@@ -281,6 +292,7 @@ fun ProfileHeader(
 
             is UIState.Success -> {
                 onSwipeRefreshingChanged(false)
+                onReload(false)
 
                 val user = userProfileState.data
 

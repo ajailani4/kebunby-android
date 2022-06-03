@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.feature.explore.ExploreScreen
 import com.kebunby.kebunby.ui.feature.home.HomeScreen
 import com.kebunby.kebunby.ui.feature.login.LoginScreen
@@ -17,7 +18,11 @@ import com.kebunby.kebunby.ui.feature.register.RegisterScreen
 import com.kebunby.kebunby.ui.feature.upload_edit_plant.UploadEditPlantScreen
 
 @Composable
-fun Navigation(navController: NavHostController, startDestination: String) {
+fun Navigation(
+    navController: NavHostController,
+    startDestination: String,
+    sharedViewModel: SharedViewModel
+) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable(route = Screen.OnboardingScreen.route) {
             OnboardingScreen(navController)
@@ -65,7 +70,10 @@ fun Navigation(navController: NavHostController, startDestination: String) {
                 }
             )
         ) {
-            PlantDetailScreen(navController)
+            PlantDetailScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
 
         composable(
@@ -77,7 +85,10 @@ fun Navigation(navController: NavHostController, startDestination: String) {
                 }
             )
         ) {
-            UploadEditPlantScreen(navController)
+            UploadEditPlantScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
 
         // Bottom nav menu
@@ -94,7 +105,10 @@ fun Navigation(navController: NavHostController, startDestination: String) {
         }
 
         composable(route = Screen.ProfileScreen.route) {
-            ProfileScreen(navController)
+            ProfileScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
     }
 }

@@ -16,12 +16,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.SavedStateViewModelFactory
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kebunby.kebunby.ui.BottomBar
 import com.kebunby.kebunby.ui.Navigation
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.feature.splash.SplashViewModel
 import com.kebunby.kebunby.ui.theme.KebunbyTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +35,9 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val splashViewModel: SplashViewModel by viewModels()
+    private val sharedViewModel: SharedViewModel by viewModels() {
+        SavedStateViewModelFactory(application, this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +54,10 @@ class MainActivity : ComponentActivity() {
 
                 setContent {
                     App {
-                        Content(startDestination)
+                        Content(
+                            startDestination = startDestination,
+                            sharedViewModel = sharedViewModel
+                        )
                     }
                 }
             }
@@ -65,7 +75,10 @@ fun App(content: @Composable () -> Unit) {
 }
 
 @Composable
-fun Content(startDestination: String) {
+fun Content(
+    startDestination: String,
+    sharedViewModel: SharedViewModel
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -87,7 +100,11 @@ fun Content(startDestination: String) {
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(bottom = innerPadding.calculateBottomPadding())) {
-            Navigation(navController = navController, startDestination = startDestination)
+            Navigation(
+                navController = navController,
+                startDestination = startDestination,
+                sharedViewModel = sharedViewModel
+            )
         }
     }
 }

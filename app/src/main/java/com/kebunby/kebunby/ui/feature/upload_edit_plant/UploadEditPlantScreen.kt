@@ -26,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CircleIconButton
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
@@ -56,7 +58,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun UploadEditPlantScreen(
     navController: NavController,
-    uploadEditPlantViewModel: UploadEditPlantViewModel = hiltViewModel()
+    uploadEditPlantViewModel: UploadEditPlantViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     val plantId = uploadEditPlantViewModel.plantId!!
     val onEvent = uploadEditPlantViewModel::onEvent
@@ -91,6 +94,8 @@ fun UploadEditPlantScreen(
     val setSteps = uploadEditPlantViewModel::setSteps
     val setPopularity = uploadEditPlantViewModel::setPopularity
     val setPublishedOn = uploadEditPlantViewModel::setPublishedOn
+
+    val onReload = sharedViewModel::onReload
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -234,11 +239,8 @@ fun UploadEditPlantScreen(
 
             is UIState.Success -> {
                 LaunchedEffect(Unit) {
-                    navController.navigate(Screen.ProfileScreen.route) {
-                        popUpTo(Screen.ProfileScreen.route) {
-                            inclusive = true
-                        }
-                    }
+                    onReload(true)
+                    navController.navigateUp()
                 }
             }
 
@@ -273,6 +275,7 @@ fun UploadEditPlantScreen(
 
             is UIState.Success -> {
                 LaunchedEffect(Unit) {
+                    onReload(true)
                     navController.navigateUp()
                 }
             }
