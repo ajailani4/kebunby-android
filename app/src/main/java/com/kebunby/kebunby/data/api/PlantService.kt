@@ -49,7 +49,7 @@ interface PlantService {
     suspend fun uploadPlant(
         @Part("name") name: RequestBody,
         @Part image: MultipartBody.Part,
-        @Part("name") category: RequestBody,
+        @Part("category") category: RequestBody,
         @Part("wateringFreq") wateringFreq: RequestBody,
         @Part("growthEst") growthEst: RequestBody,
         @Part("desc") desc: RequestBody,
