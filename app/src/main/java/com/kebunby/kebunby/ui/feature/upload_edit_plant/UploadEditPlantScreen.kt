@@ -37,6 +37,7 @@ import com.kebunby.kebunby.ui.feature.camera.CameraScreen
 import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import com.kebunby.kebunby.util.ListAction
+import com.kebunby.kebunby.util.getFileSizeInMB
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
@@ -44,6 +45,8 @@ import compose.icons.evaicons.fill.ArrowDown
 import compose.icons.evaicons.fill.PlusCircle
 import compose.icons.evaicons.outline.Close
 import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import id.zelory.compressor.constraint.quality
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -140,7 +143,13 @@ fun UploadEditPlantScreen(
                     onBackButtonClicked = { navController.navigateUp() },
                     onImageCaptured = { photo ->
                         coroutineScope.launch {
-                            onPhotoChanged(Compressor.compress(context, photo))
+                            onPhotoChanged(
+                                Compressor.compress(context, photo) {
+                                    if (photo.getFileSizeInMB() >= 1) {
+                                        default(width = 1500, height = 2000)
+                                    }
+                                }
+                            )
                             onCameraScreenVisChanged(false)
                         }
                     },
