@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
@@ -31,6 +33,7 @@ import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.UIState
+import com.kebunby.kebunby.ui.common.component.CircleIconButton
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.camera.CameraScreen
@@ -44,9 +47,9 @@ import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.ArrowDown
 import compose.icons.evaicons.fill.PlusCircle
 import compose.icons.evaicons.outline.Close
+import compose.icons.evaicons.outline.Edit
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.default
-import id.zelory.compressor.constraint.quality
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -116,6 +119,7 @@ fun UploadEditPlantScreen(
                 plantId = plantId,
                 onEvent = onEvent,
                 photo = photo,
+                onCameraScreenVisChanged = onCameraScreenVisChanged,
                 plantName = plantName,
                 onPlantNameChanged = onPlantNameChanged,
                 plantCategoriesState = plantCategoriesState,
@@ -141,10 +145,17 @@ fun UploadEditPlantScreen(
             )
             AnimatedVisibility(
                 visible = cameraScreenVis,
+                enter = expandVertically(expandFrom = Alignment.Top),
                 exit = shrinkVertically()
             ) {
                 CameraScreen(
-                    onBackButtonClicked = { navController.navigateUp() },
+                    onBackButtonClicked = {
+                        if (plantId > 0) {
+                            onCameraScreenVisChanged(false)
+                        } else {
+                            navController.navigateUp()
+                        }
+                    },
                     onImageCaptured = { photo ->
                         coroutineScope.launch {
                             onPhotoChanged(
@@ -297,6 +308,7 @@ fun PlantForm(
     plantId: Int,
     onEvent: (UploadEditPlantEvent) -> Unit,
     photo: Any?,
+    onCameraScreenVisChanged: (Boolean) -> Unit,
     plantName: String,
     onPlantNameChanged: (String) -> Unit,
     plantCategoriesState: UIState<List<PlantCategory>>,
@@ -327,18 +339,33 @@ fun PlantForm(
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             if (photo != null) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .sizeIn(maxHeight = 400.dp)
-                        .clip(MaterialTheme.shapes.medium),
-                    painter = rememberImagePainter(photo),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Plant photoFile"
-                )
+                Box {
+                    Image(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .sizeIn(maxHeight = 400.dp)
+                            .clip(MaterialTheme.shapes.medium),
+                        painter = rememberImagePainter(photo),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Plant photoFile"
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        CircleIconButton(
+                            modifier = Modifier.size(42.dp),
+                            icon = EvaIcons.Outline.Edit,
+                            tint = Color.White,
+                            backgroundColor = MaterialTheme.colors.secondary,
+                            contentDescription = "Edit photo button",
+                            onClick = { onCameraScreenVisChanged(true) }
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(25.dp))
             }
-
-            Spacer(modifier = Modifier.height(25.dp))
 
             // Plant Name
             Text(

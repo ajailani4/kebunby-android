@@ -163,6 +163,7 @@ fun PlantDetailScreen(
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
                                             CircleIconButton(
+                                                modifier = Modifier.size(42.dp),
                                                 icon = EvaIcons.Fill.ArrowBack,
                                                 tint = Grey,
                                                 backgroundColor = MaterialTheme.colors.background,
@@ -171,6 +172,7 @@ fun PlantDetailScreen(
                                             )
                                             Row {
                                                 CircleIconButton(
+                                                    modifier = Modifier.size(42.dp),
                                                     icon = if (isFavorited == true) {
                                                         EvaIcons.Fill.Heart
                                                     } else {
@@ -193,6 +195,7 @@ fun PlantDetailScreen(
                                                 if (moreMenuBtnVis) {
                                                     Spacer(modifier = Modifier.width(15.dp))
                                                     CircleIconButton(
+                                                        modifier = Modifier.size(42.dp),
                                                         icon = EvaIcons.Outline.MoreVertical,
                                                         tint = Grey,
                                                         backgroundColor = MaterialTheme.colors.background,

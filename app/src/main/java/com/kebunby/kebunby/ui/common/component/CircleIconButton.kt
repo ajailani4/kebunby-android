@@ -16,6 +16,7 @@ import com.kebunby.kebunby.ui.theme.Grey
 
 @Composable
 fun CircleIconButton(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     tint: Color,
     backgroundColor: Color,
@@ -23,7 +24,7 @@ fun CircleIconButton(
     onClick: () -> Unit
 ) {
     Button(
-        modifier = Modifier.size(42.dp),
+        modifier = modifier,
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor),
         contentPadding = PaddingValues(0.dp),
