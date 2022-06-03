@@ -45,10 +45,10 @@ class UploadedViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
+            ).`when`(getUserCredentialUseCase)()
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
-            ).`when`(getPlantActivitiesUseCase).invoke(
+            ).`when`(getPlantActivitiesUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = isNull()
@@ -70,8 +70,8 @@ class UploadedViewModelTest {
 
             assertEquals(generatePlants(), differ.snapshot().items)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getPlantActivitiesUseCase).invoke(
+            verify(getUserCredentialUseCase)()
+            verify(getPlantActivitiesUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = isNull()

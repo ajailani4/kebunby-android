@@ -67,8 +67,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getUserProfileUseCase)(anyString())
 
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
@@ -88,8 +88,8 @@ class HomeViewModelTest {
             assertEquals("Username should be 'george'", "george", userProfile?.username)
             assertEquals("Email should be 'george@email.com'", "george@email.com", userProfile?.email)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getUserProfileUseCase).invoke(anyString())
+            verify(getUserCredentialUseCase)()
+            verify(getUserProfileUseCase)(anyString())
         }
     }
 
@@ -104,8 +104,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getUserProfileUseCase)(anyString())
 
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
@@ -128,8 +128,8 @@ class HomeViewModelTest {
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getUserProfileUseCase).invoke(anyString())
+            verify(getUserCredentialUseCase)()
+            verify(getUserProfileUseCase)(anyString())
         }
     }
 
@@ -144,8 +144,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getPlantsUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = anyBoolean(),
@@ -171,8 +171,8 @@ class HomeViewModelTest {
 
             assertEquals("Plants size should be 5", 5, trendingPlants?.size)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getPlantsUseCase).invoke(
+            verify(getUserCredentialUseCase)()
+            verify(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = anyBoolean(),
@@ -193,8 +193,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getPlantsUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = anyBoolean(),
@@ -223,8 +223,8 @@ class HomeViewModelTest {
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getPlantsUseCase).invoke(
+            verify(getUserCredentialUseCase)()
+            verify(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = anyBoolean(),
@@ -245,8 +245,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getPlantsUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = isNull(),
@@ -272,8 +272,8 @@ class HomeViewModelTest {
 
             assertEquals("Plants size should be 5", 5, forBeginnerPlants?.size)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getPlantsUseCase).invoke(
+            verify(getUserCredentialUseCase)()
+            verify(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = isNull(),
@@ -294,8 +294,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getPlantsUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = isNull(),
@@ -324,8 +324,8 @@ class HomeViewModelTest {
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getPlantsUseCase).invoke(
+            verify(getUserCredentialUseCase)()
+            verify(getPlantsUseCase)(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = isNull(),
@@ -346,8 +346,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getPlantCategoriesUseCase).invoke()
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantCategoriesUseCase)()
 
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
@@ -367,8 +367,8 @@ class HomeViewModelTest {
 
             assertEquals("Plant categories size should be 5", 5, plantCategoriesPlants?.size)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getPlantCategoriesUseCase).invoke()
+            verify(getUserCredentialUseCase)()
+            verify(getPlantCategoriesUseCase)()
         }
     }
 
@@ -383,8 +383,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getPlantCategoriesUseCase).invoke()
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantCategoriesUseCase)()
 
             homeViewModel = HomeViewModel(
                 getUserProfileUseCase,
@@ -407,8 +407,8 @@ class HomeViewModelTest {
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getPlantCategoriesUseCase).invoke()
+            verify(getUserCredentialUseCase)()
+            verify(getPlantCategoriesUseCase)()
         }
     }
 
@@ -423,8 +423,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(addPlantActivityUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = isNull(),
@@ -451,8 +451,8 @@ class HomeViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(2)).invoke()
-            verify(addPlantActivityUseCase).invoke(
+            verify(getUserCredentialUseCase, times(2))()
+            verify(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = isNull(),
@@ -473,8 +473,8 @@ class HomeViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(deletePlantActivityUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(deletePlantActivityUseCase)(
                 username = anyString(),
                 plantId = anyInt(),
                 isPlanting = isNull(),
@@ -501,8 +501,8 @@ class HomeViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(2)).invoke()
-            verify(deletePlantActivityUseCase).invoke(
+            verify(getUserCredentialUseCase, times(2))()
+            verify(deletePlantActivityUseCase)(
                 username = anyString(),
                 plantId = anyInt(),
                 isPlanting = isNull(),

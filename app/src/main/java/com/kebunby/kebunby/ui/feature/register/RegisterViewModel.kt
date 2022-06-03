@@ -76,7 +76,7 @@ class RegisterViewModel @Inject constructor(
         _registerState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = registerUserUseCase.invoke(
+            val resource = registerUserUseCase(
                 RegisterRequest(
                     username = _username.value,
                     email = _email.value,

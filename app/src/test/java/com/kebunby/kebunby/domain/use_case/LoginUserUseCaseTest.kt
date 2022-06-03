@@ -51,7 +51,7 @@ class LoginUserUseCaseTest {
 
             doReturn(resource).`when`(userRepository).login(any())
 
-            val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
+            val actResource = loginUserUseCase(generateLoginRequest()).first()
             var userCredential = UserCredential()
 
             when (actResource) {
@@ -79,7 +79,7 @@ class LoginUserUseCaseTest {
 
             doReturn(resource).`when`(userRepository).login(any())
 
-            val actResource = loginUserUseCase.invoke(generateLoginRequest()).first()
+            val actResource = loginUserUseCase(generateLoginRequest()).first()
 
             assertEquals("Resource should be error", Resource.Error<UserCredential>(), actResource)
 

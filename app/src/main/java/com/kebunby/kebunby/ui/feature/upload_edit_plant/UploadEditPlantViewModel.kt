@@ -219,7 +219,7 @@ class UploadEditPlantViewModel @Inject constructor(
         _plantDetailState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = getPlantDetailUseCase.invoke(plantId!!)
+            val resource = getPlantDetailUseCase(plantId!!)
 
             resource.catch {
                 _plantDetailState.value = UIState.Error(it.localizedMessage)
@@ -239,7 +239,7 @@ class UploadEditPlantViewModel @Inject constructor(
 
     private fun getPlantCategories() {
         viewModelScope.launch {
-            val resource = getPlantCategoriesUseCase.invoke()
+            val resource = getPlantCategoriesUseCase()
 
             resource.catch {
                 _plantCategoriesState.value = UIState.Error(it.localizedMessage)
@@ -257,9 +257,9 @@ class UploadEditPlantViewModel @Inject constructor(
         _uploadPlantState.value = UIState.Loading
 
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = uploadPlantUseCase.invoke(
+            val resource = uploadPlantUseCase(
                 name = _plantName.value,
                 image = _photo.value as File,
                 category = _selectedCategory.value!!.id.toString(),
@@ -288,9 +288,9 @@ class UploadEditPlantViewModel @Inject constructor(
         _editPlantState.value = UIState.Loading
 
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = editPlantUseCase.invoke(
+            val resource = editPlantUseCase(
                 id = plantId!!,
                 name = _plantName.value,
                 image = if (_photo.value is File) _photo.value as File else null,

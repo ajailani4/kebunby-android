@@ -58,7 +58,7 @@ class PlantListViewModel @Inject constructor(
 
     private fun getPlants() {
         viewModelScope.launch {
-            getPagingPlantsUseCase.invoke(
+            getPagingPlantsUseCase(
                 isTrending = isTrending,
                 forBeginner = forBeginner,
                 searchQuery = null
@@ -70,8 +70,7 @@ class PlantListViewModel @Inject constructor(
 
     private fun getPlantsByCategory() {
         viewModelScope.launch {
-            getPagingPlantsByCategoryUseCase
-                .invoke(categoryId!!)
+            getPagingPlantsByCategoryUseCase(categoryId!!)
                 .cachedIn(viewModelScope)
                 .collect {
                     _pagingPlants.value = it

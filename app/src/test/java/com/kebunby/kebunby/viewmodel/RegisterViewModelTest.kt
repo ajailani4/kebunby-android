@@ -49,7 +49,7 @@ class RegisterViewModelTest {
                 emit(Resource.Success(generateUserCredential()))
             }
 
-            doReturn(resource).`when`(registerUserUseCase).invoke(any())
+            doReturn(resource).`when`(registerUserUseCase)(any())
 
             registerViewModel.onEvent(RegisterEvent.Submit)
 
@@ -65,7 +65,7 @@ class RegisterViewModelTest {
 
             assertEquals("Should return success", true, isSuccess)
 
-            verify(registerUserUseCase).invoke(any())
+            verify(registerUserUseCase)(any())
         }
     }
 
@@ -76,7 +76,7 @@ class RegisterViewModelTest {
                 emit(Resource.Error<UserCredential>())
             }
 
-            doReturn(resource).`when`(registerUserUseCase).invoke(any())
+            doReturn(resource).`when`(registerUserUseCase)(any())
 
             registerViewModel.onEvent(RegisterEvent.Submit)
 
@@ -92,7 +92,7 @@ class RegisterViewModelTest {
 
             assertEquals("Should return fail", false, isSuccess)
 
-            verify(registerUserUseCase).invoke(any())
+            verify(registerUserUseCase)(any())
         }
     }
 }

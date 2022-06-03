@@ -62,7 +62,7 @@ class LoginViewModel @Inject constructor(
         _loginState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = loginUserUseCase.invoke(
+            val resource = loginUserUseCase(
                 LoginRequest(
                     username = _username.value,
                     password = _password.value

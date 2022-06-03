@@ -46,7 +46,7 @@ class GetUserProfileUseCaseTest {
 
             doReturn(resource).`when`(userRepository).getUserProfile(anyString())
 
-            val actualResource = getUserProfileUseCase.invoke(anyString()).first()
+            val actualResource = getUserProfileUseCase(anyString()).first()
 
             assertEquals(
                 "Resource should be success", Resource.Success(generateUser()), actualResource
@@ -65,7 +65,7 @@ class GetUserProfileUseCaseTest {
 
             doReturn(resource).`when`(userRepository).getUserProfile(anyString())
 
-            val actualResource = getUserProfileUseCase.invoke(anyString()).first()
+            val actualResource = getUserProfileUseCase(anyString()).first()
 
             assertEquals(
                 "Resource should be error", Resource.Error<User>(), actualResource

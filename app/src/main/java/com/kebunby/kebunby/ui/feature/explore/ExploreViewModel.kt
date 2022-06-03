@@ -57,7 +57,7 @@ class ExploreViewModel @Inject constructor(
 
     private fun getPlants() {
         viewModelScope.launch {
-            getPagingPlantsUseCase.invoke(
+            getPagingPlantsUseCase(
                 isTrending = null,
                 forBeginner = null,
                 searchQuery = _searchQuery.value

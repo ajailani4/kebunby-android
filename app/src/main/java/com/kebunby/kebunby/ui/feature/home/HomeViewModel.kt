@@ -132,9 +132,9 @@ class HomeViewModel @Inject constructor(
         _userProfileState.value = UIState.Loading
 
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = getUserProfileUseCase.invoke(userCredential.username!!)
+            val resource = getUserProfileUseCase(userCredential.username!!)
 
             resource.catch {
                 _userProfileState.value = UIState.Error(it.localizedMessage)
@@ -152,7 +152,7 @@ class HomeViewModel @Inject constructor(
         _trendingPlantsState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = getPlantsUseCase.invoke(
+            val resource = getPlantsUseCase(
                 page = 1,
                 size = 5,
                 isTrending = true
@@ -174,7 +174,7 @@ class HomeViewModel @Inject constructor(
         _forBeginnerPlantsState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = getPlantsUseCase.invoke(
+            val resource = getPlantsUseCase(
                 page = 1,
                 size = 5,
                 forBeginner = true
@@ -196,7 +196,7 @@ class HomeViewModel @Inject constructor(
         _plantCategoriesState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = getPlantCategoriesUseCase.invoke()
+            val resource = getPlantCategoriesUseCase()
 
             resource.catch {
                 _plantCategoriesState.value = UIState.Error(it.localizedMessage)
@@ -212,9 +212,9 @@ class HomeViewModel @Inject constructor(
 
     private fun addFavoritePlant() {
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = addPlantActivityUseCase.invoke(
+            val resource = addPlantActivityUseCase(
                 username = userCredential.username!!,
                 isFavorited = true,
                 plantActRequest = PlantActRequest(selectedPlant)
@@ -233,9 +233,9 @@ class HomeViewModel @Inject constructor(
 
     private fun deleteFavPlant() {
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = deletePlantActivityUseCase.invoke(
+            val resource = deletePlantActivityUseCase(
                 username = userCredential.username!!,
                 plantId = selectedPlant,
                 isFavorited = true

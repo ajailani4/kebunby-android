@@ -52,7 +52,7 @@ class AddPlantActivityUseCaseTest {
                 plantActRequest = any()
             )
 
-            val actualResource = addPlantActivityUseCase.invoke(
+            val actualResource = addPlantActivityUseCase(
                 username = "george",
                 isPlanting = null,
                 isPlanted = null,
@@ -91,7 +91,7 @@ class AddPlantActivityUseCaseTest {
                 plantActRequest = any()
             )
 
-            val actualResource = addPlantActivityUseCase.invoke(
+            val actualResource = addPlantActivityUseCase(
                 username = "george",
                 isPlanting = null,
                 isPlanted = null,

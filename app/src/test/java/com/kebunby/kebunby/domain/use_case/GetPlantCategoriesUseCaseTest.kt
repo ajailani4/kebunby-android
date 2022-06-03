@@ -45,7 +45,7 @@ class GetPlantCategoriesUseCaseTest {
 
             doReturn(resource).`when`(plantRepository).getPlantCategories()
 
-            val actualResource = getPlantCategoriesUseCase.invoke().first()
+            val actualResource = getPlantCategoriesUseCase().first()
 
             Assert.assertEquals(
                 "Resource should be success",
@@ -66,7 +66,7 @@ class GetPlantCategoriesUseCaseTest {
 
             doReturn(resource).`when`(plantRepository).getPlantCategories()
 
-            val actualResource = getPlantCategoriesUseCase.invoke().first()
+            val actualResource = getPlantCategoriesUseCase().first()
 
             Assert.assertEquals(
                 "Resource should be error",

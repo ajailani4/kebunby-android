@@ -50,7 +50,7 @@ class DeletePlantActivityUseCaseTest {
                 isFavorited = anyBoolean()
             )
 
-            val actualResource = deletePlantActivityUseCase.invoke(
+            val actualResource = deletePlantActivityUseCase(
                 username = "george",
                 plantId = 1,
                 isPlanting = null,
@@ -89,7 +89,7 @@ class DeletePlantActivityUseCaseTest {
                 isFavorited = anyBoolean()
             )
 
-            val actualResource = deletePlantActivityUseCase.invoke(
+            val actualResource = deletePlantActivityUseCase(
                 username = "george",
                 plantId = 1,
                 isPlanting = null,
