@@ -28,6 +28,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.UIState
+import com.kebunby.kebunby.ui.common.component.CircleIconButton
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.plant_detail.component.*
@@ -161,20 +162,22 @@ fun PlantDetailScreen(
                                                 .padding(20.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween
                                         ) {
-                                            TopMenuButton(
+                                            CircleIconButton(
                                                 icon = EvaIcons.Fill.ArrowBack,
                                                 tint = Grey,
+                                                backgroundColor = MaterialTheme.colors.background,
                                                 contentDescription = "Back button",
                                                 onClick = { navController.navigateUp() }
                                             )
                                             Row {
-                                                TopMenuButton(
+                                                CircleIconButton(
                                                     icon = if (isFavorited == true) {
                                                         EvaIcons.Fill.Heart
                                                     } else {
                                                         EvaIcons.Outline.Heart
                                                     },
                                                     tint = if (isFavorited == true) Red else Grey,
+                                                    backgroundColor = MaterialTheme.colors.background,
                                                     contentDescription = "Like button",
                                                     onClick = {
                                                         onFavoritePlant(!isFavorited!!)
@@ -189,9 +192,10 @@ fun PlantDetailScreen(
 
                                                 if (moreMenuBtnVis) {
                                                     Spacer(modifier = Modifier.width(15.dp))
-                                                    TopMenuButton(
+                                                    CircleIconButton(
                                                         icon = EvaIcons.Outline.MoreVertical,
                                                         tint = Grey,
+                                                        backgroundColor = MaterialTheme.colors.background,
                                                         contentDescription = "More button",
                                                         onClick = {
                                                             coroutineScope.launch {
