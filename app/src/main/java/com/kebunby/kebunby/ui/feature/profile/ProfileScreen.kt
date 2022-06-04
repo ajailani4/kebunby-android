@@ -43,7 +43,6 @@ import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
-import com.kebunby.kebunby.ui.feature.plant_detail.PlantDetailEvent
 import com.kebunby.kebunby.ui.feature.profile.component.CountingText
 import com.kebunby.kebunby.ui.feature.profile.component.ProfileHeaderShimmer
 import com.kebunby.kebunby.ui.feature.profile.planted.PlantedScreen

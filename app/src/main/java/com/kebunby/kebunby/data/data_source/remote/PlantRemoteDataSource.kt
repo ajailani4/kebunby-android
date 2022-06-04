@@ -74,12 +74,16 @@ class PlantRemoteDataSource @Inject constructor(
             RequestBody.create(MediaType.parse("image/*"), image)
         )
         val categoryPart = RequestBody.create(MediaType.parse("multipart/form-data"), category)
-        val wateringFreqPart = RequestBody.create(MediaType.parse("multipart/form-data"), wateringFreq)
+        val wateringFreqPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), wateringFreq)
         val growthEstPart = RequestBody.create(MediaType.parse("multipart/form-data"), growthEst)
         val descPart = RequestBody.create(MediaType.parse("multipart/form-data"), desc)
-        val toolsPart = RequestBody.create(MediaType.parse("multipart/form-data"), tools.joinToString(", "))
-        val materialsPart = RequestBody.create(MediaType.parse("multipart/form-data"), materials.joinToString(", "))
-        val stepsPart = RequestBody.create(MediaType.parse("multipart/form-data"), steps.joinToString(", "))
+        val toolsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), tools.joinToString(", "))
+        val materialsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), materials.joinToString(", "))
+        val stepsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), steps.joinToString(", "))
         val authorPart = RequestBody.create(MediaType.parse("multipart/form-data"), author)
 
         return plantService.uploadPlant(
@@ -122,15 +126,20 @@ class PlantRemoteDataSource @Inject constructor(
             null
         }
         val categoryPart = RequestBody.create(MediaType.parse("multipart/form-data"), category)
-        val wateringFreqPart = RequestBody.create(MediaType.parse("multipart/form-data"), wateringFreq)
+        val wateringFreqPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), wateringFreq)
         val growthEstPart = RequestBody.create(MediaType.parse("multipart/form-data"), growthEst)
         val descPart = RequestBody.create(MediaType.parse("multipart/form-data"), desc)
-        val toolsPart = RequestBody.create(MediaType.parse("multipart/form-data"), tools.joinToString(", "))
-        val materialsPart = RequestBody.create(MediaType.parse("multipart/form-data"), materials.joinToString(", "))
-        val stepsPart = RequestBody.create(MediaType.parse("multipart/form-data"), steps.joinToString(", "))
+        val toolsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), tools.joinToString(", "))
+        val materialsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), materials.joinToString(", "))
+        val stepsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), steps.joinToString(", "))
         val authorPart = RequestBody.create(MediaType.parse("multipart/form-data"), author)
         val popularityPart = RequestBody.create(MediaType.parse("multipart/form-data"), popularity)
-        val publishedOnPart = RequestBody.create(MediaType.parse("multipart/form-data"), publishedOn)
+        val publishedOnPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), publishedOn)
 
         return plantService.editPlant(
             id = id,

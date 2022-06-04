@@ -6,9 +6,7 @@ import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.request.PlantActRequest
-import com.kebunby.kebunby.data.model.response.BaseResponse
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 import java.io.File
 
 interface PlantRepository {

@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.Plant
-import com.kebunby.kebunby.data.model.UserCredential
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.domain.use_case.plant.AddPlantActivityUseCase
 import com.kebunby.kebunby.domain.use_case.plant.DeletePlantActivityUseCase
