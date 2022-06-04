@@ -327,4 +327,64 @@ class PlantDetailViewModelTest {
             )
         }
     }
+
+    @Test
+    fun `Delete plant should return success`() {
+        testCoroutineRule.runBlockingTest {
+            val resource = flow { emit(Resource.Success(Any())) }
+
+            doReturn(resource).`when`(deletePlantUseCase)(anyInt())
+
+            plantDetailViewModel = PlantDetailViewModel(
+                savedStateHandle,
+                getUserCredentialUseCase,
+                getPlantDetailUseCase,
+                addPlantActivityUseCase,
+                deletePlantActivityUseCase,
+                deletePlantUseCase
+            )
+
+            plantDetailViewModel.onEvent(PlantDetailEvent.DeletePlant)
+
+            val isSuccess = when (plantDetailViewModel.deletePlantState.value) {
+                is UIState.Success -> true
+
+                else -> false
+            }
+
+            assertEquals("Should be success", true, isSuccess)
+
+            verify(deletePlantUseCase)(anyInt())
+        }
+    }
+
+    @Test
+    fun `Delete plant should return fail`() {
+        testCoroutineRule.runBlockingTest {
+            val resource = flow { emit(Resource.Error<Any>()) }
+
+            doReturn(resource).`when`(deletePlantUseCase)(anyInt())
+
+            plantDetailViewModel = PlantDetailViewModel(
+                savedStateHandle,
+                getUserCredentialUseCase,
+                getPlantDetailUseCase,
+                addPlantActivityUseCase,
+                deletePlantActivityUseCase,
+                deletePlantUseCase
+            )
+
+            plantDetailViewModel.onEvent(PlantDetailEvent.DeletePlant)
+
+            val isSuccess = when (plantDetailViewModel.deletePlantState.value) {
+                is UIState.Success -> true
+
+                else -> false
+            }
+
+            assertEquals("Should be fail", false, isSuccess)
+
+            verify(deletePlantUseCase)(anyInt())
+        }
+    }
 }
