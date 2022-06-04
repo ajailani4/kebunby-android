@@ -64,6 +64,11 @@ class PlantDetailViewModelTest {
                 emit(Resource.Success(generatePlant()))
             }
 
+            doReturn(
+                flow {
+                    emit(generateUserCredential())
+                }
+            ).`when`(getUserCredentialUseCase)()
             doReturn(resource).`when`(getPlantDetailUseCase)(anyInt())
 
             plantDetailViewModel = PlantDetailViewModel(
@@ -81,6 +86,7 @@ class PlantDetailViewModelTest {
 
             assertNotNull("Plant should not null", plant)
 
+            verify(getUserCredentialUseCase)()
             verify(getPlantDetailUseCase)(anyInt())
         }
     }
@@ -92,6 +98,11 @@ class PlantDetailViewModelTest {
                 emit(Resource.Error<Plant>())
             }
 
+            doReturn(
+                flow {
+                    emit(generateUserCredential())
+                }
+            ).`when`(getUserCredentialUseCase)()
             doReturn(resource).`when`(getPlantDetailUseCase)(anyInt())
 
             plantDetailViewModel = PlantDetailViewModel(
@@ -114,6 +125,7 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be fail", false, isSuccess)
 
+            verify(getUserCredentialUseCase)()
             verify(getPlantDetailUseCase)(anyInt())
         }
     }
@@ -156,7 +168,7 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1))()
+            verify(getUserCredentialUseCase, times(2))()
             verify(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
@@ -205,7 +217,7 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1))()
+            verify(getUserCredentialUseCase, times(2))()
             verify(deletePlantActivityUseCase)(
                 username = anyString(),
                 plantId = anyInt(),
@@ -254,7 +266,7 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1))()
+            verify(getUserCredentialUseCase, times(2))()
             verify(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = anyBoolean(),
@@ -303,7 +315,7 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1))()
+            verify(getUserCredentialUseCase, times(2))()
             verify(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
