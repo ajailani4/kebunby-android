@@ -56,10 +56,6 @@ class LoginViewModelTest {
             val isSuccess = when (loginViewModel.loginState.value) {
                 is UIState.Success -> true
 
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
-
                 else -> false
             }
 
@@ -82,10 +78,6 @@ class LoginViewModelTest {
 
             val isSuccess = when (loginViewModel.loginState.value) {
                 is UIState.Success -> true
-
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
 
                 else -> false
             }

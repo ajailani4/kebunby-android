@@ -56,10 +56,6 @@ class RegisterViewModelTest {
             val isSuccess = when (registerViewModel.registerState.value) {
                 is UIState.Success -> true
 
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
-
                 else -> false
             }
 
@@ -82,10 +78,6 @@ class RegisterViewModelTest {
 
             val isSuccess = when (registerViewModel.registerState.value) {
                 is UIState.Success -> true
-
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
 
                 else -> false
             }

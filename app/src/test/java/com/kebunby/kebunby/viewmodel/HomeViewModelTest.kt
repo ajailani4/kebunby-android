@@ -342,11 +342,6 @@ class HomeViewModelTest {
                 emit(Resource.Success(generatePlantCategories()))
             }
 
-            doReturn(
-                flow {
-                    emit(generateUserCredential())
-                }
-            ).`when`(getUserCredentialUseCase)()
             doReturn(resource).`when`(getPlantCategoriesUseCase)()
 
             homeViewModel = HomeViewModel(
@@ -367,7 +362,6 @@ class HomeViewModelTest {
 
             assertEquals("Plant categories size should be 5", 5, plantCategoriesPlants?.size)
 
-            verify(getUserCredentialUseCase)()
             verify(getPlantCategoriesUseCase)()
         }
     }
@@ -379,11 +373,6 @@ class HomeViewModelTest {
                 emit(Resource.Error<List<PlantCategory>>())
             }
 
-            doReturn(
-                flow {
-                    emit(generateUserCredential())
-                }
-            ).`when`(getUserCredentialUseCase)()
             doReturn(resource).`when`(getPlantCategoriesUseCase)()
 
             homeViewModel = HomeViewModel(
@@ -398,16 +387,11 @@ class HomeViewModelTest {
             val isSuccess = when (homeViewModel.plantCategoriesState.value) {
                 is UIState.Success -> true
 
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
-
                 else -> false
             }
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(getUserCredentialUseCase)()
             verify(getPlantCategoriesUseCase)()
         }
     }
@@ -415,9 +399,7 @@ class HomeViewModelTest {
     @Test
     fun `Add favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success<Any>()) }
 
             doReturn(
                 flow {
@@ -466,7 +448,7 @@ class HomeViewModelTest {
     fun `Delete favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
-                emit(Resource.Success(Any()))
+                emit(Resource.Success<Any>())
             }
 
             doReturn(
