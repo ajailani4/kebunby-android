@@ -399,7 +399,7 @@ class HomeViewModelTest {
     @Test
     fun `Add favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow { emit(Resource.Success<Any>()) }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
@@ -448,7 +448,7 @@ class HomeViewModelTest {
     fun `Delete favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
-                emit(Resource.Success<Any>())
+                emit(Resource.Success(Any()))
             }
 
             doReturn(

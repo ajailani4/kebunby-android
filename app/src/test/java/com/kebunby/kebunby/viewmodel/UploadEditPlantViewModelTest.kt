@@ -138,7 +138,7 @@ class UploadEditPlantViewModelTest {
                 onSelectedCategoryChanged(generatePlantCategory())
             }
 
-            val resource = flow { emit(Resource.Success<Any>()) }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
@@ -245,7 +245,7 @@ class UploadEditPlantViewModelTest {
         testCoroutineRule.runBlockingTest {
             uploadEditPlantViewModel.onSelectedCategoryChanged(generatePlantCategory())
 
-            val resource = flow { emit(Resource.Success<Any>()) }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
@@ -364,7 +364,7 @@ class UploadEditPlantViewModelTest {
                 onSelectedCategoryChanged(generatePlantCategory())
             }
 
-            val resource = flow { emit(Resource.Success<Any>()) }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
