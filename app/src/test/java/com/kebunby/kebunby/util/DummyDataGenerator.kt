@@ -41,7 +41,7 @@ fun generatePlantItem() =
         id = 1,
         name = "Tanaman",
         image = "test",
-        category = "Tanaman Hias",
+        category = generatePlantCategory(),
         growthEst = "2-3 Tahun",
         wateringFreq = "3x Sehari",
         popularity = 10,
@@ -60,7 +60,7 @@ fun generatePlants() =
 fun generatePlantCategory() =
     PlantCategory(
         id = 1,
-        category = "Tanaman Hias"
+        name = "Tanaman Hias"
     )
 
 fun generatePlantCategories() =
@@ -83,12 +83,13 @@ fun generatePlant() =
         name = "Tanaman",
         latinName = "Tanaman latin",
         image = "test",
-        category = "Tanaman Hias",
+        category = generatePlantCategory(),
         isPlanting = true,
         isPlanted = false,
         isFavorited = true,
         wateringFreq = "3x Sehari",
         growthEst = "2-3 Tahun",
+        desc = "This is a plant",
         tools = listOf(
             "tool 1", "tool 2"
         ),

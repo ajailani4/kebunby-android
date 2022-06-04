@@ -1,15 +1,18 @@
-package com.kebunby.kebunby.ui.feature.upload_plant
+package com.kebunby.kebunby.ui.feature.upload_edit_plant
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.PlantCategory
+import com.kebunby.kebunby.domain.use_case.plant.EditPlantUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantCategoriesUseCase
+import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
 import com.kebunby.kebunby.domain.use_case.plant.UploadPlantUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import com.kebunby.kebunby.ui.common.UIState
@@ -23,28 +26,39 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class UploadPlantViewModel @Inject constructor(
+class UploadEditPlantViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val getPlantDetailUseCase: GetPlantDetailUseCase,
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantCategoriesUseCase: GetPlantCategoriesUseCase,
-    private val uploadPlantUseCase: UploadPlantUseCase
+    private val uploadPlantUseCase: UploadPlantUseCase,
+    private val editPlantUseCase: EditPlantUseCase
 ) : ViewModel() {
+    val plantId = savedStateHandle.get<Int>("plantId")
+
+    private var _plantDetailState = mutableStateOf<UIState<Plant>>(UIState.Idle)
+    val plantDetailState: State<UIState<Plant>> = _plantDetailState
+
     private var _plantCategoriesState = mutableStateOf<UIState<List<PlantCategory>>>(UIState.Idle)
     val plantCategoriesState: State<UIState<List<PlantCategory>>> = _plantCategoriesState
 
     private var _uploadPlantState = mutableStateOf<UIState<Any>>(UIState.Idle)
     val uploadPlantState: State<UIState<Any>> = _uploadPlantState
 
+    private var _editPlantState = mutableStateOf<UIState<Any>>(UIState.Idle)
+    val editPlantState: State<UIState<Any>> = _editPlantState
+
     private var _cameraScreenVis = mutableStateOf(true)
     val cameraScreenVis: State<Boolean> = _cameraScreenVis
 
-    private var _photo = mutableStateOf<File?>(null)
-    val photo: State<File?> = _photo
+    private var _photo = mutableStateOf<Any?>(null)
+    val photo: State<Any?> = _photo
 
     private var _plantName = mutableStateOf("")
     val plantName: State<String> = _plantName
 
-    private var _selectedCategory = mutableStateOf<Pair<Int, Int>?>(null)
-    val selectedCategory: State<Pair<Int, Int>?> = _selectedCategory
+    private var _selectedCategory = mutableStateOf<PlantCategory?>(null)
+    val selectedCategory: State<PlantCategory?> = _selectedCategory
 
     private var _categorySpinnerVis = mutableStateOf(false)
     val categorySpinnerVis: State<Boolean> = _categorySpinnerVis
@@ -67,15 +81,29 @@ class UploadPlantViewModel @Inject constructor(
     private var _steps = mutableStateListOf("Step 1")
     val steps: SnapshotStateList<String> = _steps
 
+    private var popularity = 0
+    private var publishedOn = ""
+
     init {
-        onEvent(UploadPlantEvent.LoadPlantCategories)
+        if (plantId!! > 0) {
+            _cameraScreenVis.value = false
+            onEvent(UploadEditPlantEvent.LoadPlantDetail)
+        }
+
+        onEvent(UploadEditPlantEvent.LoadPlantCategories)
     }
 
-    fun onEvent(event: UploadPlantEvent) {
+    fun onEvent(event: UploadEditPlantEvent) {
         when (event) {
-            UploadPlantEvent.LoadPlantCategories -> getPlantCategories()
+            UploadEditPlantEvent.Idle -> idle()
 
-            UploadPlantEvent.UploadPlant -> uploadPlant()
+            UploadEditPlantEvent.LoadPlantDetail -> getPlantDetail()
+
+            UploadEditPlantEvent.LoadPlantCategories -> getPlantCategories()
+
+            UploadEditPlantEvent.UploadPlant -> uploadPlant()
+
+            UploadEditPlantEvent.EditPlant -> editPlant()
         }
     }
 
@@ -83,11 +111,11 @@ class UploadPlantViewModel @Inject constructor(
         _cameraScreenVis.value = visibility
     }
 
-    fun onPhotoChanged(file: File?) {
-        _photo.value = file
+    fun onPhotoChanged(photo: Any?) {
+        _photo.value = photo
     }
 
-    fun onSelectedCategoryChanged(category: Pair<Int, Int>) {
+    fun onSelectedCategoryChanged(category: PlantCategory) {
         _selectedCategory.value = category
     }
 
@@ -127,6 +155,11 @@ class UploadPlantViewModel @Inject constructor(
         }
     }
 
+    fun setTools(items: List<String>) {
+        _tools.clear()
+        _tools.addAll(items)
+    }
+
     fun onMaterialsChanged(index: Int?, material: String?, action: ListAction) {
         when (action) {
             ListAction.ADD_ITEM -> {
@@ -141,6 +174,11 @@ class UploadPlantViewModel @Inject constructor(
                 if (index != null) _materials.removeAt(index)
             }
         }
+    }
+
+    fun setMaterials(items: List<String>) {
+        _materials.clear()
+        _materials.addAll(items)
     }
 
     fun onStepsChanged(index: Int?, step: String?, action: ListAction) {
@@ -159,9 +197,49 @@ class UploadPlantViewModel @Inject constructor(
         }
     }
 
+    fun setSteps(items: List<String>) {
+        _steps.clear()
+        _steps.addAll(items)
+    }
+
+    fun setPopularity(_popularity: Int) {
+        popularity = _popularity
+    }
+
+    fun setPublishedOn(_publishedOn: String) {
+        publishedOn = _publishedOn
+    }
+
+    private fun idle() {
+        _plantDetailState.value = UIState.Idle
+        _uploadPlantState.value = UIState.Idle
+    }
+
+    private fun getPlantDetail() {
+        _plantDetailState.value = UIState.Loading
+
+        viewModelScope.launch {
+            val resource = getPlantDetailUseCase(plantId!!)
+
+            resource.catch {
+                _plantDetailState.value = UIState.Error(it.localizedMessage)
+            }.collect {
+                _plantDetailState.value = when (it) {
+                    is Resource.Success -> {
+                        UIState.Success(it.data)
+                    }
+
+                    is Resource.Error -> {
+                        UIState.Fail(it.message)
+                    }
+                }
+            }
+        }
+    }
+
     private fun getPlantCategories() {
         viewModelScope.launch {
-            val resource = getPlantCategoriesUseCase.invoke()
+            val resource = getPlantCategoriesUseCase()
 
             resource.catch {
                 _plantCategoriesState.value = UIState.Error(it.localizedMessage)
@@ -179,12 +257,12 @@ class UploadPlantViewModel @Inject constructor(
         _uploadPlantState.value = UIState.Loading
 
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = uploadPlantUseCase.invoke(
+            val resource = uploadPlantUseCase(
                 name = _plantName.value,
-                image = _photo.value!!,
-                category = _selectedCategory.value!!.second.toString(),
+                image = _photo.value as File,
+                category = _selectedCategory.value!!.id.toString(),
                 wateringFreq = _wateringFreq.value,
                 growthEst = _growthEst.value,
                 desc = _desc.value,
@@ -198,6 +276,40 @@ class UploadPlantViewModel @Inject constructor(
                 _uploadPlantState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 _uploadPlantState.value = when (it) {
+                    is Resource.Success -> UIState.Success(it.data)
+
+                    is Resource.Error -> UIState.Fail(it.message)
+                }
+            }
+        }
+    }
+
+    private fun editPlant() {
+        _editPlantState.value = UIState.Loading
+
+        viewModelScope.launch {
+            val userCredential = getUserCredentialUseCase().first()
+
+            val resource = editPlantUseCase(
+                id = plantId!!,
+                name = _plantName.value,
+                image = if (_photo.value is File) _photo.value as File else null,
+                category = _selectedCategory.value!!.id.toString(),
+                wateringFreq = _wateringFreq.value,
+                growthEst = _growthEst.value,
+                desc = _desc.value,
+                tools = _tools,
+                materials = _materials,
+                steps = _steps,
+                author = userCredential.username!!,
+                popularity = popularity.toString(),
+                publishedOn = publishedOn
+            )
+
+            resource.catch {
+                _editPlantState.value = UIState.Error(it.localizedMessage)
+            }.collect {
+                _editPlantState.value = when (it) {
                     is Resource.Success -> UIState.Success(it.data)
 
                     is Resource.Error -> UIState.Fail(it.message)

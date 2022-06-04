@@ -42,14 +42,14 @@ class SplashViewModelTest {
                 emit(generateUserCredential())
             }
 
-            doReturn(userCredential).`when`(getUserCredentialUseCase).invoke()
+            doReturn(userCredential).`when`(getUserCredentialUseCase)()
 
             val actUserCredential = splashViewModel.getUserCredential().first()
 
             assertEquals("Username should be 'george'", "george", actUserCredential.username)
             assertEquals("Access token should be 'abc'", "abc", actUserCredential.accessToken)
 
-            verify(getUserCredentialUseCase).invoke()
+            verify(getUserCredentialUseCase)()
         }
     }
 
@@ -65,14 +65,14 @@ class SplashViewModelTest {
                 )
             }
 
-            doReturn(userCredential).`when`(getUserCredentialUseCase).invoke()
+            doReturn(userCredential).`when`(getUserCredentialUseCase)()
 
             val actUserCredential = splashViewModel.getUserCredential().first()
 
             assertEquals("Username should be empty", "", actUserCredential.username)
             assertEquals("Access token should be empty", "", actUserCredential.accessToken)
 
-            verify(getUserCredentialUseCase).invoke()
+            verify(getUserCredentialUseCase)()
         }
     }
 }

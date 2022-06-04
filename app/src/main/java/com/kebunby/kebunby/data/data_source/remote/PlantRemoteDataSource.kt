@@ -74,12 +74,16 @@ class PlantRemoteDataSource @Inject constructor(
             RequestBody.create(MediaType.parse("image/*"), image)
         )
         val categoryPart = RequestBody.create(MediaType.parse("multipart/form-data"), category)
-        val wateringFreqPart = RequestBody.create(MediaType.parse("multipart/form-data"), wateringFreq)
+        val wateringFreqPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), wateringFreq)
         val growthEstPart = RequestBody.create(MediaType.parse("multipart/form-data"), growthEst)
         val descPart = RequestBody.create(MediaType.parse("multipart/form-data"), desc)
-        val toolsPart = RequestBody.create(MediaType.parse("multipart/form-data"), tools.joinToString(", "))
-        val materialsPart = RequestBody.create(MediaType.parse("multipart/form-data"), materials.joinToString(", "))
-        val stepsPart = RequestBody.create(MediaType.parse("multipart/form-data"), steps.joinToString(", "))
+        val toolsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), tools.joinToString(", "))
+        val materialsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), materials.joinToString(", "))
+        val stepsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), steps.joinToString(", "))
         val authorPart = RequestBody.create(MediaType.parse("multipart/form-data"), author)
 
         return plantService.uploadPlant(
@@ -93,6 +97,64 @@ class PlantRemoteDataSource @Inject constructor(
             materials = materialsPart,
             steps = stepsPart,
             author = authorPart
+        )
+    }
+
+    suspend fun editPlant(
+        id: Int,
+        name: String,
+        image: File?,
+        category: String,
+        wateringFreq: String,
+        growthEst: String,
+        desc: String,
+        tools: List<String>,
+        materials: List<String>,
+        steps: List<String>,
+        author: String,
+        popularity: String,
+        publishedOn: String
+    ): Response<BaseResponse<Any>> {
+        val namePart = RequestBody.create(MediaType.parse("multipart/form-data"), name)
+        val imagePart = if (image != null) {
+            MultipartBody.Part.createFormData(
+                "image",
+                image.name,
+                RequestBody.create(MediaType.parse("image/*"), image)
+            )
+        } else {
+            null
+        }
+        val categoryPart = RequestBody.create(MediaType.parse("multipart/form-data"), category)
+        val wateringFreqPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), wateringFreq)
+        val growthEstPart = RequestBody.create(MediaType.parse("multipart/form-data"), growthEst)
+        val descPart = RequestBody.create(MediaType.parse("multipart/form-data"), desc)
+        val toolsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), tools.joinToString(", "))
+        val materialsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), materials.joinToString(", "))
+        val stepsPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), steps.joinToString(", "))
+        val authorPart = RequestBody.create(MediaType.parse("multipart/form-data"), author)
+        val popularityPart = RequestBody.create(MediaType.parse("multipart/form-data"), popularity)
+        val publishedOnPart =
+            RequestBody.create(MediaType.parse("multipart/form-data"), publishedOn)
+
+        return plantService.editPlant(
+            id = id,
+            name = namePart,
+            image = imagePart,
+            category = categoryPart,
+            wateringFreq = wateringFreqPart,
+            growthEst = growthEstPart,
+            desc = descPart,
+            tools = toolsPart,
+            materials = materialsPart,
+            steps = stepsPart,
+            author = authorPart,
+            popularity = popularityPart,
+            publishedOn = publishedOnPart
         )
     }
 

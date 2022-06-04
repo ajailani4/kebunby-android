@@ -76,6 +76,7 @@
 
     <string name="take_plant_photo">Ambil foto tanaman</string>
     <string name="upload_plant">Unggah Tanaman</string>
+    <string name="edit_plant">Edit Tanaman</string>
 
     <string name="plant_name">Nama Tanaman</string>
     <string name="category">Kategori</string>
@@ -85,4 +86,6 @@
     <string name="tools">Alat</string>
     <string name="materials">Bahan</string>
     <string name="upload">Unggah</string>
+    <string name="save">Simpan</string>
+    <string name="photo_size_is_too_large">Ukuran foto terlalu besar</string>
 </resources>

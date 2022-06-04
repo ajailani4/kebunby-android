@@ -1,14 +1,16 @@
-package com.kebunby.kebunby.ui.feature.upload_plant
+package com.kebunby.kebunby.ui.feature.upload_edit_plant
 
 import android.app.Activity
 import android.content.Context
 import android.view.WindowManager
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
@@ -29,55 +31,69 @@ import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.PlantCategory
-import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.UIState
+import com.kebunby.kebunby.ui.common.component.CircleIconButton
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.camera.CameraScreen
 import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import com.kebunby.kebunby.util.ListAction
+import com.kebunby.kebunby.util.getFileSizeInMB
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.ArrowDown
 import compose.icons.evaicons.fill.PlusCircle
 import compose.icons.evaicons.outline.Close
+import compose.icons.evaicons.outline.Edit
 import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.io.File
 
 @Composable
-fun UploadPlantScreen(
+fun UploadEditPlantScreen(
     navController: NavController,
-    uploadPlantViewModel: UploadPlantViewModel = hiltViewModel()
+    uploadEditPlantViewModel: UploadEditPlantViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
-    val onEvent = uploadPlantViewModel::onEvent
-    val plantCategoriesState = uploadPlantViewModel.plantCategoriesState.value
-    val uploadPlantState = uploadPlantViewModel.uploadPlantState.value
-    val cameraScreenVis = uploadPlantViewModel.cameraScreenVis.value
-    val onCameraScreenVisChanged = uploadPlantViewModel::onCameraScreenVisChanged
-    val photo = uploadPlantViewModel.photo.value
-    val onPhotoChanged = uploadPlantViewModel::onPhotoChanged
-    val plantName = uploadPlantViewModel.plantName.value
-    val onPlantNameChanged = uploadPlantViewModel::onPlantNameChanged
-    val selectedCategory = uploadPlantViewModel.selectedCategory.value
-    val onSelectedCategoryChanged = uploadPlantViewModel::onSelectedCategoryChanged
-    val categorySpinnerVis = uploadPlantViewModel.categorySpinnerVis.value
-    val onCategorySpinnerVisChanged = uploadPlantViewModel::onCategorySpinnerVisChanged
-    val growthEst = uploadPlantViewModel.growthEst.value
-    val onGrowEstChanged = uploadPlantViewModel::onGrowthEstChanged
-    val wateringFreq = uploadPlantViewModel.wateringFreq.value
-    val onWateringFreqChanged = uploadPlantViewModel::onWateringFreqChanged
-    val desc = uploadPlantViewModel.desc.value
-    val onDescChanged = uploadPlantViewModel::onDescChanged
-    val tools = uploadPlantViewModel.tools
-    val onToolsChanged = uploadPlantViewModel::onToolsChanged
-    val materials = uploadPlantViewModel.materials
-    val onMaterialsChanged = uploadPlantViewModel::onMaterialsChanged
-    val steps = uploadPlantViewModel.steps
-    val onStepsChanged = uploadPlantViewModel::onStepsChanged
+    val plantId = uploadEditPlantViewModel.plantId!!
+    val onEvent = uploadEditPlantViewModel::onEvent
+    val plantDetailState = uploadEditPlantViewModel.plantDetailState.value
+    val plantCategoriesState = uploadEditPlantViewModel.plantCategoriesState.value
+    val uploadPlantState = uploadEditPlantViewModel.uploadPlantState.value
+    val editPlantState = uploadEditPlantViewModel.editPlantState.value
+    val cameraScreenVis = uploadEditPlantViewModel.cameraScreenVis.value
+    val onCameraScreenVisChanged = uploadEditPlantViewModel::onCameraScreenVisChanged
+    val photo = uploadEditPlantViewModel.photo.value
+    val onPhotoChanged = uploadEditPlantViewModel::onPhotoChanged
+    val plantName = uploadEditPlantViewModel.plantName.value
+    val onPlantNameChanged = uploadEditPlantViewModel::onPlantNameChanged
+    val selectedCategory = uploadEditPlantViewModel.selectedCategory.value
+    val onSelectedCategoryChanged = uploadEditPlantViewModel::onSelectedCategoryChanged
+    val categorySpinnerVis = uploadEditPlantViewModel.categorySpinnerVis.value
+    val onCategorySpinnerVisChanged = uploadEditPlantViewModel::onCategorySpinnerVisChanged
+    val growthEst = uploadEditPlantViewModel.growthEst.value
+    val onGrowEstChanged = uploadEditPlantViewModel::onGrowthEstChanged
+    val wateringFreq = uploadEditPlantViewModel.wateringFreq.value
+    val onWateringFreqChanged = uploadEditPlantViewModel::onWateringFreqChanged
+    val desc = uploadEditPlantViewModel.desc.value
+    val onDescChanged = uploadEditPlantViewModel::onDescChanged
+    val tools = uploadEditPlantViewModel.tools
+    val onToolsChanged = uploadEditPlantViewModel::onToolsChanged
+    val setTools = uploadEditPlantViewModel::setTools
+    val materials = uploadEditPlantViewModel.materials
+    val onMaterialsChanged = uploadEditPlantViewModel::onMaterialsChanged
+    val setMaterials = uploadEditPlantViewModel::setMaterials
+    val steps = uploadEditPlantViewModel.steps
+    val onStepsChanged = uploadEditPlantViewModel::onStepsChanged
+    val setSteps = uploadEditPlantViewModel::setSteps
+    val setPopularity = uploadEditPlantViewModel::setPopularity
+    val setPublishedOn = uploadEditPlantViewModel::setPublishedOn
+
+    val onReload = sharedViewModel::onReload
 
     val scaffoldState = rememberScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -90,7 +106,11 @@ fun UploadPlantScreen(
         topBar = {
             if (!cameraScreenVis) {
                 CustomToolbar(
-                    title = stringResource(id = R.string.upload_plant),
+                    title = if (plantId > 0) {
+                        stringResource(id = R.string.edit_plant)
+                    } else {
+                        stringResource(id = R.string.upload_plant)
+                    },
                     hasBackButton = true,
                     onBackButtonClicked = { navController.navigateUp() }
                 )
@@ -98,9 +118,11 @@ fun UploadPlantScreen(
         }
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            UploadPlantForm(
+            PlantForm(
+                plantId = plantId,
                 onEvent = onEvent,
                 photo = photo,
+                onCameraScreenVisChanged = onCameraScreenVisChanged,
                 plantName = plantName,
                 onPlantNameChanged = onPlantNameChanged,
                 plantCategoriesState = plantCategoriesState,
@@ -126,19 +148,84 @@ fun UploadPlantScreen(
             )
             AnimatedVisibility(
                 visible = cameraScreenVis,
+                enter = expandVertically(expandFrom = Alignment.Top),
                 exit = shrinkVertically()
             ) {
                 CameraScreen(
-                    onBackButtonClicked = { navController.navigateUp() },
+                    onBackButtonClicked = {
+                        if (plantId > 0) {
+                            onCameraScreenVisChanged(false)
+                        } else {
+                            navController.navigateUp()
+                        }
+                    },
                     onImageCaptured = { photo ->
                         coroutineScope.launch {
-                            onPhotoChanged(Compressor.compress(context, photo))
+                            onPhotoChanged(
+                                Compressor.compress(context, photo) {
+                                    if (photo.getFileSizeInMB() >= 1) {
+                                        default(width = 1500, height = 2000)
+                                    }
+                                }
+                            )
                             onCameraScreenVisChanged(false)
                         }
                     },
                     scaffoldState = scaffoldState,
                     coroutineScope = coroutineScope
                 )
+            }
+        }
+
+        if (plantId > 0) {
+            // Observe plant detail state
+            when (plantDetailState) {
+                is UIState.Loading -> {
+                    FullSizeProgressBar()
+                }
+
+                is UIState.Success -> {
+                    val plant = plantDetailState.data
+
+                    // Setup values for PlantForm
+                    if (plant != null) {
+                        onPhotoChanged(plant.image)
+                        onPlantNameChanged(plant.name)
+                        onSelectedCategoryChanged(plant.category)
+                        onGrowEstChanged(plant.growthEst)
+                        onWateringFreqChanged(plant.wateringFreq)
+                        onDescChanged(plant.desc)
+                        setTools(plant.tools)
+                        setMaterials(plant.materials)
+                        setSteps(plant.steps)
+                        setPopularity(plant.popularity)
+                        setPublishedOn(plant.publishedOn)
+                    }
+
+                    onEvent(UploadEditPlantEvent.Idle)
+                }
+
+                is UIState.Fail -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantDetailState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                is UIState.Error -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            plantDetailState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                else -> {}
             }
         }
 
@@ -150,11 +237,8 @@ fun UploadPlantScreen(
 
             is UIState.Success -> {
                 LaunchedEffect(Unit) {
-                    navController.navigate(Screen.ProfileScreen.route) {
-                        popUpTo(Screen.ProfileScreen.route) {
-                            inclusive = true
-                        }
-                    }
+                    onReload(true)
+                    navController.navigateUp()
                 }
             }
 
@@ -180,19 +264,57 @@ fun UploadPlantScreen(
 
             else -> {}
         }
+
+        // Observe edit plant state
+        when (editPlantState) {
+            is UIState.Loading -> {
+                FullSizeProgressBar()
+            }
+
+            is UIState.Success -> {
+                LaunchedEffect(Unit) {
+                    onReload(true)
+                    navController.navigateUp()
+                }
+            }
+
+            is UIState.Fail -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        editPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            is UIState.Error -> {
+                LaunchedEffect(Unit) {
+                    coroutineScope.launch {
+                        editPlantState.message?.let { message ->
+                            scaffoldState.snackbarHostState.showSnackbar(message)
+                        }
+                    }
+                }
+            }
+
+            else -> {}
+        }
     }
 }
 
 @OptIn(ExperimentalCoilApi::class)
 @Composable
-fun UploadPlantForm(
-    onEvent: (UploadPlantEvent) -> Unit,
-    photo: File?,
+fun PlantForm(
+    plantId: Int,
+    onEvent: (UploadEditPlantEvent) -> Unit,
+    photo: Any?,
+    onCameraScreenVisChanged: (Boolean) -> Unit,
     plantName: String,
     onPlantNameChanged: (String) -> Unit,
     plantCategoriesState: UIState<List<PlantCategory>>,
-    selectedCategory: Pair<Int, Int>?,
-    onSelectedCategoryChanged: (Pair<Int, Int>) -> Unit,
+    selectedCategory: PlantCategory?,
+    onSelectedCategoryChanged: (PlantCategory) -> Unit,
     categorySpinnerVis: Boolean,
     onCategorySpinnerVisChanged: (Boolean) -> Unit,
     growthEst: String,
@@ -218,18 +340,33 @@ fun UploadPlantForm(
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             if (photo != null) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .sizeIn(maxHeight = 400.dp)
-                        .clip(MaterialTheme.shapes.medium),
-                    painter = rememberImagePainter(photo),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = "Plant photo"
-                )
+                Box {
+                    Image(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .sizeIn(maxHeight = 400.dp)
+                            .clip(MaterialTheme.shapes.medium),
+                        painter = rememberImagePainter(photo),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = "Plant photoFile"
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .align(Alignment.TopEnd)
+                    ) {
+                        CircleIconButton(
+                            modifier = Modifier.size(42.dp),
+                            icon = EvaIcons.Outline.Edit,
+                            tint = Color.White,
+                            backgroundColor = MaterialTheme.colors.secondary,
+                            contentDescription = "Edit photo button",
+                            onClick = { onCameraScreenVisChanged(true) }
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(25.dp))
             }
-
-            Spacer(modifier = Modifier.height(25.dp))
 
             // Plant Name
             Text(
@@ -261,7 +398,7 @@ fun UploadPlantForm(
 
                     if (plantCategories != null) {
                         if (selectedCategory == null) {
-                            onSelectedCategoryChanged(Pair(0, plantCategories[0].id))
+                            onSelectedCategoryChanged(plantCategories[0])
                         }
 
                         Text(
@@ -281,11 +418,7 @@ fun UploadPlantForm(
                                     .clickable(onClick = {
                                         onCategorySpinnerVisChanged(true)
                                     }),
-                                value = if (plantCategories.isNotEmpty() && selectedCategory != null) {
-                                    plantCategories[selectedCategory.first].category
-                                } else {
-                                    ""
-                                },
+                                value = selectedCategory?.name ?: "",
                                 onValueChange = {},
                                 trailingIcon = {
                                     Icon(
@@ -317,12 +450,12 @@ fun UploadPlantForm(
                                 plantCategories.forEachIndexed { index, plantCategory ->
                                     DropdownMenuItem(
                                         onClick = {
-                                            onSelectedCategoryChanged(Pair(index, plantCategory.id))
+                                            onSelectedCategoryChanged(plantCategory)
                                             onCategorySpinnerVisChanged(false)
                                         }
                                     ) {
                                         Text(
-                                            text = plantCategory.category,
+                                            text = plantCategory.name,
                                             color = MaterialTheme.colors.onBackground,
                                             style = MaterialTheme.typography.body1
                                         )
@@ -599,7 +732,11 @@ fun UploadPlantForm(
                         growthEst.isNotEmpty() && wateringFreq.isNotEmpty() && desc.isNotEmpty() &&
                         tools.isNotEmpty() && materials.isNotEmpty() && steps.isNotEmpty()
                     ) {
-                        onEvent(UploadPlantEvent.UploadPlant)
+                        if (plantId > 0) {
+                            onEvent(UploadEditPlantEvent.EditPlant)
+                        } else {
+                            onEvent(UploadEditPlantEvent.UploadPlant)
+                        }
                     } else {
                         coroutineScope.launch {
                             scaffoldState.snackbarHostState.showSnackbar(
@@ -611,7 +748,11 @@ fun UploadPlantForm(
             ) {
                 Text(
                     modifier = Modifier.padding(5.dp),
-                    text = stringResource(id = R.string.upload),
+                    text = if (plantId > 0) {
+                        stringResource(id = R.string.save)
+                    } else {
+                        stringResource(id = R.string.upload)
+                    },
                     color = MaterialTheme.colors.onPrimary,
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.subtitle1

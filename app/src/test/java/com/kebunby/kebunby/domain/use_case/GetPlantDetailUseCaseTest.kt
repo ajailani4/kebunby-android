@@ -47,7 +47,7 @@ class GetPlantDetailUseCaseTest {
 
             doReturn(resource).`when`(plantRepository).getPlantDetail(anyInt())
 
-            val actualResource = getPlantDetailUseCase.invoke(anyInt()).first()
+            val actualResource = getPlantDetailUseCase(anyInt()).first()
 
             assertEquals(
                 "Resource should be success",
@@ -68,7 +68,7 @@ class GetPlantDetailUseCaseTest {
 
             doReturn(resource).`when`(plantRepository).getPlantDetail(anyInt())
 
-            val actualResource = getPlantDetailUseCase.invoke(anyInt()).first()
+            val actualResource = getPlantDetailUseCase(anyInt()).first()
 
             assertEquals(
                 "Resource should be error",

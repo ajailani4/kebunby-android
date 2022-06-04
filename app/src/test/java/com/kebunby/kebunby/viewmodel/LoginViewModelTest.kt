@@ -49,23 +49,19 @@ class LoginViewModelTest {
                 emit(Resource.Success(generateUserCredential()))
             }
 
-            doReturn(resource).`when`(loginUserUseCase).invoke(any())
+            doReturn(resource).`when`(loginUserUseCase)(any())
 
             loginViewModel.onEvent(LoginEvent.Submit)
 
             val isSuccess = when (loginViewModel.loginState.value) {
                 is UIState.Success -> true
 
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
-
                 else -> false
             }
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(loginUserUseCase).invoke(any())
+            verify(loginUserUseCase)(any())
         }
     }
 
@@ -76,23 +72,19 @@ class LoginViewModelTest {
                 emit(Resource.Error<UserCredential>())
             }
 
-            doReturn(resource).`when`(loginUserUseCase).invoke(any())
+            doReturn(resource).`when`(loginUserUseCase)(any())
 
             loginViewModel.onEvent(LoginEvent.Submit)
 
             val isSuccess = when (loginViewModel.loginState.value) {
                 is UIState.Success -> true
 
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
-
                 else -> false
             }
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(loginUserUseCase).invoke(any())
+            verify(loginUserUseCase)(any())
         }
     }
 }

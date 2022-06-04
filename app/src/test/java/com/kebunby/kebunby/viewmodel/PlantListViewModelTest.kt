@@ -50,7 +50,7 @@ class PlantListViewModelTest {
             set("forBeginner", false)
             set("searchQuery", null)
             set("categoryId", 0)
-            set("category", "Tanaman Hias")
+            set("name", "Tanaman Hias")
         }
     }
 
@@ -59,7 +59,7 @@ class PlantListViewModelTest {
         testCoroutineRule.runBlockingTest {
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
-            ).`when`(getPagingPlantsUseCase).invoke(
+            ).`when`(getPagingPlantsUseCase)(
                 isTrending = anyBoolean(),
                 forBeginner = anyBoolean(),
                 searchQuery = isNull()
@@ -82,7 +82,7 @@ class PlantListViewModelTest {
 
             assertEquals(generatePlants(), differ.snapshot().items)
 
-            verify(getPagingPlantsUseCase).invoke(
+            verify(getPagingPlantsUseCase)(
                 isTrending = anyBoolean(),
                 forBeginner = anyBoolean(),
                 searchQuery = isNull()
@@ -95,7 +95,7 @@ class PlantListViewModelTest {
         testCoroutineRule.runBlockingTest {
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
-            ).`when`(getPagingPlantsByCategoryUseCase).invoke(anyInt())
+            ).`when`(getPagingPlantsByCategoryUseCase)(anyInt())
 
             plantListViewModel = PlantListViewModel(
                 savedStateHandle,
@@ -115,7 +115,7 @@ class PlantListViewModelTest {
 
             assertEquals(generatePlants(), differ.snapshot().items)
 
-            verify(getPagingPlantsByCategoryUseCase).invoke(anyInt())
+            verify(getPagingPlantsByCategoryUseCase)(anyInt())
         }
     }
 }

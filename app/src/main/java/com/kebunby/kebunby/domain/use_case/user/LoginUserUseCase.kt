@@ -7,9 +7,5 @@ import javax.inject.Inject
 class LoginUserUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    private fun login(loginRequest: LoginRequest) =
-        userRepository.login(loginRequest)
-
-    operator fun invoke(loginRequest: LoginRequest) =
-        login(loginRequest)
+    operator fun invoke(loginRequest: LoginRequest) = userRepository.login(loginRequest)
 }

@@ -1,9 +1,7 @@
 package com.kebunby.kebunby.ui.feature.login
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kebunby.kebunby.data.Resource
@@ -62,7 +60,7 @@ class LoginViewModel @Inject constructor(
         _loginState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = loginUserUseCase.invoke(
+            val resource = loginUserUseCase(
                 LoginRequest(
                     username = _username.value,
                     password = _password.value

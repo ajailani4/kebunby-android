@@ -49,23 +49,19 @@ class RegisterViewModelTest {
                 emit(Resource.Success(generateUserCredential()))
             }
 
-            doReturn(resource).`when`(registerUserUseCase).invoke(any())
+            doReturn(resource).`when`(registerUserUseCase)(any())
 
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState.value) {
                 is UIState.Success -> true
 
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
-
                 else -> false
             }
 
             assertEquals("Should return success", true, isSuccess)
 
-            verify(registerUserUseCase).invoke(any())
+            verify(registerUserUseCase)(any())
         }
     }
 
@@ -76,23 +72,19 @@ class RegisterViewModelTest {
                 emit(Resource.Error<UserCredential>())
             }
 
-            doReturn(resource).`when`(registerUserUseCase).invoke(any())
+            doReturn(resource).`when`(registerUserUseCase)(any())
 
             registerViewModel.onEvent(RegisterEvent.Submit)
 
             val isSuccess = when (registerViewModel.registerState.value) {
                 is UIState.Success -> true
 
-                is UIState.Fail -> false
-
-                is UIState.Error -> false
-
                 else -> false
             }
 
             assertEquals("Should return fail", false, isSuccess)
 
-            verify(registerUserUseCase).invoke(any())
+            verify(registerUserUseCase)(any())
         }
     }
 }

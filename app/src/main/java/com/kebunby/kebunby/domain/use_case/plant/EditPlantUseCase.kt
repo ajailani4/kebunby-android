@@ -4,12 +4,13 @@ import com.kebunby.kebunby.data.repository.PlantRepository
 import java.io.File
 import javax.inject.Inject
 
-class UploadPlantUseCase @Inject constructor(
+class EditPlantUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
     operator fun invoke(
+        id: Int,
         name: String,
-        image: File,
+        image: File?,
         category: String,
         wateringFreq: String,
         growthEst: String,
@@ -17,8 +18,11 @@ class UploadPlantUseCase @Inject constructor(
         tools: List<String>,
         materials: List<String>,
         steps: List<String>,
-        author: String
-    ) = plantRepository.uploadPlant(
+        author: String,
+        popularity: String,
+        publishedOn: String
+    ) = plantRepository.editPlant(
+        id = id,
         name = name,
         image = image,
         category = category,
@@ -28,6 +32,8 @@ class UploadPlantUseCase @Inject constructor(
         tools = tools,
         materials = materials,
         steps = steps,
-        author = author
+        author = author,
+        popularity = popularity,
+        publishedOn = publishedOn
     )
 }

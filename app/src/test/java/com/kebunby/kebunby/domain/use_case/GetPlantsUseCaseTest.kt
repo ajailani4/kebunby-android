@@ -52,7 +52,7 @@ class GetPlantsUseCaseTest {
                 searchQuery = isNull()
             )
 
-            val actualResource = getPlantsUseCase.invoke(
+            val actualResource = getPlantsUseCase(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = anyBoolean(),
@@ -91,7 +91,7 @@ class GetPlantsUseCaseTest {
                 searchQuery = isNull()
             )
 
-            val actualResource = getPlantsUseCase.invoke(
+            val actualResource = getPlantsUseCase(
                 page = anyInt(),
                 size = anyInt(),
                 isTrending = anyBoolean(),

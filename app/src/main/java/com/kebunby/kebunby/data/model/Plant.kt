@@ -5,7 +5,7 @@ data class Plant(
     val name: String,
     val latinName: String,
     val image: String,
-    val category: String,
+    val category: PlantCategory,
     val isPlanting: Boolean,
     val isPlanted: Boolean,
     val isFavorited: Boolean,

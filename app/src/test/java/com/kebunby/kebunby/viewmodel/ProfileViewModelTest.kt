@@ -52,8 +52,8 @@ class ProfileViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getUserProfileUseCase)(anyString())
 
             profileViewModel = ProfileViewModel(
                 getUserCredentialUseCase,
@@ -74,8 +74,8 @@ class ProfileViewModelTest {
                 userProfile?.email
             )
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getUserProfileUseCase).invoke(anyString())
+            verify(getUserCredentialUseCase)()
+            verify(getUserProfileUseCase)(anyString())
         }
     }
 
@@ -90,8 +90,8 @@ class ProfileViewModelTest {
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(getUserProfileUseCase).invoke(anyString())
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getUserProfileUseCase)(anyString())
 
             profileViewModel = ProfileViewModel(
                 getUserCredentialUseCase,
@@ -111,8 +111,8 @@ class ProfileViewModelTest {
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(getUserCredentialUseCase).invoke()
-            verify(getUserProfileUseCase).invoke(anyString())
+            verify(getUserCredentialUseCase)()
+            verify(getUserProfileUseCase)(anyString())
         }
     }
 }

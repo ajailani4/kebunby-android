@@ -547,7 +547,7 @@ fun PlantCategorySection(
                     plantCategory = plantCategory,
                     onClick = {
                         navController.navigate(
-                            Screen.PlantListScreen.route + "?categoryId=${plantCategory.id}&category=${plantCategory.category}"
+                            Screen.PlantListScreen.route + "?categoryId=${plantCategory.id}&name=${plantCategory.name}"
                         )
                     }
                 )

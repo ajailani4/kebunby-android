@@ -68,6 +68,24 @@ interface PlantService {
         @Body plantActRequest: PlantActRequest
     ): Response<BaseResponse<Any>>
 
+    @Multipart
+    @PUT("plants/{id}")
+    suspend fun editPlant(
+        @Path("id") id: Int,
+        @Part("name") name: RequestBody,
+        @Part image: MultipartBody.Part?,
+        @Part("category") category: RequestBody,
+        @Part("wateringFreq") wateringFreq: RequestBody,
+        @Part("growthEst") growthEst: RequestBody,
+        @Part("desc") desc: RequestBody,
+        @Part("tools") tools: RequestBody,
+        @Part("materials") materials: RequestBody,
+        @Part("steps") steps: RequestBody,
+        @Part("author") author: RequestBody,
+        @Part("popularity") popularity: RequestBody,
+        @Part("publishedOn") publishedOn: RequestBody
+    ): Response<BaseResponse<Any>>
+
     @DELETE("users/{username}/plants/{plantId}")
     suspend fun deletePlantActivity(
         @Path("username") username: String,

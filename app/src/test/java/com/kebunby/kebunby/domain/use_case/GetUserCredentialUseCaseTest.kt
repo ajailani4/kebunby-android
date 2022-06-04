@@ -44,7 +44,7 @@ class GetUserCredentialUseCaseTest {
 
             doReturn(userCredential).`when`(userCredentialRepository).getUserCredential()
 
-            val actUserCredential = getUserCredentialUseCase.invoke().first()
+            val actUserCredential = getUserCredentialUseCase().first()
 
             assertEquals("Username should be 'george'", "george", actUserCredential.username)
             assertEquals("Access token should be 'abc'", "abc", actUserCredential.accessToken)
@@ -69,7 +69,7 @@ class GetUserCredentialUseCaseTest {
             doReturn(userCredential).`when`(userCredentialRepository).getUserCredential()
 
             // Act
-            val actUserCredential = getUserCredentialUseCase.invoke().first()
+            val actUserCredential = getUserCredentialUseCase().first()
 
             // Assert
             assertEquals("Username should be empty", "", actUserCredential.username)

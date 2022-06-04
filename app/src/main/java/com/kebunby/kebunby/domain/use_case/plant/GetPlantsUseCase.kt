@@ -6,27 +6,13 @@ import javax.inject.Inject
 class GetPlantsUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private fun getPlants(
-        page: Int,
-        size: Int,
-        isTrending: Boolean?,
-        forBeginner: Boolean?,
-        searchQuery: String?
-    ) = plantRepository.getPlants(
-        page = page,
-        size = size,
-        isTrending = isTrending,
-        forBeginner = forBeginner,
-        searchQuery = searchQuery
-    )
-
     operator fun invoke(
         page: Int,
         size: Int,
         isTrending: Boolean? = null,
         forBeginner: Boolean? = null,
         searchQuery: String? = null
-    ) = getPlants(
+    ) = plantRepository.getPlants(
         page = page,
         size = size,
         isTrending = isTrending,

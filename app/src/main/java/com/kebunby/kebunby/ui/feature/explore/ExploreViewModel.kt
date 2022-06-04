@@ -1,9 +1,7 @@
 package com.kebunby.kebunby.ui.feature.explore
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -57,7 +55,7 @@ class ExploreViewModel @Inject constructor(
 
     private fun getPlants() {
         viewModelScope.launch {
-            getPagingPlantsUseCase.invoke(
+            getPagingPlantsUseCase(
                 isTrending = null,
                 forBeginner = null,
                 searchQuery = _searchQuery.value

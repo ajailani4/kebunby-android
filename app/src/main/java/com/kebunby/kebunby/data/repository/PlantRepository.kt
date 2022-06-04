@@ -6,9 +6,7 @@ import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.request.PlantActRequest
-import com.kebunby.kebunby.data.model.response.BaseResponse
 import kotlinx.coroutines.flow.Flow
-import retrofit2.Response
 import java.io.File
 
 interface PlantRepository {
@@ -49,6 +47,22 @@ interface PlantRepository {
         materials: List<String>,
         steps: List<String>,
         author: String
+    ): Flow<Resource<Any>>
+
+    fun editPlant(
+        id: Int,
+        name: String,
+        image: File?,
+        category: String,
+        wateringFreq: String,
+        growthEst: String,
+        desc: String,
+        tools: List<String>,
+        materials: List<String>,
+        steps: List<String>,
+        author: String,
+        popularity: String,
+        publishedOn: String
     ): Flow<Resource<Any>>
 
     fun addPlantActivity(

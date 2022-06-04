@@ -64,7 +64,12 @@ class PlantDetailViewModelTest {
                 emit(Resource.Success(generatePlant()))
             }
 
-            doReturn(resource).`when`(getPlantDetailUseCase).invoke(anyInt())
+            doReturn(
+                flow {
+                    emit(generateUserCredential())
+                }
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantDetailUseCase)(anyInt())
 
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
@@ -81,7 +86,8 @@ class PlantDetailViewModelTest {
 
             assertNotNull("Plant should not null", plant)
 
-            verify(getPlantDetailUseCase).invoke(anyInt())
+            verify(getUserCredentialUseCase)()
+            verify(getPlantDetailUseCase)(anyInt())
         }
     }
 
@@ -92,7 +98,12 @@ class PlantDetailViewModelTest {
                 emit(Resource.Error<Plant>())
             }
 
-            doReturn(resource).`when`(getPlantDetailUseCase).invoke(anyInt())
+            doReturn(
+                flow {
+                    emit(generateUserCredential())
+                }
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(getPlantDetailUseCase)(anyInt())
 
             plantDetailViewModel = PlantDetailViewModel(
                 savedStateHandle,
@@ -114,23 +125,22 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be fail", false, isSuccess)
 
-            verify(getPlantDetailUseCase).invoke(anyInt())
+            verify(getUserCredentialUseCase)()
+            verify(getPlantDetailUseCase)(anyInt())
         }
     }
 
     @Test
     fun `Add favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(addPlantActivityUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = isNull(),
@@ -156,8 +166,8 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1)).invoke()
-            verify(addPlantActivityUseCase).invoke(
+            verify(getUserCredentialUseCase, times(2))()
+            verify(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = isNull(),
@@ -170,16 +180,14 @@ class PlantDetailViewModelTest {
     @Test
     fun `Delete favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(deletePlantActivityUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(deletePlantActivityUseCase)(
                 username = anyString(),
                 plantId = anyInt(),
                 isPlanting = isNull(),
@@ -205,8 +213,8 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1)).invoke()
-            verify(deletePlantActivityUseCase).invoke(
+            verify(getUserCredentialUseCase, times(2))()
+            verify(deletePlantActivityUseCase)(
                 username = anyString(),
                 plantId = anyInt(),
                 isPlanting = isNull(),
@@ -219,16 +227,14 @@ class PlantDetailViewModelTest {
     @Test
     fun `Add planting plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(addPlantActivityUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = anyBoolean(),
                 isPlanted = isNull(),
@@ -254,8 +260,8 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1)).invoke()
-            verify(addPlantActivityUseCase).invoke(
+            verify(getUserCredentialUseCase, times(2))()
+            verify(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = anyBoolean(),
                 isPlanted = isNull(),
@@ -268,16 +274,14 @@ class PlantDetailViewModelTest {
     @Test
     fun `Add planted plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
                     emit(generateUserCredential())
                 }
-            ).`when`(getUserCredentialUseCase).invoke()
-            doReturn(resource).`when`(addPlantActivityUseCase).invoke(
+            ).`when`(getUserCredentialUseCase)()
+            doReturn(resource).`when`(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = anyBoolean(),
@@ -303,8 +307,8 @@ class PlantDetailViewModelTest {
 
             assertEquals("Should be success", true, isSuccess)
 
-            verify(getUserCredentialUseCase, times(1)).invoke()
-            verify(addPlantActivityUseCase).invoke(
+            verify(getUserCredentialUseCase, times(2))()
+            verify(addPlantActivityUseCase)(
                 username = anyString(),
                 isPlanting = isNull(),
                 isPlanted = anyBoolean(),

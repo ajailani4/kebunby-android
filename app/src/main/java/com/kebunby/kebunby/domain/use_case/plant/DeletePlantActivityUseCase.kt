@@ -6,27 +6,13 @@ import javax.inject.Inject
 class DeletePlantActivityUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private fun deletePlantActivity(
-        username: String,
-        plantId: Int,
-        isPlanting: Boolean?,
-        isPlanted: Boolean?,
-        isFavorited: Boolean?
-    ) = plantRepository.deletePlantActivity(
-        username = username,
-        plantId = plantId,
-        isPlanting = isPlanting,
-        isPlanted = isPlanted,
-        isFavorited = isFavorited
-    )
-
     operator fun invoke(
         username: String,
         plantId: Int,
         isPlanting: Boolean? = null,
         isPlanted: Boolean? = null,
         isFavorited: Boolean? = null
-    ) = deletePlantActivity(
+    ) = plantRepository.deletePlantActivity(
         username = username,
         plantId = plantId,
         isPlanting = isPlanting,

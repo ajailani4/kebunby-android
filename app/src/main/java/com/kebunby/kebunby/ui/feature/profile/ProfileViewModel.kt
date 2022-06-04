@@ -65,8 +65,8 @@ class ProfileViewModel @Inject constructor(
         _userProfileState.value = UIState.Loading
 
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
-            val resource = getUserProfileUseCase.invoke(userCredential.username!!)
+            val userCredential = getUserCredentialUseCase().first()
+            val resource = getUserProfileUseCase(userCredential.username!!)
 
             resource.catch {
                 _userProfileState.value = UIState.Error(it.localizedMessage)
@@ -84,7 +84,7 @@ class ProfileViewModel @Inject constructor(
         _logoutState.value = UIState.Loading
 
         viewModelScope.launch {
-            deleteUserCredentialUseCase.invoke()
+            deleteUserCredentialUseCase()
             _logoutState.value = UIState.Success(null)
         }
     }

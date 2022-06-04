@@ -7,11 +7,7 @@ import javax.inject.Inject
 class SaveUserCredentialUseCase @Inject constructor(
     private val userCredentialRepository: UserCredentialRepository
 ) {
-    private suspend fun saveUserCredential(userCredential: UserCredential) {
-        userCredentialRepository.saveUserCredential(userCredential)
-    }
-
     suspend operator fun invoke(userCredential: UserCredential) {
-        saveUserCredential(userCredential)
+        userCredentialRepository.saveUserCredential(userCredential)
     }
 }

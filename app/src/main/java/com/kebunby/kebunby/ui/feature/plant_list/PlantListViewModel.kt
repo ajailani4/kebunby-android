@@ -1,9 +1,7 @@
 package com.kebunby.kebunby.ui.feature.plant_list
 
 import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,7 +26,7 @@ class PlantListViewModel @Inject constructor(
     val isTrending = savedStateHandle.get<Boolean>("isTrending")
     val forBeginner = savedStateHandle.get<Boolean>("forBeginner")
     val categoryId = savedStateHandle.get<Int>("categoryId")
-    val category = savedStateHandle.get<String>("category")
+    val category = savedStateHandle.get<String>("name")
 
     private var _pagingPlants = MutableStateFlow<PagingData<PlantItem>>(PagingData.empty())
     val pagingPlants: StateFlow<PagingData<PlantItem>> = _pagingPlants
@@ -58,7 +56,7 @@ class PlantListViewModel @Inject constructor(
 
     private fun getPlants() {
         viewModelScope.launch {
-            getPagingPlantsUseCase.invoke(
+            getPagingPlantsUseCase(
                 isTrending = isTrending,
                 forBeginner = forBeginner,
                 searchQuery = null
@@ -70,8 +68,7 @@ class PlantListViewModel @Inject constructor(
 
     private fun getPlantsByCategory() {
         viewModelScope.launch {
-            getPagingPlantsByCategoryUseCase
-                .invoke(categoryId!!)
+            getPagingPlantsByCategoryUseCase(categoryId!!)
                 .cachedIn(viewModelScope)
                 .collect {
                     _pagingPlants.value = it

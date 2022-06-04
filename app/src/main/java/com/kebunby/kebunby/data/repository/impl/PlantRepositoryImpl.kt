@@ -10,7 +10,6 @@ import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
 import javax.inject.Inject
@@ -142,6 +141,48 @@ class PlantRepositoryImpl @Inject constructor(
 
         when (response.code()) {
             201 -> emit(Resource.Success(response.body()?.data))
+
+            413 -> emit(Resource.Error(context.resources.getString(R.string.photo_size_is_too_large)))
+
+            else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
+        }
+    }
+
+    override fun editPlant(
+        id: Int,
+        name: String,
+        image: File?,
+        category: String,
+        wateringFreq: String,
+        growthEst: String,
+        desc: String,
+        tools: List<String>,
+        materials: List<String>,
+        steps: List<String>,
+        author: String,
+        popularity: String,
+        publishedOn: String
+    ) = flow {
+        val response = plantRemoteDataSource.editPlant(
+            id = id,
+            name = name,
+            image = image,
+            category = category,
+            wateringFreq = wateringFreq,
+            growthEst = growthEst,
+            desc = desc,
+            tools = tools,
+            materials = materials,
+            steps = steps,
+            author = author,
+            popularity = popularity,
+            publishedOn = publishedOn
+        )
+
+        when (response.code()) {
+            200 -> emit(Resource.Success(response.body()?.data))
+
+            413 -> emit(Resource.Error(context.resources.getString(R.string.photo_size_is_too_large)))
 
             else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
         }

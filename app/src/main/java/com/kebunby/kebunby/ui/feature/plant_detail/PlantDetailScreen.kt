@@ -2,7 +2,6 @@ package com.kebunby.kebunby.ui.feature.plant_detail
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -27,13 +26,16 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
+import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.UIState
+import com.kebunby.kebunby.ui.common.component.CircleIconButton
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.feature.plant_detail.component.BottomSheetItem
+import com.kebunby.kebunby.ui.feature.plant_detail.component.FullSizeImage
 import com.kebunby.kebunby.ui.feature.plant_detail.component.InfoSurface
 import com.kebunby.kebunby.ui.feature.plant_detail.component.StepItem
-import com.kebunby.kebunby.ui.feature.plant_detail.component.TopMenuButton
 import com.kebunby.kebunby.ui.theme.Grey
 import com.kebunby.kebunby.ui.theme.Red
 import com.kebunby.kebunby.ui.theme.poppinsFamily
@@ -56,8 +58,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun PlantDetailScreen(
     navController: NavController,
-    plantDetailViewModel: PlantDetailViewModel = hiltViewModel()
+    plantDetailViewModel: PlantDetailViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
+    val plantId = plantDetailViewModel.plantId
     val onEvent = plantDetailViewModel::onEvent
     val plantDetailState = plantDetailViewModel.plantDetailState.value
     val addFavPlantState = plantDetailViewModel.addFavPlantState.value
@@ -69,10 +73,16 @@ fun PlantDetailScreen(
     val onSwipeRefreshingChanged = plantDetailViewModel::onSwipeRefreshingChanged
     val isFavorited = plantDetailViewModel.isFavorited.value
     val onFavoritePlant = plantDetailViewModel::onFavoritePlant
+    val moreMenuBtnVis = plantDetailViewModel.moreMenuBtnVis.value
     val plantNowDialogVis = plantDetailViewModel.plantNowDialogVis.value
     val onPlantNowDialogVisChanged = plantDetailViewModel::onPlantNowDialogVisChanged
     val finishPlantingDlgVis = plantDetailViewModel.finishPlantingDlgVis.value
     val onFinishPlantingDlgVisChanged = plantDetailViewModel::onFinishPlantingDlgVisChanged
+    val fullSizeImgVis = plantDetailViewModel.fullSizeImgVis.value
+    val onFullSizeImgVisChanged = plantDetailViewModel::onFullSizeImgVisChanged
+
+    val isReloaded = sharedViewModel.isReloaded.value
+    val onReload = sharedViewModel::onReload
 
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val scaffoldState = rememberScaffoldState()
@@ -86,7 +96,13 @@ fun PlantDetailScreen(
                 BottomSheetItem(
                     icon = EvaIcons.Fill.Edit,
                     title = stringResource(id = R.string.edit),
-                    onClick = {}
+                    onClick = {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+
+                        navController.navigate(Screen.UploadEditPlantScreen.route + "?plantId=$plantId")
+                    }
                 )
                 BottomSheetItem(
                     icon = EvaIcons.Fill.Trash,
@@ -111,300 +127,320 @@ fun PlantDetailScreen(
                     )
                 }
             ) {
-                Box {
-                    // Observe plant detail state
-                    when (plantDetailState) {
-                        is UIState.Loading -> {
-                            Box(
-                                modifier = Modifier.fillMaxSize(),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                CircularProgressIndicator()
-                            }
+                // Observe plant detail state
+                when (plantDetailState) {
+                    is UIState.Loading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
                         }
+                    }
 
-                        is UIState.Success -> {
-                            onSwipeRefreshingChanged(false)
+                    is UIState.Success -> {
+                        onSwipeRefreshingChanged(false)
+                        onReload(false)
 
-                            val plant = plantDetailState.data!!
+                        val plant = plantDetailState.data
 
+                        if (plant != null) {
                             if (isFavorited == null) onFavoritePlant(plant.isFavorited)
 
-                            Column(
-                                modifier = Modifier
-                                    .background(color = MaterialTheme.colors.background)
-                                    .fillMaxSize()
-                                    .verticalScroll(rememberScrollState())
-                            ) {
-                                // Plant Image
-                                Box {
-                                    Image(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .height(260.dp),
-                                        painter = rememberImagePainter(plant.image),
-                                        contentScale = ContentScale.Crop,
-                                        contentDescription = "Plant image"
-                                    )
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(20.dp),
-                                        horizontalArrangement = Arrangement.SpaceBetween
-                                    ) {
-                                        TopMenuButton(
-                                            icon = EvaIcons.Fill.ArrowBack,
-                                            tint = Grey,
-                                            contentDescription = "Back button",
-                                            onClick = { navController.navigateUp() }
-                                        )
-                                        Row {
-                                            TopMenuButton(
-                                                icon = if (isFavorited == true) {
-                                                    EvaIcons.Fill.Heart
-                                                } else {
-                                                    EvaIcons.Outline.Heart
-                                                },
-                                                tint = if (isFavorited == true) Red else Grey,
-                                                contentDescription = "Like button",
-                                                onClick = {
-                                                    onFavoritePlant(!isFavorited!!)
-
-                                                    if (isFavorited == false) {
-                                                        onEvent(PlantDetailEvent.AddFavoritePlant)
-                                                    } else {
-                                                        onEvent(PlantDetailEvent.DeleteFavoritePlant)
-                                                    }
-                                                }
-                                            )
-                                            Spacer(modifier = Modifier.width(20.dp))
-                                            TopMenuButton(
-                                                icon = EvaIcons.Outline.MoreVertical,
-                                                tint = Grey,
-                                                contentDescription = "More button",
-                                                onClick = {
-                                                    coroutineScope.launch {
-                                                        bottomSheetState.show()
-                                                    }
-                                                }
-                                            )
-                                        }
-                                    }
-                                }
-
+                            Box {
                                 Column(
                                     modifier = Modifier
-                                        .padding(horizontal = 20.dp)
-                                        .padding(top = 15.dp, bottom = 80.dp)
+                                        .background(color = MaterialTheme.colors.background)
+                                        .fillMaxSize()
+                                        .verticalScroll(rememberScrollState())
                                 ) {
-                                    // Short Info
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween
+                                    // Plant Image
+                                    Box {
+                                        Image(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(260.dp)
+                                                .clickable(onClick = { onFullSizeImgVisChanged(true) }),
+                                            painter = rememberImagePainter(plant.image),
+                                            contentScale = ContentScale.Crop,
+                                            contentDescription = "Plant image"
+                                        )
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(20.dp),
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            CircleIconButton(
+                                                modifier = Modifier.size(42.dp),
+                                                icon = EvaIcons.Fill.ArrowBack,
+                                                tint = Grey,
+                                                backgroundColor = MaterialTheme.colors.background,
+                                                contentDescription = "Back button",
+                                                onClick = { navController.navigateUp() }
+                                            )
+                                            Row {
+                                                CircleIconButton(
+                                                    modifier = Modifier.size(42.dp),
+                                                    icon = if (isFavorited == true) {
+                                                        EvaIcons.Fill.Heart
+                                                    } else {
+                                                        EvaIcons.Outline.Heart
+                                                    },
+                                                    tint = if (isFavorited == true) Red else Grey,
+                                                    backgroundColor = MaterialTheme.colors.background,
+                                                    contentDescription = "Like button",
+                                                    onClick = {
+                                                        onFavoritePlant(!isFavorited!!)
+
+                                                        if (isFavorited == false) {
+                                                            onEvent(PlantDetailEvent.AddFavoritePlant)
+                                                        } else {
+                                                            onEvent(PlantDetailEvent.DeleteFavoritePlant)
+                                                        }
+                                                    }
+                                                )
+
+                                                if (moreMenuBtnVis) {
+                                                    Spacer(modifier = Modifier.width(15.dp))
+                                                    CircleIconButton(
+                                                        modifier = Modifier.size(42.dp),
+                                                        icon = EvaIcons.Outline.MoreVertical,
+                                                        tint = Grey,
+                                                        backgroundColor = MaterialTheme.colors.background,
+                                                        contentDescription = "More button",
+                                                        onClick = {
+                                                            coroutineScope.launch {
+                                                                bottomSheetState.show()
+                                                            }
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    Column(
+                                        modifier = Modifier
+                                            .padding(horizontal = 20.dp)
+                                            .padding(top = 15.dp, bottom = 80.dp)
                                     ) {
+                                        // Short Info
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween
+                                        ) {
+                                            Text(
+                                                text = Formatter.formatDate(plant.publishedOn),
+                                                color = Grey,
+                                                style = MaterialTheme.typography.body2
+                                            )
+                                            Row {
+                                                Icon(
+                                                    imageVector = EvaIcons.Fill.Heart,
+                                                    tint = Red,
+                                                    contentDescription = "Heart icon"
+                                                )
+                                                Spacer(modifier = Modifier.width(5.dp))
+                                                Text(
+                                                    text = "${plant.popularity}",
+                                                    color = MaterialTheme.colors.onBackground,
+                                                    fontWeight = FontWeight.SemiBold,
+                                                    style = MaterialTheme.typography.subtitle2
+                                                )
+                                            }
+                                        }
+                                        Spacer(modifier = Modifier.height(15.dp))
                                         Text(
-                                            text = Formatter.formatDate(plant.publishedOn),
+                                            text = plant.name,
+                                            color = MaterialTheme.colors.onBackground,
+                                            fontWeight = FontWeight.Bold,
+                                            style = MaterialTheme.typography.h2
+                                        )
+                                        Text(
+                                            text = plant.category.name,
                                             color = Grey,
+                                            fontWeight = FontWeight.SemiBold,
+                                            style = MaterialTheme.typography.body1
+                                        )
+                                        Spacer(modifier = Modifier.height(10.dp))
+                                        Text(
+                                            text = buildAnnotatedString {
+                                                withStyle(
+                                                    style = SpanStyle(
+                                                        color = Grey,
+                                                        fontFamily = poppinsFamily,
+                                                        fontSize = 13.sp
+                                                    )
+                                                ) {
+                                                    append(stringResource(id = R.string.by))
+                                                    append(": ")
+                                                }
+
+                                                append(plant.author)
+                                            },
+                                            color = MaterialTheme.colors.onBackground,
                                             style = MaterialTheme.typography.body2
                                         )
+                                        Spacer(modifier = Modifier.height(20.dp))
                                         Row {
-                                            Icon(
-                                                imageVector = EvaIcons.Fill.Heart,
-                                                tint = Red,
-                                                contentDescription = "Heart icon"
+                                            InfoSurface(
+                                                icon = EvaIcons.Outline.Clock,
+                                                info = plant.growthEst
                                             )
-                                            Spacer(modifier = Modifier.width(5.dp))
+                                            Spacer(modifier = Modifier.width(10.dp))
+                                            InfoSurface(
+                                                icon = SimpleIcons.Rainmeter,
+                                                info = plant.wateringFreq
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(20.dp))
+
+                                        // Description
+                                        Text(
+                                            text = stringResource(id = R.string.desc),
+                                            color = MaterialTheme.colors.onBackground,
+                                            fontWeight = FontWeight.SemiBold,
+                                            style = MaterialTheme.typography.h4
+                                        )
+                                        Spacer(modifier = Modifier.height(5.dp))
+                                        Text(
+                                            text = plant.desc,
+                                            color = MaterialTheme.colors.onBackground,
+                                            style = MaterialTheme.typography.body1
+                                        )
+                                        Spacer(modifier = Modifier.height(10.dp))
+
+                                        // Tools and Materials
+                                        Text(
+                                            text = stringResource(id = R.string.tools_and_materials),
+                                            color = MaterialTheme.colors.onBackground,
+                                            fontWeight = FontWeight.SemiBold,
+                                            style = MaterialTheme.typography.h4
+                                        )
+                                        Spacer(modifier = Modifier.height(5.dp))
+
+                                        plant.tools.forEach { tool ->
                                             Text(
-                                                text = "${plant.popularity}",
+                                                text = tool,
                                                 color = MaterialTheme.colors.onBackground,
-                                                fontWeight = FontWeight.SemiBold,
-                                                style = MaterialTheme.typography.subtitle2
+                                                style = MaterialTheme.typography.body1
+                                            )
+                                            Spacer(modifier = Modifier.height(5.dp))
+                                        }
+
+                                        plant.materials.forEach { material ->
+                                            Text(
+                                                text = material,
+                                                color = MaterialTheme.colors.onBackground,
+                                                style = MaterialTheme.typography.body1
+                                            )
+                                            Spacer(modifier = Modifier.height(5.dp))
+                                        }
+
+                                        Spacer(modifier = Modifier.height(10.dp))
+
+                                        // Steps
+                                        Text(
+                                            text = stringResource(id = R.string.steps),
+                                            color = MaterialTheme.colors.onBackground,
+                                            fontWeight = FontWeight.SemiBold,
+                                            style = MaterialTheme.typography.h4
+                                        )
+                                        Spacer(modifier = Modifier.height(5.dp))
+
+                                        plant.steps.forEachIndexed { index, step ->
+                                            StepItem(
+                                                number = index + 1,
+                                                step = step
+                                            )
+                                            Spacer(modifier = Modifier.height(10.dp))
+                                        }
+                                    }
+                                }
+                                Surface(
+                                    modifier = Modifier.align(Alignment.BottomCenter),
+                                    color = MaterialTheme.colors.background
+                                ) {
+                                    if (!plant.isPlanting) {
+                                        Button(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(15.dp),
+                                            shape = MaterialTheme.shapes.medium,
+                                            enabled = !plant.isPlanted,
+                                            onClick = { onPlantNowDialogVisChanged(true) }
+                                        ) {
+                                            Text(
+                                                text = if (!plant.isPlanted) {
+                                                    stringResource(id = R.string.plant_now)
+                                                } else {
+                                                    stringResource(id = R.string.already_planted)
+                                                },
+                                                color = MaterialTheme.colors.onPrimary,
+                                                fontWeight = FontWeight.Bold,
+                                                style = MaterialTheme.typography.subtitle1
+                                            )
+                                        }
+                                    } else if (plant.isPlanting) {
+                                        OutlinedButton(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(15.dp),
+                                            shape = MaterialTheme.shapes.medium,
+                                            colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
+                                            border = BorderStroke(
+                                                width = 1.dp,
+                                                color = MaterialTheme.colors.primary
+                                            ),
+                                            enabled = plantDetailState != UIState.Loading,
+                                            onClick = { onFinishPlantingDlgVisChanged(true) }
+                                        ) {
+                                            Text(
+                                                text = stringResource(id = R.string.finish_planting),
+                                                color = MaterialTheme.colors.primary,
+                                                fontWeight = FontWeight.Bold,
+                                                style = MaterialTheme.typography.subtitle1
                                             )
                                         }
                                     }
-                                    Spacer(modifier = Modifier.height(15.dp))
-                                    Text(
-                                        text = plant.name,
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontWeight = FontWeight.Bold,
-                                        style = MaterialTheme.typography.h2
-                                    )
-                                    Text(
-                                        text = plant.category,
-                                        color = Grey,
-                                        fontWeight = FontWeight.SemiBold,
-                                        style = MaterialTheme.typography.body1
-                                    )
-                                    Spacer(modifier = Modifier.height(10.dp))
-                                    Text(
-                                        text = buildAnnotatedString {
-                                            withStyle(
-                                                style = SpanStyle(
-                                                    color = Grey,
-                                                    fontFamily = poppinsFamily,
-                                                    fontSize = 13.sp
-                                                )
-                                            ) {
-                                                append(stringResource(id = R.string.by))
-                                                append(": ")
-                                            }
-
-                                            append(plant.author)
-                                        },
-                                        color = MaterialTheme.colors.onBackground,
-                                        style = MaterialTheme.typography.body2
-                                    )
-                                    Spacer(modifier = Modifier.height(20.dp))
-                                    Row {
-                                        InfoSurface(
-                                            icon = EvaIcons.Outline.Clock,
-                                            info = plant.growthEst
-                                        )
-                                        Spacer(modifier = Modifier.width(10.dp))
-                                        InfoSurface(
-                                            icon = SimpleIcons.Rainmeter,
-                                            info = plant.wateringFreq
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(20.dp))
-
-                                    // Description
-                                    Text(
-                                        text = stringResource(id = R.string.desc),
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontWeight = FontWeight.SemiBold,
-                                        style = MaterialTheme.typography.h4
-                                    )
-                                    Spacer(modifier = Modifier.height(5.dp))
-                                    Text(
-                                        text = plant.desc,
-                                        color = MaterialTheme.colors.onBackground,
-                                        style = MaterialTheme.typography.body1
-                                    )
-                                    Spacer(modifier = Modifier.height(10.dp))
-
-                                    // Tools and Materials
-                                    Text(
-                                        text = stringResource(id = R.string.tools_and_materials),
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontWeight = FontWeight.SemiBold,
-                                        style = MaterialTheme.typography.h4
-                                    )
-                                    Spacer(modifier = Modifier.height(5.dp))
-
-                                    plant.tools.forEach { tool ->
-                                        Text(
-                                            text = tool,
-                                            color = MaterialTheme.colors.onBackground,
-                                            style = MaterialTheme.typography.body1
-                                        )
-                                        Spacer(modifier = Modifier.height(5.dp))
-                                    }
-
-                                    plant.materials.forEach { material ->
-                                        Text(
-                                            text = material,
-                                            color = MaterialTheme.colors.onBackground,
-                                            style = MaterialTheme.typography.body1
-                                        )
-                                        Spacer(modifier = Modifier.height(5.dp))
-                                    }
-
-                                    Spacer(modifier = Modifier.height(10.dp))
-
-                                    // Steps
-                                    Text(
-                                        text = stringResource(id = R.string.steps),
-                                        color = MaterialTheme.colors.onBackground,
-                                        fontWeight = FontWeight.SemiBold,
-                                        style = MaterialTheme.typography.h4
-                                    )
-                                    Spacer(modifier = Modifier.height(5.dp))
-
-                                    plant.steps.forEachIndexed { index, step ->
-                                        StepItem(
-                                            number = index + 1,
-                                            step = step
-                                        )
-                                        Spacer(modifier = Modifier.height(10.dp))
-                                    }
                                 }
-                            }
-                            Surface(
-                                modifier = Modifier.align(Alignment.BottomCenter),
-                                color = MaterialTheme.colors.background
-                            ) {
-                                if (!plant.isPlanting) {
-                                    Button(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(15.dp),
-                                        shape = MaterialTheme.shapes.medium,
-                                        enabled = !plant.isPlanted,
-                                        onClick = { onPlantNowDialogVisChanged(true) }
-                                    ) {
-                                        Text(
-                                            text = if (!plant.isPlanted) {
-                                                stringResource(id = R.string.plant_now)
-                                            } else {
-                                                stringResource(id = R.string.already_planted)
-                                            },
-                                            color = MaterialTheme.colors.onPrimary,
-                                            fontWeight = FontWeight.Bold,
-                                            style = MaterialTheme.typography.subtitle1
-                                        )
-                                    }
-                                } else if (plant.isPlanting) {
-                                    OutlinedButton(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(15.dp),
-                                        shape = MaterialTheme.shapes.medium,
-                                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),
-                                        border = BorderStroke(
-                                            width = 1.dp,
-                                            color = MaterialTheme.colors.primary
-                                        ),
-                                        enabled = plantDetailState != UIState.Loading,
-                                        onClick = { onFinishPlantingDlgVisChanged(true) }
-                                    ) {
-                                        Text(
-                                            text = stringResource(id = R.string.finish_planting),
-                                            color = MaterialTheme.colors.primary,
-                                            fontWeight = FontWeight.Bold,
-                                            style = MaterialTheme.typography.subtitle1
-                                        )
-                                    }
+
+                                if (fullSizeImgVis) {
+                                    FullSizeImage(
+                                        image = plant.image,
+                                        onVisibilityChanged = onFullSizeImgVisChanged
+                                    )
                                 }
                             }
                         }
-
-                        is UIState.Fail -> {
-                            onSwipeRefreshingChanged(false)
-
-                            LaunchedEffect(Unit) {
-                                coroutineScope.launch {
-                                    plantDetailState.message?.let { message ->
-                                        scaffoldState.snackbarHostState.showSnackbar(message)
-                                    }
-                                }
-                            }
-                        }
-
-                        is UIState.Error -> {
-                            onSwipeRefreshingChanged(false)
-
-                            LaunchedEffect(Unit) {
-                                coroutineScope.launch {
-                                    plantDetailState.message?.let { message ->
-                                        scaffoldState.snackbarHostState.showSnackbar(message)
-                                    }
-                                }
-                            }
-                        }
-
-                        else -> {}
                     }
+
+                    is UIState.Fail -> {
+                        onSwipeRefreshingChanged(false)
+
+                        LaunchedEffect(Unit) {
+                            coroutineScope.launch {
+                                plantDetailState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+                    }
+
+                    is UIState.Error -> {
+                        onSwipeRefreshingChanged(false)
+
+                        LaunchedEffect(Unit) {
+                            coroutineScope.launch {
+                                plantDetailState.message?.let { message ->
+                                    scaffoldState.snackbarHostState.showSnackbar(message)
+                                }
+                            }
+                        }
+                    }
+
+                    else -> {}
                 }
             }
 
@@ -516,5 +552,8 @@ fun PlantDetailScreen(
                 else -> {}
             }
         }
+
+        // Observe is reloaded state
+        if (isReloaded) onEvent(PlantDetailEvent.LoadPlantDetail)
     }
 }

@@ -60,3 +60,5 @@ fun Context.convertInputStreamToFile(inputStream: InputStream): File {
 
     return file
 }
+
+fun File.getFileSizeInMB() = length() / 1048576

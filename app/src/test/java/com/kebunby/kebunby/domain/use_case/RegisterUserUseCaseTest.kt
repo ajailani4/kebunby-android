@@ -51,7 +51,7 @@ class RegisterUserUseCaseTest {
 
             doReturn(resource).`when`(userRepository).register(any())
 
-            val actResource = registerUserUseCase.invoke(generateRegisterRequest()).first()
+            val actResource = registerUserUseCase(generateRegisterRequest()).first()
             var userCredential = UserCredential()
 
             when (actResource) {
@@ -78,7 +78,7 @@ class RegisterUserUseCaseTest {
 
             doReturn(resource).`when`(userRepository).register(any())
 
-            val actResource = registerUserUseCase.invoke(generateRegisterRequest()).first()
+            val actResource = registerUserUseCase(generateRegisterRequest()).first()
 
             Assert.assertEquals(
                 "Resource should be error",

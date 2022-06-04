@@ -28,6 +28,8 @@ class PlantDetailViewModel @Inject constructor(
     private val addPlantActivityUseCase: AddPlantActivityUseCase,
     private val deletePlantActivityUseCase: DeletePlantActivityUseCase
 ) : ViewModel() {
+    val plantId = savedStateHandle.get<Int>("plantId")
+
     private var _plantDetailState = mutableStateOf<UIState<Plant>>(UIState.Idle)
     val plantDetailState: State<UIState<Plant>> = _plantDetailState
 
@@ -49,11 +51,17 @@ class PlantDetailViewModel @Inject constructor(
     private var _isFavorited = mutableStateOf<Boolean?>(null)
     val isFavorited: State<Boolean?> = _isFavorited
 
+    private var _moreMenuBtnVis = mutableStateOf(false)
+    val moreMenuBtnVis: State<Boolean> = _moreMenuBtnVis
+
     private var _plantNowDialogVis = mutableStateOf(false)
     val plantNowDialogVis: State<Boolean> = _plantNowDialogVis
 
     private var _finishPlantingDlgVis = mutableStateOf(false)
     val finishPlantingDlgVis: State<Boolean> = _finishPlantingDlgVis
+
+    private var _fullSizeImgVis = mutableStateOf(false)
+    val fullSizeImgVis: State<Boolean> = _fullSizeImgVis
 
     init {
         onEvent(PlantDetailEvent.LoadPlantDetail)
@@ -89,17 +97,26 @@ class PlantDetailViewModel @Inject constructor(
         _finishPlantingDlgVis.value = visibility
     }
 
+    fun onFullSizeImgVisChanged(visibility: Boolean) {
+        _fullSizeImgVis.value = visibility
+    }
+
     private fun getPlantDetail() {
         _plantDetailState.value = UIState.Loading
 
         viewModelScope.launch {
-            val resource = getPlantDetailUseCase.invoke(savedStateHandle.get<Int>("plantId")!!)
+            val userCredential = getUserCredentialUseCase().first()
+            val resource = getPlantDetailUseCase(savedStateHandle.get<Int>("plantId")!!)
 
             resource.catch {
                 _plantDetailState.value = UIState.Error(it.localizedMessage)
             }.collect {
                 _plantDetailState.value = when (it) {
                     is Resource.Success -> {
+                        if (userCredential.username == it.data?.author) {
+                            _moreMenuBtnVis.value = true
+                        }
+
                         UIState.Success(it.data)
                     }
 
@@ -113,9 +130,9 @@ class PlantDetailViewModel @Inject constructor(
 
     private fun addFavoritePlant() {
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = addPlantActivityUseCase.invoke(
+            val resource = addPlantActivityUseCase(
                 username = userCredential.username!!,
                 isFavorited = true,
                 plantActRequest = PlantActRequest(savedStateHandle.get<Int>("plantId")!!)
@@ -134,9 +151,9 @@ class PlantDetailViewModel @Inject constructor(
 
     private fun deleteFavoritePlant() {
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = deletePlantActivityUseCase.invoke(
+            val resource = deletePlantActivityUseCase(
                 username = userCredential.username!!,
                 plantId = savedStateHandle.get<Int>("plantId")!!,
                 isFavorited = true
@@ -157,9 +174,9 @@ class PlantDetailViewModel @Inject constructor(
         _addPlantingPlantState.value = UIState.Loading
 
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = addPlantActivityUseCase.invoke(
+            val resource = addPlantActivityUseCase(
                 username = userCredential.username!!,
                 isPlanting = true,
                 plantActRequest = PlantActRequest(savedStateHandle.get<Int>("plantId")!!)
@@ -183,9 +200,9 @@ class PlantDetailViewModel @Inject constructor(
         _addPlantedPlantState.value = UIState.Loading
 
         viewModelScope.launch {
-            val userCredential = getUserCredentialUseCase.invoke().first()
+            val userCredential = getUserCredentialUseCase().first()
 
-            val resource = addPlantActivityUseCase.invoke(
+            val resource = addPlantActivityUseCase(
                 username = userCredential.username!!,
                 isPlanted = true,
                 plantActRequest = PlantActRequest(savedStateHandle.get<Int>("plantId")!!)

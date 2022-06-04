@@ -76,6 +76,7 @@
 
     <string name="take_plant_photo">Take a plant photo</string>
     <string name="upload_plant">Upload Plant</string>
+    <string name="edit_plant">Edit Plant</string>
 
     <string name="plant_name">Plant Name</string>
     <string name="category">Category</string>
@@ -85,4 +86,6 @@
     <string name="tools">Tools</string>
     <string name="materials">Materials</string>
     <string name="upload">Upload</string>
+    <string name="save">Save</string>
+    <string name="photo_size_is_too_large">Photo size is too large</string>
 </resources>

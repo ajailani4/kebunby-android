@@ -47,7 +47,7 @@ class ExploreViewModelTest {
             exploreViewModel.onSearchQueryChanged("plant")
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
-            ).`when`(getPagingPlantsUseCase).invoke(
+            ).`when`(getPagingPlantsUseCase)(
                 isTrending = null,
                 forBeginner = null,
                 searchQuery = exploreViewModel.searchQuery.value
@@ -66,7 +66,7 @@ class ExploreViewModelTest {
 
             assertEquals(generatePlants(), differ.snapshot().items)
 
-            verify(getPagingPlantsUseCase).invoke(
+            verify(getPagingPlantsUseCase)(
                 isTrending = null,
                 forBeginner = null,
                 searchQuery = exploreViewModel.searchQuery.value

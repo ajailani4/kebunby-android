@@ -6,21 +6,11 @@ import javax.inject.Inject
 class GetPlantActivitiesUseCase @Inject constructor(
     private val plantRepository: PlantRepository
 ) {
-    private fun getPlantActivities(
-        username: String,
-        isPlanting: Boolean?,
-        isPlanted: Boolean?
-    ) = plantRepository.getPlantActivities(
-        username = username,
-        isPlanting = isPlanting,
-        isPlanted = isPlanted
-    )
-
     operator fun invoke(
         username: String,
         isPlanting: Boolean?,
         isPlanted: Boolean?
-    ) = getPlantActivities(
+    ) = plantRepository.getPlantActivities(
         username = username,
         isPlanting = isPlanting,
         isPlanted = isPlanted

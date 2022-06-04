@@ -15,7 +15,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -39,6 +38,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.CustomAlertDialog
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
@@ -50,12 +50,9 @@ import com.kebunby.kebunby.ui.feature.profile.planting.PlantingScreen
 import com.kebunby.kebunby.ui.feature.profile.uploaded.UploadedScreen
 import com.kebunby.kebunby.ui.theme.Grey
 import compose.icons.EvaIcons
-import compose.icons.evaicons.Fill
 import compose.icons.evaicons.Outline
-import compose.icons.evaicons.fill.LogOut
 import compose.icons.evaicons.outline.LogOut
 import compose.icons.evaicons.outline.Plus
-import compose.icons.evaicons.outline.PlusCircle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -63,7 +60,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    profileViewModel: ProfileViewModel = hiltViewModel()
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     val onEvent = profileViewModel::onEvent
     val userProfileState = profileViewModel.userProfileState.value
@@ -72,6 +70,9 @@ fun ProfileScreen(
     val onSwipeRefreshingChanged = profileViewModel::onSwipeRefreshingChanged
     val logoutConfirmDlgVis = profileViewModel.logoutConfirmDlgVis.value
     val onLogoutConfirmDlgVisChanged = profileViewModel::onLogoutConfirmDlgVisChanged
+
+    val isReloaded = sharedViewModel.isReloaded.value
+    val onReload = sharedViewModel::onReload
 
     val profileTabMenus = listOf(
         stringResource(R.string.planting),
@@ -124,7 +125,7 @@ fun ProfileScreen(
                         {
                             when {
                                 cameraPermissionState.hasPermission && readExStoragePermissionState.hasPermission -> {
-                                    navController.navigate(Screen.UploadPlantScreen.route)
+                                    navController.navigate(Screen.UploadEditPlantScreen.route)
                                 }
 
                                 cameraPermissionState.shouldShowRationale ||
@@ -179,6 +180,7 @@ fun ProfileScreen(
                         onEvent = onEvent,
                         userProfileState = userProfileState,
                         onSwipeRefreshingChanged = onSwipeRefreshingChanged,
+                        onReload = onReload,
                         scaffoldState = scaffoldState,
                         coroutineScope = coroutineScope
                     )
@@ -203,21 +205,21 @@ fun ProfileScreen(
                                 0 -> {
                                     PlantingScreen(
                                         navController = navController,
-                                        isRefreshing = swipeRefreshing
+                                        isRefreshing = swipeRefreshing || isReloaded
                                     )
                                 }
 
                                 1 -> {
                                     PlantedScreen(
                                         navController = navController,
-                                        isRefreshing = swipeRefreshing
+                                        isRefreshing = swipeRefreshing || isReloaded
                                     )
                                 }
 
                                 2 -> {
                                     UploadedScreen(
                                         navController = navController,
-                                        isRefreshing = swipeRefreshing
+                                        isRefreshing = swipeRefreshing || isReloaded
                                     )
                                 }
                             }
@@ -259,6 +261,9 @@ fun ProfileScreen(
 
             else -> {}
         }
+
+        // Observe is reloaded state
+        if (isReloaded) onEvent(ProfileEvent.LoadUserProfile)
     }
 }
 
@@ -268,6 +273,7 @@ fun ProfileHeader(
     onEvent: (ProfileEvent) -> Unit,
     userProfileState: UIState<User>,
     onSwipeRefreshingChanged: (Boolean) -> Unit,
+    onReload: (Boolean) -> Unit,
     scaffoldState: ScaffoldState,
     coroutineScope: CoroutineScope
 ) {
@@ -285,6 +291,7 @@ fun ProfileHeader(
 
             is UIState.Success -> {
                 onSwipeRefreshingChanged(false)
+                onReload(false)
 
                 val user = userProfileState.data
 
