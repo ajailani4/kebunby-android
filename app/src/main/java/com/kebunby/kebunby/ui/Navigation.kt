@@ -59,7 +59,10 @@ fun Navigation(
                 }
             )
         ) {
-            PlantListScreen(navController)
+            PlantListScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
 
         composable(
@@ -93,7 +96,10 @@ fun Navigation(
 
         // Bottom nav menu
         composable(route = Screen.HomeScreen.route) {
-            HomeScreen(navController)
+            HomeScreen(
+                navController = navController,
+                sharedViewModel = sharedViewModel
+            )
         }
 
         composable(route = Screen.ExploreScreen.route) {

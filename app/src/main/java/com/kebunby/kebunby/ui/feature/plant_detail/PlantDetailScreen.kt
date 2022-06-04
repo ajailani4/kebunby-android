@@ -68,9 +68,12 @@ fun PlantDetailScreen(
     val deleteFavPlantState = plantDetailViewModel.deleteFavPlantState.value
     val addPlantingPlantState = plantDetailViewModel.addPlantingPlantState.value
     val addPlantedPlantState = plantDetailViewModel.addPlantedPlantState.value
+    val deletePlantState = plantDetailViewModel.deletePlantState.value
 
     val swipeRefreshing = plantDetailViewModel.swipeRefreshing.value
     val onSwipeRefreshingChanged = plantDetailViewModel::onSwipeRefreshingChanged
+    val fullSizeImgVis = plantDetailViewModel.fullSizeImgVis.value
+    val onFullSizeImgVisChanged = plantDetailViewModel::onFullSizeImgVisChanged
     val isFavorited = plantDetailViewModel.isFavorited.value
     val onFavoritePlant = plantDetailViewModel::onFavoritePlant
     val moreMenuBtnVis = plantDetailViewModel.moreMenuBtnVis.value
@@ -78,8 +81,8 @@ fun PlantDetailScreen(
     val onPlantNowDialogVisChanged = plantDetailViewModel::onPlantNowDialogVisChanged
     val finishPlantingDlgVis = plantDetailViewModel.finishPlantingDlgVis.value
     val onFinishPlantingDlgVisChanged = plantDetailViewModel::onFinishPlantingDlgVisChanged
-    val fullSizeImgVis = plantDetailViewModel.fullSizeImgVis.value
-    val onFullSizeImgVisChanged = plantDetailViewModel::onFullSizeImgVisChanged
+    val deletePlantDlgVis = plantDetailViewModel.deletePlantDlgVis.value
+    val onDeletePlantDlgVisChanged = plantDetailViewModel::onDeletePlantDlgVisChanged
 
     val isReloaded = sharedViewModel.isReloaded.value
     val onReload = sharedViewModel::onReload
@@ -107,7 +110,13 @@ fun PlantDetailScreen(
                 BottomSheetItem(
                     icon = EvaIcons.Fill.Trash,
                     title = stringResource(id = R.string.delete),
-                    onClick = {}
+                    onClick = {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+
+                        onDeletePlantDlgVisChanged(true)
+                    }
                 )
             }
         }
@@ -444,7 +453,7 @@ fun PlantDetailScreen(
                 }
             }
 
-            // Plant now dialog
+            // Plant now confirmation dialog
             if (plantNowDialogVis) {
                 CustomAlertDialog(
                     onVisibilityChanged = onPlantNowDialogVisChanged,
@@ -458,7 +467,7 @@ fun PlantDetailScreen(
                 )
             }
 
-            // Finish planting dialog
+            // Finish planting confirmation dialog
             if (finishPlantingDlgVis) {
                 CustomAlertDialog(
                     onVisibilityChanged = onFinishPlantingDlgVisChanged,
@@ -469,6 +478,20 @@ fun PlantDetailScreen(
                         onEvent(PlantDetailEvent.AddPlantedPlant)
                     },
                     onDismissed = { onFinishPlantingDlgVisChanged(false) }
+                )
+            }
+
+            // Delete plant confirmation dialog
+            if (deletePlantDlgVis) {
+                CustomAlertDialog(
+                    onVisibilityChanged = onDeletePlantDlgVisChanged,
+                    title = stringResource(id = R.string.delete_plant),
+                    message = stringResource(id = R.string.delete_plant_confirm_msg),
+                    onConfirmed = {
+                        onDeletePlantDlgVisChanged(false)
+                        onEvent(PlantDetailEvent.DeletePlant)
+                    },
+                    onDismissed = { onDeletePlantDlgVisChanged(false) }
                 )
             }
 
@@ -551,9 +574,45 @@ fun PlantDetailScreen(
 
                 else -> {}
             }
-        }
 
-        // Observe is reloaded state
-        if (isReloaded) onEvent(PlantDetailEvent.LoadPlantDetail)
+            // Observe delete plant state
+            when (deletePlantState) {
+                is UIState.Loading -> {
+                    FullSizeProgressBar()
+                }
+
+                is UIState.Success -> {
+                    LaunchedEffect(Unit) {
+                        onReload(true)
+                        navController.popBackStack()
+                    }
+                }
+
+                is UIState.Fail -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            deletePlantState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                is UIState.Error -> {
+                    LaunchedEffect(Unit) {
+                        coroutineScope.launch {
+                            deletePlantState.message?.let { message ->
+                                scaffoldState.snackbarHostState.showSnackbar(message)
+                            }
+                        }
+                    }
+                }
+
+                else -> {}
+            }
+
+            // Observe is reloaded state
+            if (isReloaded) onEvent(PlantDetailEvent.LoadPlantDetail)
+        }
     }
 }

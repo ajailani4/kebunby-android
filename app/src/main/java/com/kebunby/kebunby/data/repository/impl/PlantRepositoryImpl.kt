@@ -10,6 +10,7 @@ import com.kebunby.kebunby.data.data_source.remote.PlantRemoteDataSource
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.data.repository.PlantRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
 import javax.inject.Inject
@@ -225,6 +226,16 @@ class PlantRepositoryImpl @Inject constructor(
 
         when (response.code()) {
             200 -> emit(Resource.Success(response.body()?.data))
+        }
+    }
+
+    override fun deletePlant(id: Int) = flow {
+        val response = plantRemoteDataSource.deletePlant(id)
+
+        when (response.code()) {
+            200 -> emit(Resource.Success(response.body()?.data))
+
+            else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
         }
     }
 }

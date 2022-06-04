@@ -80,4 +80,6 @@ interface PlantRepository {
         isPlanted: Boolean?,
         isFavorited: Boolean?
     ): Flow<Resource<Any>>
+
+    fun deletePlant(id: Int): Flow<Resource<Any>>
 }

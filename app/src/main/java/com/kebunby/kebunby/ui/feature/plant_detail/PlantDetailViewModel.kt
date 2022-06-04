@@ -10,6 +10,7 @@ import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.model.request.PlantActRequest
 import com.kebunby.kebunby.domain.use_case.plant.AddPlantActivityUseCase
 import com.kebunby.kebunby.domain.use_case.plant.DeletePlantActivityUseCase
+import com.kebunby.kebunby.domain.use_case.plant.DeletePlantUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import com.kebunby.kebunby.ui.common.UIState
@@ -26,7 +27,8 @@ class PlantDetailViewModel @Inject constructor(
     private val getUserCredentialUseCase: GetUserCredentialUseCase,
     private val getPlantDetailUseCase: GetPlantDetailUseCase,
     private val addPlantActivityUseCase: AddPlantActivityUseCase,
-    private val deletePlantActivityUseCase: DeletePlantActivityUseCase
+    private val deletePlantActivityUseCase: DeletePlantActivityUseCase,
+    private val deletePlantUseCase: DeletePlantUseCase
 ) : ViewModel() {
     val plantId = savedStateHandle.get<Int>("plantId")
 
@@ -45,8 +47,14 @@ class PlantDetailViewModel @Inject constructor(
     private var _addPlantedPlantState = mutableStateOf<UIState<Nothing>>(UIState.Idle)
     val addPlantedPlantState: State<UIState<Nothing>> = _addPlantedPlantState
 
+    private var _deletePlantState = mutableStateOf<UIState<Any>>(UIState.Idle)
+    val deletePlantState: State<UIState<Any>> = _deletePlantState
+
     private var _swipeRefreshing = mutableStateOf(false)
     val swipeRefreshing: State<Boolean> = _swipeRefreshing
+
+    private var _fullSizeImgVis = mutableStateOf(false)
+    val fullSizeImgVis: State<Boolean> = _fullSizeImgVis
 
     private var _isFavorited = mutableStateOf<Boolean?>(null)
     val isFavorited: State<Boolean?> = _isFavorited
@@ -60,8 +68,8 @@ class PlantDetailViewModel @Inject constructor(
     private var _finishPlantingDlgVis = mutableStateOf(false)
     val finishPlantingDlgVis: State<Boolean> = _finishPlantingDlgVis
 
-    private var _fullSizeImgVis = mutableStateOf(false)
-    val fullSizeImgVis: State<Boolean> = _fullSizeImgVis
+    private var _deletePlantDlgVis = mutableStateOf(false)
+    val deletePlantDlgVis: State<Boolean> = _deletePlantDlgVis
 
     init {
         onEvent(PlantDetailEvent.LoadPlantDetail)
@@ -78,11 +86,17 @@ class PlantDetailViewModel @Inject constructor(
             PlantDetailEvent.AddPlantingPlant -> addPlantingPlant()
 
             PlantDetailEvent.AddPlantedPlant -> addPlantedPlant()
+
+            PlantDetailEvent.DeletePlant -> deletePlant()
         }
     }
 
     fun onSwipeRefreshingChanged(isRefreshing: Boolean) {
         _swipeRefreshing.value = isRefreshing
+    }
+
+    fun onFullSizeImgVisChanged(visibility: Boolean) {
+        _fullSizeImgVis.value = visibility
     }
 
     fun onFavoritePlant(isFavorited: Boolean) {
@@ -97,8 +111,8 @@ class PlantDetailViewModel @Inject constructor(
         _finishPlantingDlgVis.value = visibility
     }
 
-    fun onFullSizeImgVisChanged(visibility: Boolean) {
-        _fullSizeImgVis.value = visibility
+    fun onDeletePlantDlgVisChanged(visibility: Boolean) {
+        _deletePlantDlgVis.value = visibility
     }
 
     private fun getPlantDetail() {
@@ -217,6 +231,24 @@ class PlantDetailViewModel @Inject constructor(
                     }
 
                     is Resource.Error -> {}
+                }
+            }
+        }
+    }
+
+    private fun deletePlant() {
+        _deletePlantState.value = UIState.Loading
+
+        viewModelScope.launch {
+            val resource = deletePlantUseCase(plantId!!)
+
+            resource.catch {
+                _deletePlantState.value = UIState.Error(it.localizedMessage)
+            }.collect {
+                _deletePlantState.value = when (it) {
+                    is Resource.Success -> UIState.Success(it.data)
+
+                    is Resource.Error -> UIState.Fail(it.message)
                 }
             }
         }

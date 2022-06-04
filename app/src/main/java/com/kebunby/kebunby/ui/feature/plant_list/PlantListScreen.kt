@@ -24,6 +24,7 @@ import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.kebunby.kebunby.R
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.component.CustomToolbar
 import com.kebunby.kebunby.ui.common.component.PlantCard
 import com.kebunby.kebunby.ui.theme.Grey
@@ -33,7 +34,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun PlantListScreen(
     navController: NavController,
-    plantListViewModel: PlantListViewModel = hiltViewModel()
+    plantListViewModel: PlantListViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     val isTrending = plantListViewModel.isTrending
     val forBeginner = plantListViewModel.forBeginner
@@ -44,6 +46,9 @@ fun PlantListScreen(
     val pagingPlants = plantListViewModel.pagingPlants.collectAsLazyPagingItems()
     val swipeRefreshing = plantListViewModel.swipeRefreshing.value
     val onSwipeRefreshingChanged = plantListViewModel::onSwipeRefreshingChanged
+
+    val isReloaded = sharedViewModel.isReloaded.value
+    val onReload = sharedViewModel::onReload
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -128,6 +133,7 @@ fun PlantListScreen(
                         loadState.source.refresh is LoadState.NotLoading &&
                             loadState.append.endOfPaginationReached -> {
                             onSwipeRefreshingChanged(false)
+                            onReload(false)
 
                             if (itemCount < 1) {
                                 item {
@@ -178,5 +184,8 @@ fun PlantListScreen(
                 }
             }
         }
+
+        // Observe is reloaded state
+        if (isReloaded) onEvent(PlantListEvent.LoadPlants)
     }
 }
