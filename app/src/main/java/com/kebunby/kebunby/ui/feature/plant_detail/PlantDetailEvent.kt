@@ -6,4 +6,5 @@ sealed class PlantDetailEvent {
     object DeleteFavoritePlant : PlantDetailEvent()
     object AddPlantingPlant : PlantDetailEvent()
     object AddPlantedPlant : PlantDetailEvent()
+    object DeletePlant : PlantDetailEvent()
 }

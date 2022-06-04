@@ -227,4 +227,14 @@ class PlantRepositoryImpl @Inject constructor(
             200 -> emit(Resource.Success(response.body()?.data))
         }
     }
+
+    override fun deletePlant(id: Int) = flow {
+        val response = plantRemoteDataSource.deletePlant(id)
+
+        when (response.code()) {
+            200 -> emit(Resource.Success(response.body()?.data))
+
+            else -> emit(Resource.Error(context.resources.getString(R.string.something_wrong_happened)))
+        }
+    }
 }

@@ -1,17 +1,14 @@
 package com.kebunby.kebunby.domain.use_case
 
 import com.kebunby.kebunby.data.Resource
-import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.data.repository.PlantRepository
-import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
+import com.kebunby.kebunby.domain.use_case.plant.DeletePlantUseCase
 import com.kebunby.kebunby.util.TestCoroutineRule
-import com.kebunby.kebunby.util.generatePlant
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
@@ -22,60 +19,59 @@ import org.mockito.kotlin.verify
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
-class GetPlantDetailUseCaseTest {
+class DeletePlantUseCaseTest {
 
-    @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
     @Mock
     private lateinit var plantRepository: PlantRepository
 
-    private lateinit var getPlantDetailUseCase: GetPlantDetailUseCase
+    private lateinit var deletePlantUseCase: DeletePlantUseCase
 
     @Before
     fun setUp() {
-        getPlantDetailUseCase = GetPlantDetailUseCase(plantRepository)
+        deletePlantUseCase = DeletePlantUseCase(plantRepository)
     }
 
     @Test
-    fun `Get plant detail should return success`() {
+    fun `Delete plant should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
-                emit(Resource.Success(generatePlant()))
+                emit(Resource.Success<Any>())
             }
 
-            doReturn(resource).`when`(plantRepository).getPlantDetail(anyInt())
+            doReturn(resource).`when`(plantRepository).deletePlant(anyInt())
 
-            val actualResource = getPlantDetailUseCase(anyInt()).first()
+            val actualResource = deletePlantUseCase(1).first()
 
             assertEquals(
                 "Resource should be success",
-                Resource.Success(generatePlant()),
+                Resource.Success<Any>(),
                 actualResource
             )
 
-            verify(plantRepository).getPlantDetail(anyInt())
+            verify(plantRepository).deletePlant(anyInt())
         }
     }
 
     @Test
-    fun `Get plant detail should return fail`() {
+    fun `Delete plant should return error`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
-                emit(Resource.Error<Plant>())
+                emit(Resource.Error<Any>())
             }
 
-            doReturn(resource).`when`(plantRepository).getPlantDetail(anyInt())
+            doReturn(resource).`when`(plantRepository).deletePlant(anyInt())
 
-            val actualResource = getPlantDetailUseCase(anyInt()).first()
+            val actualResource = deletePlantUseCase(1).first()
 
             assertEquals(
                 "Resource should be error",
-                Resource.Error<Plant>(),
+                Resource.Error<Any>(),
                 actualResource
             )
 
-            verify(plantRepository).getPlantDetail(anyInt())
+            verify(plantRepository).deletePlant(anyInt())
         }
     }
 }

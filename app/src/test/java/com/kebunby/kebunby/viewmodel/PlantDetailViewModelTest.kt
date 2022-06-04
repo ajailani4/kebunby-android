@@ -5,6 +5,7 @@ import com.kebunby.kebunby.data.Resource
 import com.kebunby.kebunby.data.model.Plant
 import com.kebunby.kebunby.domain.use_case.plant.AddPlantActivityUseCase
 import com.kebunby.kebunby.domain.use_case.plant.DeletePlantActivityUseCase
+import com.kebunby.kebunby.domain.use_case.plant.DeletePlantUseCase
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import com.kebunby.kebunby.ui.common.UIState
@@ -48,6 +49,9 @@ class PlantDetailViewModelTest {
     @Mock
     private lateinit var deletePlantActivityUseCase: DeletePlantActivityUseCase
 
+    @Mock
+    private lateinit var deletePlantUseCase: DeletePlantUseCase
+
     private lateinit var savedStateHandle: SavedStateHandle
 
     private lateinit var plantDetailViewModel: PlantDetailViewModel
@@ -76,7 +80,8 @@ class PlantDetailViewModelTest {
                 getUserCredentialUseCase,
                 getPlantDetailUseCase,
                 addPlantActivityUseCase,
-                deletePlantActivityUseCase
+                deletePlantActivityUseCase,
+                deletePlantUseCase
             )
 
             val plant = when (val plantDetailState = plantDetailViewModel.plantDetailState.value) {
@@ -110,7 +115,8 @@ class PlantDetailViewModelTest {
                 getUserCredentialUseCase,
                 getPlantDetailUseCase,
                 addPlantActivityUseCase,
-                deletePlantActivityUseCase
+                deletePlantActivityUseCase,
+                deletePlantUseCase
             )
 
             val isSuccess = when (plantDetailViewModel.plantDetailState.value) {
@@ -153,7 +159,8 @@ class PlantDetailViewModelTest {
                 getUserCredentialUseCase,
                 getPlantDetailUseCase,
                 addPlantActivityUseCase,
-                deletePlantActivityUseCase
+                deletePlantActivityUseCase,
+                deletePlantUseCase
             )
 
             plantDetailViewModel.onEvent(PlantDetailEvent.AddFavoritePlant)
@@ -200,7 +207,8 @@ class PlantDetailViewModelTest {
                 getUserCredentialUseCase,
                 getPlantDetailUseCase,
                 addPlantActivityUseCase,
-                deletePlantActivityUseCase
+                deletePlantActivityUseCase,
+                deletePlantUseCase
             )
 
             plantDetailViewModel.onEvent(PlantDetailEvent.DeleteFavoritePlant)
@@ -247,7 +255,8 @@ class PlantDetailViewModelTest {
                 getUserCredentialUseCase,
                 getPlantDetailUseCase,
                 addPlantActivityUseCase,
-                deletePlantActivityUseCase
+                deletePlantActivityUseCase,
+                deletePlantUseCase
             )
 
             plantDetailViewModel.onEvent(PlantDetailEvent.AddPlantingPlant)
@@ -294,7 +303,8 @@ class PlantDetailViewModelTest {
                 getUserCredentialUseCase,
                 getPlantDetailUseCase,
                 addPlantActivityUseCase,
-                deletePlantActivityUseCase
+                deletePlantActivityUseCase,
+                deletePlantUseCase
             )
 
             plantDetailViewModel.onEvent(PlantDetailEvent.AddPlantedPlant)
@@ -315,6 +325,66 @@ class PlantDetailViewModelTest {
                 isFavorited = isNull(),
                 plantActRequest = any()
             )
+        }
+    }
+
+    @Test
+    fun `Delete plant should return success`() {
+        testCoroutineRule.runBlockingTest {
+            val resource = flow { emit(Resource.Success(Any())) }
+
+            doReturn(resource).`when`(deletePlantUseCase)(anyInt())
+
+            plantDetailViewModel = PlantDetailViewModel(
+                savedStateHandle,
+                getUserCredentialUseCase,
+                getPlantDetailUseCase,
+                addPlantActivityUseCase,
+                deletePlantActivityUseCase,
+                deletePlantUseCase
+            )
+
+            plantDetailViewModel.onEvent(PlantDetailEvent.DeletePlant)
+
+            val isSuccess = when (plantDetailViewModel.deletePlantState.value) {
+                is UIState.Success -> true
+
+                else -> false
+            }
+
+            assertEquals("Should be success", true, isSuccess)
+
+            verify(deletePlantUseCase)(anyInt())
+        }
+    }
+
+    @Test
+    fun `Delete plant should return fail`() {
+        testCoroutineRule.runBlockingTest {
+            val resource = flow { emit(Resource.Error<Any>()) }
+
+            doReturn(resource).`when`(deletePlantUseCase)(anyInt())
+
+            plantDetailViewModel = PlantDetailViewModel(
+                savedStateHandle,
+                getUserCredentialUseCase,
+                getPlantDetailUseCase,
+                addPlantActivityUseCase,
+                deletePlantActivityUseCase,
+                deletePlantUseCase
+            )
+
+            plantDetailViewModel.onEvent(PlantDetailEvent.DeletePlant)
+
+            val isSuccess = when (plantDetailViewModel.deletePlantState.value) {
+                is UIState.Success -> true
+
+                else -> false
+            }
+
+            assertEquals("Should be fail", false, isSuccess)
+
+            verify(deletePlantUseCase)(anyInt())
         }
     }
 }

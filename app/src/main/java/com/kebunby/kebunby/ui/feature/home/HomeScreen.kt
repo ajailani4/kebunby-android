@@ -33,6 +33,7 @@ import com.kebunby.kebunby.data.model.PlantCategory
 import com.kebunby.kebunby.data.model.PlantItem
 import com.kebunby.kebunby.data.model.User
 import com.kebunby.kebunby.ui.Screen
+import com.kebunby.kebunby.ui.common.SharedViewModel
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.feature.home.component.HomeHeaderShimmer
 import com.kebunby.kebunby.ui.feature.home.component.PlantCategoryCard
@@ -45,7 +46,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavController,
-    homeViewModel: HomeViewModel = hiltViewModel()
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    sharedViewModel: SharedViewModel
 ) {
     val onEvent = homeViewModel::onEvent
     val userProfileState = homeViewModel.userProfileState.value
@@ -66,6 +68,9 @@ fun HomeScreen(
     val setForBeginnerPlants = homeViewModel::setForBeginnerPlants
     val updateForBeginnerPlants = homeViewModel::updateForBeginnerPlants
     val clearForBeginnerPlants = homeViewModel::clearForBeginnerPlants
+
+    val isReloaded = sharedViewModel.isReloaded.value
+    val onReload = sharedViewModel::onReload
 
     val coroutineScope = rememberCoroutineScope()
     val scaffoldState = rememberScaffoldState()
@@ -103,6 +108,7 @@ fun HomeScreen(
                         onEvent = onEvent,
                         userProfileState = userProfileState,
                         onSwipeRefreshingChanged = onSwipeRefreshingChanged,
+                        onReload = onReload,
                         coroutineScope = coroutineScope,
                         scaffoldState = scaffoldState
                     )
@@ -159,6 +165,18 @@ fun HomeScreen(
 
             else -> {}
         }
+
+        // Observe is reloaded state
+        if (isReloaded) {
+            // Clear local plant list
+            clearTrendingPlants()
+            clearForBeginnerPlants()
+
+            onEvent(HomeEvent.LoadUserProfile)
+            onEvent(HomeEvent.LoadTrendingPlants)
+            onEvent(HomeEvent.LoadForBeginnerPlants)
+            onEvent(HomeEvent.LoadPlantCategories)
+        }
     }
 }
 
@@ -168,6 +186,7 @@ fun HomeHeader(
     onEvent: (HomeEvent) -> Unit,
     userProfileState: UIState<User>,
     onSwipeRefreshingChanged: (Boolean) -> Unit,
+    onReload: (Boolean) -> Unit,
     coroutineScope: CoroutineScope,
     scaffoldState: ScaffoldState
 ) {
@@ -185,6 +204,7 @@ fun HomeHeader(
 
             is UIState.Success -> {
                 onSwipeRefreshingChanged(false)
+                onReload(false)
 
                 val user = userProfileState.data
 

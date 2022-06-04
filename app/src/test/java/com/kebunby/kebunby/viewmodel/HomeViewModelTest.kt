@@ -86,7 +86,11 @@ class HomeViewModelTest {
 
             assertNotNull(userProfile)
             assertEquals("Username should be 'george'", "george", userProfile?.username)
-            assertEquals("Email should be 'george@email.com'", "george@email.com", userProfile?.email)
+            assertEquals(
+                "Email should be 'george@email.com'",
+                "george@email.com",
+                userProfile?.email
+            )
 
             verify(getUserCredentialUseCase)()
             verify(getUserProfileUseCase)(anyString())
@@ -399,7 +403,7 @@ class HomeViewModelTest {
     @Test
     fun `Add favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow { emit(Resource.Success<Any>()) }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
@@ -448,7 +452,7 @@ class HomeViewModelTest {
     fun `Delete favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
             val resource = flow {
-                emit(Resource.Success<Any>())
+                emit(Resource.Success(Any()))
             }
 
             doReturn(

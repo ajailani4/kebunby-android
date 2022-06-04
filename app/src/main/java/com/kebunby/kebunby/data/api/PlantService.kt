@@ -94,4 +94,9 @@ interface PlantService {
         @Query("isPlanted") isPlanted: Boolean?,
         @Query("isFavorited") isFavorited: Boolean?
     ): Response<BaseResponse<Any>>
+
+    @DELETE("plants/{id}")
+    suspend fun deletePlant(
+        @Path("id") id: Int
+    ): Response<BaseResponse<Any>>
 }

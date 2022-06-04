@@ -185,4 +185,6 @@ class PlantRemoteDataSource @Inject constructor(
         isPlanted = isPlanted,
         isFavorited = isFavorited
     )
+
+    suspend fun deletePlant(id: Int) = plantService.deletePlant(id)
 }
