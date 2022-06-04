@@ -86,7 +86,11 @@ class HomeViewModelTest {
 
             assertNotNull(userProfile)
             assertEquals("Username should be 'george'", "george", userProfile?.username)
-            assertEquals("Email should be 'george@email.com'", "george@email.com", userProfile?.email)
+            assertEquals(
+                "Email should be 'george@email.com'",
+                "george@email.com",
+                userProfile?.email
+            )
 
             verify(getUserCredentialUseCase)()
             verify(getUserProfileUseCase)(anyString())

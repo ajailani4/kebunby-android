@@ -9,7 +9,6 @@ import com.kebunby.kebunby.domain.use_case.plant.GetPlantDetailUseCase
 import com.kebunby.kebunby.domain.use_case.plant.UploadPlantUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
 import com.kebunby.kebunby.ui.common.UIState
-import com.kebunby.kebunby.ui.feature.home.HomeViewModel
 import com.kebunby.kebunby.ui.feature.upload_edit_plant.UploadEditPlantEvent
 import com.kebunby.kebunby.ui.feature.upload_edit_plant.UploadEditPlantViewModel
 import com.kebunby.kebunby.util.TestCoroutineRule
@@ -18,14 +17,12 @@ import com.kebunby.kebunby.util.generatePlantCategory
 import com.kebunby.kebunby.util.generateUserCredential
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import org.junit.Assert.*
-
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.*
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
@@ -33,7 +30,6 @@ import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import java.io.File
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
@@ -91,7 +87,8 @@ class UploadEditPlantViewModelTest {
             uploadEditPlantViewModel.onEvent(UploadEditPlantEvent.LoadPlantCategories)
 
             val plantCategoriesPlants =
-                when (val plantCategoriesState = uploadEditPlantViewModel.plantCategoriesState.value) {
+                when (val plantCategoriesState =
+                    uploadEditPlantViewModel.plantCategoriesState.value) {
                     is UIState.Success -> plantCategoriesState.data
 
                     else -> listOf()
@@ -116,7 +113,8 @@ class UploadEditPlantViewModelTest {
             uploadEditPlantViewModel.onEvent(UploadEditPlantEvent.LoadPlantCategories)
 
             val isSuccess =
-                when (val plantCategoriesState = uploadEditPlantViewModel.plantCategoriesState.value) {
+                when (val plantCategoriesState =
+                    uploadEditPlantViewModel.plantCategoriesState.value) {
                     is UIState.Success -> true
 
                     else -> false

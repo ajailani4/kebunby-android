@@ -9,8 +9,7 @@ import com.kebunby.kebunby.util.generatePlant
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import org.junit.Assert.*
-
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

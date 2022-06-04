@@ -61,10 +61,11 @@ class ProfileViewModelTest {
                 deleteUserCredentialUseCase
             )
 
-            val userProfile = when (val userProfileState = profileViewModel.userProfileState.value) {
-                is UIState.Success -> userProfileState.data
-                else -> null
-            }
+            val userProfile =
+                when (val userProfileState = profileViewModel.userProfileState.value) {
+                    is UIState.Success -> userProfileState.data
+                    else -> null
+                }
 
             assertNotNull(userProfile)
             assertEquals("Username should be 'george'", "george", userProfile?.username)

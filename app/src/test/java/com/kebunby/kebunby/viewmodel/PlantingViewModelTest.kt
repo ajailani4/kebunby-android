@@ -4,15 +4,12 @@ import androidx.paging.AsyncPagingDataDiffer
 import androidx.paging.PagingData
 import com.kebunby.kebunby.domain.use_case.plant.GetPlantActivitiesUseCase
 import com.kebunby.kebunby.domain.use_case.user_credential.GetUserCredentialUseCase
-import com.kebunby.kebunby.ui.feature.profile.planting.PlantingEvent
 import com.kebunby.kebunby.ui.feature.profile.planting.PlantingViewModel
 import com.kebunby.kebunby.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import org.junit.Assert.*
-
-import org.junit.Before
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

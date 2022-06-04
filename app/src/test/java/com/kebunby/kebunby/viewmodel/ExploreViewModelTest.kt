@@ -12,17 +12,15 @@ import com.kebunby.kebunby.util.generatePlants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 
 @ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
