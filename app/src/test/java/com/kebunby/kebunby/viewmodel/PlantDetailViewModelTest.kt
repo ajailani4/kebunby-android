@@ -133,9 +133,7 @@ class PlantDetailViewModelTest {
     @Test
     fun `Add favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
@@ -182,9 +180,7 @@ class PlantDetailViewModelTest {
     @Test
     fun `Delete favorite plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
@@ -231,9 +227,7 @@ class PlantDetailViewModelTest {
     @Test
     fun `Add planting plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
@@ -280,9 +274,7 @@ class PlantDetailViewModelTest {
     @Test
     fun `Add planted plant should return success`() {
         testCoroutineRule.runBlockingTest {
-            val resource = flow {
-                emit(Resource.Success(Any()))
-            }
+            val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
                 flow {
