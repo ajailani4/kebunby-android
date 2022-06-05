@@ -387,7 +387,7 @@ fun PlantForm(
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Category
             // Observe plant categories state
@@ -489,7 +489,7 @@ fun PlantForm(
                 else -> {}
             }
 
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Growth Estimation
             Text(
@@ -510,7 +510,7 @@ fun PlantForm(
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Watering Frequency
             Text(
@@ -531,7 +531,7 @@ fun PlantForm(
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Description
             Text(
@@ -551,7 +551,7 @@ fun PlantForm(
                     fontSize = 14.sp
                 )
             )
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Tools
             Text(
@@ -606,7 +606,7 @@ fun PlantForm(
                     contentDescription = "Add icon"
                 )
             }
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Materials
             Text(
@@ -667,7 +667,7 @@ fun PlantForm(
                     contentDescription = "Add icon"
                 )
             }
-            Spacer(modifier = Modifier.height(25.dp))
+            Spacer(modifier = Modifier.height(30.dp))
 
             // Steps
             Text(
