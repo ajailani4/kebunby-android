@@ -237,7 +237,7 @@ fun SearchTextField(
             onValueChange = onSearchQueryChanged,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = SearchTextFieldGrey,
+                backgroundColor = MaterialTheme.colors.SearchTextFieldGrey,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),

@@ -1,5 +1,8 @@
 package com.kebunby.kebunby.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 // Light theme
@@ -30,8 +33,12 @@ val OnBackgroundDark = Color.White
 val OnSurfaceDark = Color.White
 val OnErrorDark = Color.White
 
+// Additional
+val Colors.SearchTextFieldGrey: Color
+    @Composable
+    get() = if (isLight) Color(0xFFECECEC) else Color(0xFF2F2F2F)
+
 // Common
 val Grey = Color(0xFFBDBDBD)
-val SearchTextFieldGrey = Color(0xFFECECEC)
 val Red = Color(0xFFEB5757)
 val BackgroundShimmer = Color(0xFFA3A3A3)
