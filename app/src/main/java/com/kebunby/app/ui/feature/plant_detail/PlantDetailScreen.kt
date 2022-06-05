@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -21,7 +22,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -54,7 +57,7 @@ import compose.icons.evaicons.outline.MoreVertical
 import compose.icons.simpleicons.Rainmeter
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalCoilApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlantDetailScreen(
     navController: NavController,
@@ -171,7 +174,12 @@ fun PlantDetailScreen(
                                                 .fillMaxWidth()
                                                 .height(260.dp)
                                                 .clickable(onClick = { onFullSizeImgVisChanged(true) }),
-                                            painter = rememberImagePainter(plant.image),
+                                            painter = rememberAsyncImagePainter(
+                                                model = ImageRequest.Builder(LocalContext.current)
+                                                    .data(plant.image)
+                                                    .placeholder(R.drawable.img_empty_plant)
+                                                    .build()
+                                            ),
                                             contentScale = ContentScale.Crop,
                                             contentDescription = "Plant image"
                                         )

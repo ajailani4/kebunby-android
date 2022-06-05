@@ -12,12 +12,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import com.kebunby.app.data.model.PlantItem
 import com.kebunby.app.ui.theme.Grey
 import com.kebunby.app.ui.theme.Red
@@ -27,7 +30,6 @@ import compose.icons.evaicons.Outline
 import compose.icons.evaicons.fill.Heart
 import compose.icons.evaicons.outline.Heart
 
-@ExperimentalCoilApi
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PlantMiniCard(
@@ -45,11 +47,12 @@ fun PlantMiniCard(
             Box {
                 Image(
                     modifier = Modifier.size(160.dp),
-                    painter = if (plantItem.image != null) {
-                        rememberImagePainter(plantItem.image)
-                    } else {
-                        painterResource(id = R.drawable.img_default_ava)
-                    },
+                    painter = rememberAsyncImagePainter(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(plantItem.image)
+                            .placeholder(R.drawable.img_empty_plant)
+                            .build()
+                    ),
                     contentScale = ContentScale.Crop,
                     contentDescription = "Plant image"
                 )

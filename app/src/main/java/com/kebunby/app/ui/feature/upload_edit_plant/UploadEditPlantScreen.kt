@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberAsyncImagePainter
 import coil.compose.rememberImagePainter
 import com.kebunby.app.R
 import com.kebunby.app.data.model.PlantCategory
@@ -346,7 +347,7 @@ fun PlantForm(
                             .fillMaxWidth()
                             .sizeIn(maxHeight = 400.dp)
                             .clip(MaterialTheme.shapes.medium),
-                        painter = rememberImagePainter(photo),
+                        painter = rememberAsyncImagePainter(photo),
                         contentScale = ContentScale.Crop,
                         contentDescription = "Plant photoFile"
                     )
