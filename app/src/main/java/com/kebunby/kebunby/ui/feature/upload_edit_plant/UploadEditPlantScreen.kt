@@ -153,7 +153,7 @@ fun UploadEditPlantScreen(
             ) {
                 CameraScreen(
                     onBackButtonClicked = {
-                        if (plantId > 0) {
+                        if (photo != null) {
                             onCameraScreenVisChanged(false)
                         } else {
                             navController.navigateUp()
