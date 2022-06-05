@@ -1,5 +1,6 @@
 package com.kebunby.app.ui.feature.profile.uploaded
 
+import com.kebunby.app.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

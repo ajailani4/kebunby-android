@@ -1,5 +1,6 @@
 package com.kebunby.app.ui.feature.shop
 
+import com.kebunby.app.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme

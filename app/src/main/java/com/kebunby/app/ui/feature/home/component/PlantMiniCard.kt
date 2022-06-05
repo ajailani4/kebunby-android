@@ -1,5 +1,6 @@
 package com.kebunby.app.ui.feature.home.component
 
+import com.kebunby.app.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
