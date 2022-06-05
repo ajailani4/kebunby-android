@@ -57,7 +57,7 @@ fun PlantMiniCard(
                 Surface(
                     modifier = Modifier.align(Alignment.TopEnd),
                     shape = CircleShape,
-                    color = Color.White,
+                    color = MaterialTheme.colors.background,
                     onClick = onFavorited
                 ) {
                     Icon(

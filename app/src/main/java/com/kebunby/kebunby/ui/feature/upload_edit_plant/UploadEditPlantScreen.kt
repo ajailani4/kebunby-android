@@ -438,7 +438,7 @@ fun PlantForm(
                             )
                             DropdownMenu(
                                 modifier = Modifier
-                                    .background(color = MaterialTheme.colors.background)
+                                    .background(color = MaterialTheme.colors.surface)
                                     .width(
                                         with(LocalDensity.current) {
                                             boxSize.width.toDp()

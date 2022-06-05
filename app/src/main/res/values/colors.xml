@@ -4,6 +4,10 @@
     <color name="primaryVariantLight">#89BA35</color>
     <color name="secondaryLight">#3DB35F</color>
     <color name="secondaryVariantLight">#36A155</color>
+    <color name="primaryDark">#91C637</color>
+    <color name="primaryVariantDark">#89BA35</color>
+    <color name="secondaryDark">#3DB35F</color>
+    <color name="secondaryVariantDark">#36A155</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

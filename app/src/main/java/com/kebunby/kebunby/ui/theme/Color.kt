@@ -16,6 +16,20 @@ val OnBackgroundLight = Color.Black
 val OnSurfaceLight = Color.Black
 val OnErrorLight = Color.White
 
+// Dark theme
+val PrimaryDark = Color(0xFF91C637)
+val PrimaryVariantDark = Color(0xFF89BA35)
+val SecondaryDark = Color(0xFF3DB35F)
+val SecondaryVariantDark = Color(0xFF36A155)
+val BackgroundDark = Color(0xFF242222)
+val SurfaceDark = Color(0xFF2F2F2F)
+val ErrorDark = Color(0xFFB00020)
+val OnPrimaryDark = Color.White
+val OnSecondaryDark = Color.White
+val OnBackgroundDark = Color.White
+val OnSurfaceDark = Color.White
+val OnErrorDark = Color.White
+
 // Common
 val Grey = Color(0xFFBDBDBD)
 val SearchTextFieldGrey = Color(0xFFECECEC)
