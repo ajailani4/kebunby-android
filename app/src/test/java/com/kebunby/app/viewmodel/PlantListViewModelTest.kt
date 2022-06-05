@@ -55,7 +55,7 @@ class PlantListViewModelTest {
 
     @Test
     fun `Get plants should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
             ).`when`(getPagingPlantsUseCase)(
@@ -91,7 +91,7 @@ class PlantListViewModelTest {
 
     @Test
     fun getPagingPlantsByCategory_ShouldReturnSuccess() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
             ).`when`(getPagingPlantsByCategoryUseCase)(anyInt())

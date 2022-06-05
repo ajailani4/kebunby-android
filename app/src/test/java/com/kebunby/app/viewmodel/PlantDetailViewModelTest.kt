@@ -63,7 +63,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Get plant detail should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(generatePlant()))
             }
@@ -98,7 +98,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Get plant detail should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<Plant>())
             }
@@ -138,7 +138,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Add favorite plant should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
@@ -186,7 +186,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Delete favorite plant should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
@@ -234,7 +234,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Add planting plant should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
@@ -282,7 +282,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Add planted plant should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
@@ -330,7 +330,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Delete plant should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(resource).`when`(deletePlantUseCase)(anyInt())
@@ -360,7 +360,7 @@ class PlantDetailViewModelTest {
 
     @Test
     fun `Delete plant should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Error<Any>()) }
 
             doReturn(resource).`when`(deletePlantUseCase)(anyInt())

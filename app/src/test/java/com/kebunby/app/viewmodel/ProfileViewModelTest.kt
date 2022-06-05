@@ -43,7 +43,7 @@ class ProfileViewModelTest {
 
     @Test
     fun `Get profile should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(generateUser()))
             }
@@ -82,7 +82,7 @@ class ProfileViewModelTest {
 
     @Test
     fun `Get profile should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<User>())
             }

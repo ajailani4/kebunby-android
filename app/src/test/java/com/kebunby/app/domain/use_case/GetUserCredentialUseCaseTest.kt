@@ -37,7 +37,7 @@ class GetUserCredentialUseCaseTest {
 
     @Test
     fun `Get user credential should return user credential is not empty`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val userCredential = flow {
                 emit(generateUserCredential())
             }
@@ -55,7 +55,7 @@ class GetUserCredentialUseCaseTest {
 
     @Test
     fun `Get user credential should return user credential is empty`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             // Arrange
             val userCredential = flow {
                 emit(

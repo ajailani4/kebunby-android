@@ -40,7 +40,7 @@ class RegisterUserUseCaseTest {
 
     @Test
     fun `Register should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(
                     Resource.Success<UserCredential>(
@@ -71,7 +71,7 @@ class RegisterUserUseCaseTest {
 
     @Test
     fun `Register should return error`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<UserCredential>())
             }
