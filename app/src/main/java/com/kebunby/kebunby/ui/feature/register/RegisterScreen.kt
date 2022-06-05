@@ -118,7 +118,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             )
@@ -151,7 +151,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             ),
@@ -187,7 +187,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             )
@@ -232,7 +232,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             ),
