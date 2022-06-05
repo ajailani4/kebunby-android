@@ -144,7 +144,7 @@ fun PlantListScreen(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
                                         Image(
-                                            modifier = Modifier.size(230.dp),
+                                            modifier = Modifier.size(200.dp),
                                             painter = painterResource(id = R.drawable.img_empty_plant),
                                             contentDescription = "Empty plant illustration"
                                         )
