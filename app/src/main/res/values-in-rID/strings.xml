@@ -61,6 +61,8 @@
     <string name="no_plants_yet">Belum ada tanaman</string>
     <string name="searched_plant_is_empty">Tanaman yang kamu cari tidak ditemukan</string>
 
+    <string name="feature_under_construction">Fitur ini sedang dikerjakan</string>
+
     <!-- Profile Tab Menu -->
     <string name="planting">Menanam</string>
     <string name="planted">Ditanam</string>

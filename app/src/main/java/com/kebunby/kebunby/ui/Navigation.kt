@@ -15,6 +15,7 @@ import com.kebunby.kebunby.ui.feature.plant_detail.PlantDetailScreen
 import com.kebunby.kebunby.ui.feature.plant_list.PlantListScreen
 import com.kebunby.kebunby.ui.feature.profile.ProfileScreen
 import com.kebunby.kebunby.ui.feature.register.RegisterScreen
+import com.kebunby.kebunby.ui.feature.shop.ShopScreen
 import com.kebunby.kebunby.ui.feature.upload_edit_plant.UploadEditPlantScreen
 
 @Composable
@@ -107,7 +108,7 @@ fun Navigation(
         }
 
         composable(route = Screen.ShopScreen.route) {
-            // ShopScreen()
+            ShopScreen()
         }
 
         composable(route = Screen.ProfileScreen.route) {

@@ -33,6 +33,7 @@ import com.kebunby.kebunby.ui.Screen
 import com.kebunby.kebunby.ui.common.UIState
 import com.kebunby.kebunby.ui.common.component.FullSizeProgressBar
 import com.kebunby.kebunby.ui.theme.Grey
+import com.kebunby.kebunby.ui.theme.montserratFamily
 import com.kebunby.kebunby.ui.theme.poppinsFamily
 import compose.icons.EvaIcons
 import compose.icons.evaicons.Fill
@@ -117,7 +118,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             )
@@ -150,7 +151,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             ),
@@ -186,7 +187,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             )
@@ -231,7 +232,7 @@ fun RegisterScreen(
                             },
                             singleLine = true,
                             textStyle = TextStyle(
-                                color = Color.Black,
+                                color = MaterialTheme.colors.onBackground,
                                 fontFamily = poppinsFamily,
                                 fontSize = 15.sp
                             ),
@@ -285,7 +286,12 @@ fun RegisterScreen(
                                     append(stringResource(id = R.string.login_here))
                                 }
                             },
-                            style = MaterialTheme.typography.subtitle1,
+                            style = TextStyle(
+                                color = MaterialTheme.colors.onBackground,
+                                fontFamily = montserratFamily,
+                                fontWeight = FontWeight.Normal,
+                                fontSize = 15.sp
+                            ),
                             onClick = { navController.navigate(Screen.LoginScreen.route) }
                         )
                     }

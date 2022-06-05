@@ -145,7 +145,7 @@ fun ExploreScreen(
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
                                         Image(
-                                            modifier = Modifier.size(230.dp),
+                                            modifier = Modifier.size(200.dp),
                                             painter = painterResource(id = R.drawable.img_empty_plant),
                                             contentDescription = "Empty plant illustration"
                                         )
@@ -237,7 +237,7 @@ fun SearchTextField(
             onValueChange = onSearchQueryChanged,
             shape = RoundedCornerShape(8.dp),
             colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = SearchTextFieldGrey,
+                backgroundColor = MaterialTheme.colors.SearchTextFieldGrey,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent
             ),

@@ -61,6 +61,8 @@
     <string name="no_plants_yet">No plants yet</string>
     <string name="searched_plant_is_empty">The plant you are looking for is not found</string>
 
+    <string name="feature_under_construction">This feature is under construction</string>
+
     <!-- Profile Tab Menu -->
     <string name="planting">Planting</string>
     <string name="planted">Planted</string>

@@ -2,18 +2,16 @@
     <!-- Base application theme. -->
     <style name="Theme.Kebunby" parent="Theme.MaterialComponents.Light.DarkActionBar">
         <!-- PrimaryLight brand color. -->
-        <item name="colorPrimary">@color/primaryLight</item>
-        <item name="colorPrimaryVariant">@color/primaryVariantLight</item>
+        <item name="colorPrimary">@color/primaryDark</item>
+        <item name="colorPrimaryVariant">@color/primaryVariantDark</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- SecondaryLight brand color. -->
-        <item name="colorSecondary">@color/secondaryLight</item>
-        <item name="colorSecondaryVariant">@color/secondaryVariantLight</item>
+        <item name="colorSecondary">@color/secondaryDark</item>
+        <item name="colorSecondaryVariant">@color/secondaryVariantDark</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:statusBarColor" tools:targetApi="l">@color/white</item>
-
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <style name="Theme.Kebunby.NoActionBar">
