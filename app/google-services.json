@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "801160872495",
+    "project_id": "kebunby",
+    "storage_bucket": "kebunby.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801160872495:android:6226c782b2ea9242407cda",
+        "android_client_info": {
+          "package_name": "com.kebunby.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "801160872495-7mmran59qkderm686aujkigbv53bbllu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kebunby.app",
+            "certificate_hash": "6c6a9e09c05768d413bfae6df59eb10b7a770fcf"
+          }
+        },
+        {
+          "client_id": "801160872495-mqg4bufhoqbcp7eu8kgu3ug2f1jh5the.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL8-6tXOrx1BzExU04zP7HMl9UHHPzhuI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "801160872495-mqg4bufhoqbcp7eu8kgu3ug2f1jh5the.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
