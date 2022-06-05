@@ -12,7 +12,7 @@ class TestCoroutineRule : TestRule {
     private val testCoroutineDispatcher = UnconfinedTestDispatcher()
     private val testCoroutineScope = TestScope()
 
-    override fun apply(base: Statement, description: Description): Statement =
+    override fun apply(base: Statement, description: Description) =
         object : Statement() {
             @Throws(Throwable::class)
             override fun evaluate() {
