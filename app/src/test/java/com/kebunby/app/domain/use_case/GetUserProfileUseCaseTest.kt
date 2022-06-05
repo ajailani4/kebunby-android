@@ -39,7 +39,7 @@ class GetUserProfileUseCaseTest {
 
     @Test
     fun `Get user profile should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(generateUser()))
             }
@@ -58,7 +58,7 @@ class GetUserProfileUseCaseTest {
 
     @Test
     fun `Get user profile should returns success error`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<User>())
             }

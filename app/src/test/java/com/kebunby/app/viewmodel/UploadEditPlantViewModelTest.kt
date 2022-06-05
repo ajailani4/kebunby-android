@@ -76,7 +76,7 @@ class UploadEditPlantViewModelTest {
 
     @Test
     fun `Get plant categories should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             savedStateHandle.set("plantId", 0)
             val resource = flow {
                 emit(Resource.Success(generatePlantCategories()))
@@ -102,7 +102,7 @@ class UploadEditPlantViewModelTest {
 
     @Test
     fun `Get plant categories should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             savedStateHandle.set("plantId", 0)
             val resource = flow {
                 emit(Resource.Error<List<PlantCategory>>())
@@ -130,7 +130,7 @@ class UploadEditPlantViewModelTest {
     fun `Upload plant should return success`() {
         val tempFile = temporaryFolder.newFile("plant.jpg")
 
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             uploadEditPlantViewModel.apply {
                 onPhotoChanged(tempFile)
                 onSelectedCategoryChanged(generatePlantCategory())
@@ -186,7 +186,7 @@ class UploadEditPlantViewModelTest {
     fun `Upload plant should return fail`() {
         val tempFile = temporaryFolder.newFile("plant.jpg")
 
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             uploadEditPlantViewModel.apply {
                 onPhotoChanged(tempFile)
                 onSelectedCategoryChanged(generatePlantCategory())
@@ -240,7 +240,7 @@ class UploadEditPlantViewModelTest {
 
     @Test
     fun `Edit plant without changing plant photo should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             uploadEditPlantViewModel.onSelectedCategoryChanged(generatePlantCategory())
 
             val resource = flow { emit(Resource.Success(Any())) }
@@ -297,7 +297,7 @@ class UploadEditPlantViewModelTest {
 
     @Test
     fun `Edit plant without changing plant photo should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             uploadEditPlantViewModel.onSelectedCategoryChanged(generatePlantCategory())
 
             val resource = flow { emit(Resource.Error<Any>()) }
@@ -356,7 +356,7 @@ class UploadEditPlantViewModelTest {
     fun `Edit plant with changing plant photo should return success`() {
         val tempFile = temporaryFolder.newFile("plant.jpg")
 
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             uploadEditPlantViewModel.apply {
                 onPhotoChanged(tempFile)
                 onSelectedCategoryChanged(generatePlantCategory())
@@ -418,7 +418,7 @@ class UploadEditPlantViewModelTest {
     fun `Edit plant with changing plant photo should return fail`() {
         val tempFile = temporaryFolder.newFile("plant.jpg")
 
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             uploadEditPlantViewModel.apply {
                 onPhotoChanged(tempFile)
                 onSelectedCategoryChanged(generatePlantCategory())

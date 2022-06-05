@@ -37,7 +37,7 @@ class UploadedViewModelTest {
 
     @Test
     fun `Get plants should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             doReturn(
                 flow {
                     emit(generateUserCredential())

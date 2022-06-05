@@ -44,7 +44,7 @@ class EditPlantUseCaseTest {
     fun `Edit plant should return success`() {
         val tempFile = temporaryFolder.newFile("plant.jpg")
 
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Success<Any>()) }
 
             doReturn(resource).`when`(plantRepository).editPlant(
@@ -107,7 +107,7 @@ class EditPlantUseCaseTest {
     fun `Edit plant should return error`() {
         val tempFile = temporaryFolder.newFile("plant.jpg")
 
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Error<Any>()) }
 
             doReturn(resource).`when`(plantRepository).editPlant(

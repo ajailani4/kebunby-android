@@ -58,7 +58,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get profile should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(generateUser()))
             }
@@ -99,7 +99,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get profile should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<User>())
             }
@@ -139,7 +139,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get trending plants should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(generatePlants()))
             }
@@ -188,7 +188,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get trending plants should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<List<PlantItem>>())
             }
@@ -240,7 +240,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get for beginner plants should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(generatePlants()))
             }
@@ -289,7 +289,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get for beginner plants should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<List<PlantItem>>())
             }
@@ -341,7 +341,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get plant categories should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(generatePlantCategories()))
             }
@@ -372,7 +372,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Get plant categories should return fail`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Error<List<PlantCategory>>())
             }
@@ -402,7 +402,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Add favorite plant should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow { emit(Resource.Success(Any())) }
 
             doReturn(
@@ -450,7 +450,7 @@ class HomeViewModelTest {
 
     @Test
     fun `Delete favorite plant should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             val resource = flow {
                 emit(Resource.Success(Any()))
             }

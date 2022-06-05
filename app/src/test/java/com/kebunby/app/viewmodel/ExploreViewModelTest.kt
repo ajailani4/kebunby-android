@@ -41,7 +41,7 @@ class ExploreViewModelTest {
 
     @Test
     fun `Get paging plants by search query should return success`() {
-        testCoroutineRule.runBlockingTest {
+        testCoroutineRule.runTest {
             exploreViewModel.onSearchQueryChanged("plant")
             doReturn(
                 flow { emit(PagingData.from(generatePlants())) }
