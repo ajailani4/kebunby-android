@@ -3,6 +3,7 @@ package com.kebunby.app.ui.feature.upload_edit_plant
 import android.app.Activity
 import android.content.Context
 import android.view.WindowManager
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
@@ -302,9 +303,14 @@ fun UploadEditPlantScreen(
             else -> {}
         }
     }
+
+    if (cameraScreenVis && photo != null) {
+        BackHandler {
+            onCameraScreenVisChanged(false)
+        }
+    }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun PlantForm(
     plantId: Int,
