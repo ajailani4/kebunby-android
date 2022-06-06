@@ -26,14 +26,11 @@ fun ProfileHeaderShimmer() {
             modifier = Modifier
                 .clip(CircleShape)
                 .background(color = BackgroundShimmer)
-                .size(100.dp)
+                .size(90.dp)
                 .shimmer(shimmerInstance)
         )
         Spacer(modifier = Modifier.width(25.dp))
-        Column(
-            modifier = Modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
+        Column(verticalArrangement = Arrangement.SpaceBetween) {
             Column {
                 Box(
                     modifier = Modifier
@@ -51,6 +48,7 @@ fun ProfileHeaderShimmer() {
                         .shimmer(shimmerInstance)
                 )
             }
+            Spacer(modifier = Modifier.height(20.dp))
             Row {
                 Box(
                     modifier = Modifier
