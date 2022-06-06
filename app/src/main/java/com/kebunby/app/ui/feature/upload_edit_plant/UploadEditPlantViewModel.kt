@@ -19,7 +19,6 @@ import com.kebunby.app.ui.common.UIState
 import com.kebunby.app.util.ListAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.io.File

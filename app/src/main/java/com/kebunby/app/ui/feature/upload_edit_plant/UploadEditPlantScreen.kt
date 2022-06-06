@@ -28,9 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import com.kebunby.app.R
 import com.kebunby.app.data.model.PlantCategory
 import com.kebunby.app.ui.common.SharedViewModel

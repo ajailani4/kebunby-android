@@ -1,6 +1,5 @@
 package com.kebunby.app.ui.feature.home.component
 
-import com.kebunby.app.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -13,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.kebunby.app.R
 import com.kebunby.app.data.model.PlantCategory
 
 @OptIn(ExperimentalMaterialApi::class)

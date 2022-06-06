@@ -1,6 +1,5 @@
 package com.kebunby.app.ui.feature.profile.planted
 
-import com.kebunby.app.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -17,6 +16,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import coil.annotation.ExperimentalCoilApi
+import com.kebunby.app.R
 import com.kebunby.app.ui.Screen
 import com.kebunby.app.ui.common.component.PlantCard
 import com.kebunby.app.ui.feature.profile.component.EmptyPlantActivityImage

@@ -27,7 +27,6 @@ import com.kebunby.app.ui.common.SharedViewModel
 import com.kebunby.app.ui.feature.splash.SplashViewModel
 import com.kebunby.app.ui.theme.KebunbyTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint

@@ -3,10 +3,8 @@ package com.kebunby.app.data.data_source.remote
 import com.kebunby.app.data.api.PlantService
 import com.kebunby.app.data.model.request.PlantActRequest
 import com.kebunby.app.data.model.response.BaseResponse
-import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import retrofit2.Response
