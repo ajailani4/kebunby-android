@@ -281,7 +281,6 @@ fun ProfileHeader(
         modifier = Modifier
             .background(color = MaterialTheme.colors.background)
             .fillMaxWidth()
-            .height(IntrinsicSize.Max)
             .padding(20.dp)
     ) {
         when (userProfileState) {
@@ -297,7 +296,7 @@ fun ProfileHeader(
 
                 Image(
                     modifier = Modifier
-                        .size(100.dp)
+                        .size(90.dp)
                         .clip(CircleShape),
                     painter = if (user?.avatar != null) {
                         rememberAsyncImagePainter(
@@ -313,17 +312,14 @@ fun ProfileHeader(
                     contentDescription = "User avatar"
                 )
                 Spacer(modifier = Modifier.width(25.dp))
-                Column(
-                    modifier = Modifier.fillMaxHeight(),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ) {
+                Column(verticalArrangement = Arrangement.SpaceBetween) {
                     if (user != null) {
                         Column {
                             Text(
                                 text = user.name,
                                 color = MaterialTheme.colors.onBackground,
                                 fontWeight = FontWeight.SemiBold,
-                                style = MaterialTheme.typography.h3
+                                style = MaterialTheme.typography.h4
                             )
                             Text(
                                 text = user.username,
@@ -331,6 +327,7 @@ fun ProfileHeader(
                                 style = MaterialTheme.typography.body1
                             )
                         }
+                        Spacer(modifier = Modifier.height(10.dp))
                         Row {
                             CountingText(
                                 count = user.planting,
