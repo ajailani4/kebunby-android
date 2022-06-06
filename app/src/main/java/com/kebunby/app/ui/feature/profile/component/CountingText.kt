@@ -6,6 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import com.kebunby.app.ui.theme.Grey
 
 @Composable
@@ -20,6 +21,7 @@ fun CountingText(count: Int, text: String) {
         Text(
             text = text,
             color = Grey,
+            textAlign = TextAlign.Center,
             style = MaterialTheme.typography.body1
         )
     }

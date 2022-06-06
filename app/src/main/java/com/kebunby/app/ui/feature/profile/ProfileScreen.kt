@@ -296,7 +296,7 @@ fun ProfileHeader(
 
                 Image(
                     modifier = Modifier
-                        .size(90.dp)
+                        .size(85.dp)
                         .clip(CircleShape),
                     painter = if (user?.avatar != null) {
                         rememberAsyncImagePainter(
@@ -328,17 +328,18 @@ fun ProfileHeader(
                             )
                         }
                         Spacer(modifier = Modifier.height(10.dp))
-                        Row {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             CountingText(
                                 count = user.planting,
                                 text = stringResource(R.string.planting)
                             )
-                            Spacer(modifier = Modifier.width(20.dp))
                             CountingText(
                                 count = user.planted,
                                 text = stringResource(R.string.planted)
                             )
-                            Spacer(modifier = Modifier.width(20.dp))
                             CountingText(
                                 count = user.uploaded,
                                 text = stringResource(R.string.uploaded)
