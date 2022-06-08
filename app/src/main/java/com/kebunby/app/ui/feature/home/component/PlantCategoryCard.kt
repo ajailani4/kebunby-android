@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.kebunby.app.R
 import com.kebunby.app.data.model.PlantCategory
@@ -50,6 +51,8 @@ fun PlantCategoryCard(
                 text = plantCategory.name,
                 color = MaterialTheme.colors.onSurface,
                 fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.subtitle2
             )
         }
