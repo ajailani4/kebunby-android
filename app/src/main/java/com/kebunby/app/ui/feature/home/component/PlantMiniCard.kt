@@ -1,10 +1,7 @@
 package com.kebunby.app.ui.feature.home.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -40,10 +37,12 @@ fun PlantMiniCard(
         elevation = 5.dp,
         onClick = onClick
     ) {
-        Column {
+        Column(modifier = Modifier.width(160.dp)) {
             Box {
                 Image(
-                    modifier = Modifier.size(160.dp),
+                    modifier = Modifier
+                        .height(160.dp)
+                        .fillMaxWidth(),
                     painter = rememberAsyncImagePainter(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(plantItem.image)
