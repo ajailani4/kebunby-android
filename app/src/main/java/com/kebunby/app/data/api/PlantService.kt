@@ -53,9 +53,9 @@ interface PlantService {
         @Part("wateringFreq") wateringFreq: RequestBody,
         @Part("growthEst") growthEst: RequestBody,
         @Part("desc") desc: RequestBody,
-        @Part("tools") tools: RequestBody,
-        @Part("materials") materials: RequestBody,
-        @Part("steps") steps: RequestBody,
+        @Part tools: List<MultipartBody.Part>,
+        @Part materials: List<MultipartBody.Part>,
+        @Part steps: List<MultipartBody.Part>,
         @Part("author") author: RequestBody
     ): Response<BaseResponse<Any>>
 
@@ -78,9 +78,9 @@ interface PlantService {
         @Part("wateringFreq") wateringFreq: RequestBody,
         @Part("growthEst") growthEst: RequestBody,
         @Part("desc") desc: RequestBody,
-        @Part("tools") tools: RequestBody,
-        @Part("materials") materials: RequestBody,
-        @Part("steps") steps: RequestBody,
+        @Part tools: List<MultipartBody.Part>,
+        @Part materials: List<MultipartBody.Part>,
+        @Part steps: List<MultipartBody.Part>,
         @Part("author") author: RequestBody,
         @Part("popularity") popularity: RequestBody,
         @Part("publishedOn") publishedOn: RequestBody

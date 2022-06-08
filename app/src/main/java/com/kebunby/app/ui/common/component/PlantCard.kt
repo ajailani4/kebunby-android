@@ -83,6 +83,8 @@ fun PlantCard(
                     Text(
                         text = plantItem?.growthEst ?: "-",
                         color = Grey,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.body2
                     )
                 }
@@ -98,6 +100,8 @@ fun PlantCard(
                     Text(
                         text = plantItem?.wateringFreq ?: "-",
                         color = Grey,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.body2
                     )
                 }
@@ -113,6 +117,8 @@ fun PlantCard(
                     Text(
                         text = "${plantItem?.popularity}",
                         color = Grey,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.body2
                     )
                 }

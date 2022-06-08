@@ -79,12 +79,22 @@ class PlantRemoteDataSource @Inject constructor(
             wateringFreq.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val growthEstPart = growthEst.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val descPart = desc.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val toolsPart =
-            tools.joinToString(", ").toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val materialsPart =
-            materials.joinToString(", ").toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val stepsPart =
-            steps.joinToString(", ").toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+        val toolsPart = mutableListOf<MultipartBody.Part>()
+        tools.forEach { tool ->
+            toolsPart.add(MultipartBody.Part.createFormData("tools", tool))
+        }
+
+        val materialsPart = mutableListOf<MultipartBody.Part>()
+        materials.forEach { material ->
+            materialsPart.add(MultipartBody.Part.createFormData("materials", material))
+        }
+
+        val stepsPart = mutableListOf<MultipartBody.Part>()
+        steps.forEach { step ->
+            stepsPart.add(MultipartBody.Part.createFormData("steps", step))
+        }
+
         val authorPart = author.toRequestBody("multipart/form-data".toMediaTypeOrNull())
 
         return plantService.uploadPlant(
@@ -131,12 +141,22 @@ class PlantRemoteDataSource @Inject constructor(
             wateringFreq.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val growthEstPart = growthEst.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val descPart = desc.toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val toolsPart =
-            tools.joinToString(", ").toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val materialsPart =
-            materials.joinToString(", ").toRequestBody("multipart/form-data".toMediaTypeOrNull())
-        val stepsPart =
-            steps.joinToString(", ").toRequestBody("multipart/form-data".toMediaTypeOrNull())
+
+        val toolsPart = mutableListOf<MultipartBody.Part>()
+        tools.forEach { tool ->
+            toolsPart.add(MultipartBody.Part.createFormData("tools", tool))
+        }
+
+        val materialsPart = mutableListOf<MultipartBody.Part>()
+        materials.forEach { material ->
+            materialsPart.add(MultipartBody.Part.createFormData("materials", material))
+        }
+
+        val stepsPart = mutableListOf<MultipartBody.Part>()
+        steps.forEach { step ->
+            stepsPart.add(MultipartBody.Part.createFormData("steps", step))
+        }
+
         val authorPart = author.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val popularityPart = popularity.toRequestBody("multipart/form-data".toMediaTypeOrNull())
         val publishedOnPart =

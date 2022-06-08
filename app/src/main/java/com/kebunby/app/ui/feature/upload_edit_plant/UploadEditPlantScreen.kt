@@ -602,7 +602,7 @@ fun PlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = { onToolsChanged(null, "Tool ${tools.size + 1}", ListAction.ADD_ITEM) }
+                onClick = { onToolsChanged(null, "", ListAction.ADD_ITEM) }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
@@ -657,13 +657,7 @@ fun PlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = {
-                    onMaterialsChanged(
-                        null,
-                        "Material ${materials.size + 1}",
-                        ListAction.ADD_ITEM
-                    )
-                }
+                onClick = { onMaterialsChanged(null, "", ListAction.ADD_ITEM) }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
@@ -718,7 +712,7 @@ fun PlantForm(
                     width = 1.dp,
                     color = MaterialTheme.colors.primary
                 ),
-                onClick = { onStepsChanged(null, "Step ${steps.size + 1}", ListAction.ADD_ITEM) }
+                onClick = { onStepsChanged(null, "", ListAction.ADD_ITEM) }
             ) {
                 Icon(
                     modifier = Modifier.size(30.dp),
@@ -735,7 +729,8 @@ fun PlantForm(
                     if (
                         photo != null && plantName.isNotEmpty() && selectedCategory != null &&
                         growthEst.isNotEmpty() && wateringFreq.isNotEmpty() && desc.isNotEmpty() &&
-                        tools.isNotEmpty() && materials.isNotEmpty() && steps.isNotEmpty()
+                        tools.isNotEmpty() && tools.all { it.isNotEmpty() } && materials.isNotEmpty() &&
+                        materials.all { it.isNotEmpty() } && steps.isNotEmpty() && steps.all { it.isNotEmpty() }
                     ) {
                         if (plantId > 0) {
                             onEvent(UploadEditPlantEvent.EditPlant)
