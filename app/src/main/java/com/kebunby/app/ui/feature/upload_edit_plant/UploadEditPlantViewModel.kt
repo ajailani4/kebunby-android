@@ -71,13 +71,13 @@ class UploadEditPlantViewModel @Inject constructor(
     private var _desc = mutableStateOf("")
     val desc: State<String> = _desc
 
-    private var _tools = mutableStateListOf("Tool 1")
+    private var _tools = mutableStateListOf("")
     val tools: SnapshotStateList<String> = _tools
 
-    private var _materials = mutableStateListOf("Material 1")
+    private var _materials = mutableStateListOf("")
     val materials: SnapshotStateList<String> = _materials
 
-    private var _steps = mutableStateListOf("Step 1")
+    private var _steps = mutableStateListOf("")
     val steps: SnapshotStateList<String> = _steps
 
     private var popularity = 0
