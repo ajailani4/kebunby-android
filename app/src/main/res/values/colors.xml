@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#91C637</color>
-    <color name="primaryVariant">#3DB35F</color>
-    <color name="secondary">#008082</color>
-    <color name="secondaryVariant">#006376</color>
+    <color name="primaryLight">#91C637</color>
+    <color name="primaryVariantLight">#89BA35</color>
+    <color name="secondaryLight">#3DB35F</color>
+    <color name="secondaryVariantLight">#36A155</color>
+    <color name="primaryDark">#91C637</color>
+    <color name="primaryVariantDark">#89BA35</color>
+    <color name="secondaryDark">#3DB35F</color>
+    <color name="secondaryVariantDark">#36A155</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

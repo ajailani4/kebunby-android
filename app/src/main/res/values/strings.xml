@@ -1,3 +1,95 @@
 <resources>
     <string name="app_name">Kebunby</string>
+
+    <string name="welcome">Welcome</string>
+    <string name="title_onboarding1">Learn How to Grow a Plant</string>
+    <string name="desc_onboarding1">Kebunby provides information on how to grow a plant, such as tools, materials, and planting steps</string>
+    <string name="title_onboarding2">Choose Your Favorite Plants</string>
+    <string name="desc_onboarding2">You can track your currently planting plants, planted plants, and uploaded plants</string>
+    <string name="title_onboarding3">Upload Plant Information</string>
+    <string name="desc_onboarding3">Kebunby provides a feature for users to upload a plant information</string>
+    <string name="skip">Skip</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+
+    <string name="username">Username</string>
+    <string name="enter_username">Enter username</string>
+    <string name="password">Password</string>
+    <string name="enter_password">Enter password</string>
+    <string name="email">Email</string>
+    <string name="enter_email">Enter email</string>
+    <string name="name">Name</string>
+    <string name="enter_name">Enter name</string>
+    <string name="have_no_account">Don\'t have an account?</string>
+    <string name="register_here">Register here</string>
+    <string name="have_account">Have an account?</string>
+    <string name="login_here">Login here</string>
+    <string name="fill_the_form">Please fill the form completely</string>
+    <string name="incorrect_username_or_pass">Username or password is incorrect</string>
+    <string name="something_wrong_happened">Sorry, something wrong happened</string>
+    <string name="username_already_exists">Username already exists. Try another username</string>
+
+    <!-- Bottom Nav Menu Title -->
+    <string name="home">Home</string>
+    <string name="explore">Explore</string>
+    <string name="shop">Shop</string>
+    <string name="profile">Profile</string>
+
+    <string name="hello">Hello</string>
+    <string name="have_a_nice_day">Have a nice day</string>
+    <string name="trending">Trending</string>
+    <string name="for_beginner">For Beginner</string>
+    <string name="view_all">View all</string>
+    <string name="plant_categories">Plant Categories</string>
+
+    <string name="plants">Plants</string>
+
+    <string name="by">By</string>
+    <string name="tools_and_materials">Tools and Materials</string>
+    <string name="steps">Steps</string>
+    <string name="plant_now">Plant Now</string>
+    <string name="finish_planting">Finish Planting</string>
+    <string name="already_planted">Already Planted</string>
+    <string name="plant_now_confirm_msg">Are you sure to plant this?</string>
+    <string name="finish_planting_confirm_msg">Are you sure to finish the planting?</string>
+    <string name="delete_plant">Delete Plant</string>
+    <string name="delete_plant_confirm_msg">Are you sure to delete this plant?</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <string name="search_plant">Search plant</string>
+    <string name="no_plants_yet">No plants yet</string>
+    <string name="searched_plant_is_empty">The plant you are looking for is not found</string>
+
+    <string name="feature_under_construction">This feature is under construction</string>
+
+    <!-- Profile Tab Menu -->
+    <string name="planting">Planting</string>
+    <string name="planted">Planted</string>
+    <string name="uploaded">Uploaded</string>
+
+    <string name="no_planting_plants_yet">No planting plants yet</string>
+    <string name="no_planted_plants_yet">No planted plants yet</string>
+    <string name="no_uploaded_plants_yet">No uploaded plants yet</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <string name="logout">Logout</string>
+    <string name="logout_confirm_msg">Are you sure to logout?</string>
+
+    <string name="take_plant_photo">Take a plant photo</string>
+    <string name="upload_plant">Upload Plant</string>
+    <string name="edit_plant">Edit Plant</string>
+
+    <string name="plant_name">Plant Name</string>
+    <string name="category">Category</string>
+    <string name="growth_estimation">Growth Estimation</string>
+    <string name="watering_frequency">Watering Frequency</string>
+    <string name="desc">Description</string>
+    <string name="tools">Tools</string>
+    <string name="materials">Materials</string>
+    <string name="upload">Upload</string>
+    <string name="save">Save</string>
+    <string name="photo_size_is_too_large">Photo size is too large</string>
 </resources>
