@@ -24,13 +24,13 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://kebunby-backend.herokuapp.com/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://kebunby-backend.fly.dev/api/v1/\"")
         }
         release {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("String", "BASE_URL", "\"https://kebunby-backend.herokuapp.com/api/v1/\"")
+            buildConfigField("String", "BASE_URL", "\"https://kebunby-backend.fly.dev/api/v1/\"")
         }
     }
     compileOptions {
@@ -62,7 +62,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.4.0'
 
     // UI Components
-    implementation 'androidx.core:core-splashscreen:1.0.0-alpha01'
+    implementation 'androidx.core:core-splashscreen:1.0.0'
     implementation 'com.google.android.material:material:1.6.1'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
